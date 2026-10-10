@@ -24,6 +24,8 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        // Compose Multiplatform repository for androidx.* artifacts
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 

@@ -40,25 +40,25 @@ fun HallaakSnackbar(
         modifier = modifier
             .fillMaxWidth()
             .border(width = 1.5.dp, color = colors.borderColor, shape = shape),
-        shape          = shape,
+        shape = shape,
         containerColor = colors.containerColor,
     ) {
         Row(
-            modifier              = Modifier.fillMaxWidth(),
-            verticalAlignment     = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Icon(
-                modifier           = Modifier.size(22.dp),
-                imageVector        = icon,
-                tint               = colors.iconColor,
+                modifier = Modifier.size(22.dp),
+                imageVector = icon,
+                tint = colors.iconColor,
                 contentDescription = null,
             )
             Text(
                 modifier = Modifier.weight(1f),
-                text     = message,
-                style    = HallaakTheme.typography.body.small,
-                color    = HallaakTheme.colors.onSurface,
+                text = message,
+                style = HallaakTheme.typography.body.small,
+                color = HallaakTheme.colors.onSurface,
             )
         }
     }
@@ -77,23 +77,26 @@ object HallaakSnackbarDefaults {
     fun colors(type: HallaakSnackbarType): HallaakSnackbarColors = when (type) {
         HallaakSnackbarType.SUCCESS -> HallaakSnackbarColors(
             containerColor = HallaakTheme.colors.background.surfaceHigh,
-            borderColor    = HallaakTheme.colors.status.success,
-            iconColor      = HallaakTheme.colors.status.success,
+            borderColor = HallaakTheme.colors.status.success,
+            iconColor = HallaakTheme.colors.status.success,
         )
+
         HallaakSnackbarType.ERROR -> HallaakSnackbarColors(
             containerColor = HallaakTheme.colors.background.surfaceHigh,
-            borderColor    = HallaakTheme.colors.status.error,
-            iconColor      = HallaakTheme.colors.status.error,
+            borderColor = HallaakTheme.colors.status.error,
+            iconColor = HallaakTheme.colors.status.error,
         )
+
         HallaakSnackbarType.WARNING -> HallaakSnackbarColors(
             containerColor = HallaakTheme.colors.background.surfaceHigh,
-            borderColor    = HallaakTheme.colors.status.warning,
-            iconColor      = HallaakTheme.colors.status.warning,
+            borderColor = HallaakTheme.colors.status.warning,
+            iconColor = HallaakTheme.colors.status.warning,
         )
+
         HallaakSnackbarType.INFO -> HallaakSnackbarColors(
             containerColor = HallaakTheme.colors.background.surfaceHigh,
-            borderColor    = HallaakTheme.colors.status.info,
-            iconColor      = HallaakTheme.colors.status.info,
+            borderColor = HallaakTheme.colors.status.info,
+            iconColor = HallaakTheme.colors.status.info,
         )
     }
 }
