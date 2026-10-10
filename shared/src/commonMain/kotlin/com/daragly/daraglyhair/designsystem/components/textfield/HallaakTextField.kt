@@ -1,5 +1,6 @@
 package com.daragly.daraglyhair.designsystem.components.textfield
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -72,7 +73,9 @@ fun HallaakTextField(
         leadingIcon = leadingIcon?.let {
             {
                 Icon(
-                    modifier = Modifier.size(HallaakTextFieldDefaults.iconSize),
+                    modifier = Modifier
+                        .size(HallaakTextFieldDefaults.iconSize)
+                        .clickable { onLeadingIconClicked() },
                     imageVector = leadingIcon,
                     tint = leadingIconColor ?: colors.contentColor,
                     contentDescription = null,
@@ -82,7 +85,9 @@ fun HallaakTextField(
         trailingIcon = trailingIcon?.let {
             {
                 Icon(
-                    modifier = Modifier.size(HallaakTextFieldDefaults.iconSize),
+                    modifier = Modifier
+                        .size(HallaakTextFieldDefaults.iconSize)
+                        .clickable { onTrailingIconClicked() },
                     imageVector = trailingIcon,
                     tint = trailingIconColor ?: colors.contentColor,
                     contentDescription = null,
