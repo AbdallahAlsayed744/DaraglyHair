@@ -1,0 +1,79 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="220dp"
+    android:height="60dp"
+    android:viewportWidth="220"
+    android:viewportHeight="60">
+
+    <!-- ══════════════════════════════════════════
+         Halla'ak – TopBar Wordmark  v3
+         Layout: [mini scissors]  |  حلاقك (text via font)
+
+         Since Android VD cannot render Arabic text
+         paths reliably at small sizes, the wordmark
+         uses the scissors icon on the LEFT and a
+         simple decorative gold underline bar.
+         The Arabic name is rendered by the Composable
+         Text() call in HallaakTopBar using Cairo font.
+
+         This asset is the ICON portion of the lockup
+         used when a pure-image logo is needed
+         (e.g. onboarding hero, about screen).
+         ══════════════════════════════════════════ -->
+
+    <!-- ── Mini scissors (left side, 60×60 area) ── -->
+
+    <!-- Blade 1 -->
+    <path
+        android:pathData="M 6,8 L 22,8 L 32,32 L 22,32 Z"
+        android:fillColor="#1C3557"/>
+    <!-- Handle ring 1 -->
+    <path
+        android:pathData="M14,8 m-10,0 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0"
+        android:fillColor="#1C3557"/>
+    <path
+        android:pathData="M14,8 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Blade 2 -->
+    <path
+        android:pathData="M 54,8 L 38,8 L 28,32 L 38,32 Z"
+        android:fillColor="#1C3557"/>
+    <!-- Handle ring 2 -->
+    <path
+        android:pathData="M46,8 m-10,0 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0"
+        android:fillColor="#1C3557"/>
+    <path
+        android:pathData="M46,8 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Pivot gold dot -->
+    <path
+        android:pathData="M30,28 m-7,0 a7,7 0 1,0 14,0 a7,7 0 1,0 -14,0"
+        android:fillColor="#C8952A"/>
+    <path
+        android:pathData="M30,28 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"
+        android:fillColor="#1C3557"/>
+
+    <!-- Comb mini (bottom of scissors area) -->
+    <path android:pathData="M8,42 L52,42 L52,47 L8,47 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M10,47 L13,47 L13,54 L10,54 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M17,47 L20,47 L20,54 L17,54 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M24,47 L27,47 L27,54 L24,54 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M31,47 L34,47 L34,54 L31,54 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M38,47 L41,47 L41,54 L38,54 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M45,47 L48,47 L48,54 L45,54 Z" android:fillColor="#C8952A"/>
+
+    <!-- ── Vertical gold divider ── -->
+    <path
+        android:pathData="M66,8 L68,8 L68,54 L66,54 Z"
+        android:fillColor="#C8952A"/>
+
+    <!-- ── "حلاقك" label area placeholder bar
+             (actual text rendered by Compose Text)
+             Two gold accent lines to complete the lockup ── -->
+    <path
+        android:pathData="M76,46 L214,46 L214,49 L76,49 Z"
+        android:fillColor="#C8952A"
+        android:fillAlpha="0.5"/>
+
+</vector>

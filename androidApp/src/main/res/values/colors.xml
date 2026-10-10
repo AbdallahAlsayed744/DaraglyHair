@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Halla'ak brand colors – used by themes.xml so the OS
+         window matches Compose before the UI renders -->
+    <color name="hallaak_primary">#1C3557</color>
+    <color name="hallaak_gold">#C8952A</color>
+</resources>

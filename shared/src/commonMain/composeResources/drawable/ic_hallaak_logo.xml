@@ -1,0 +1,99 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!--
+        Halla'ak  حلاقك  –  App Logo  v4
+        ════════════════════════════════════════
+        All content fits inside a padded safe zone:
+          left/right margin : 18px
+          top margin        : 18px
+          bottom margin     : 18px
+        Content occupies roughly (18,18)→(182,182)
+        so nothing is ever clipped.
+        ════════════════════════════════════════
+    -->
+
+    <!-- ① BACKGROUND — full rounded square -->
+    <path
+        android:pathData="M30,0 L170,0 Q200,0 200,30 L200,170 Q200,200 170,200 L30,200 Q0,200 0,170 L0,30 Q0,0 30,0 Z"
+        android:fillColor="#1C3557"/>
+
+    <!--
+        ② HANDLE RING LEFT  — center (58, 52)  r=18
+        Top of ring = 52-18 = 34  ✓ (safe, margin=18)
+    -->
+    <path
+        android:pathData="M58,52 m-18,0 a18,18 0 1,0 36,0 a18,18 0 1,0 -36,0"
+        android:fillColor="#FFFFFF"/>
+    <path
+        android:pathData="M58,52 m-9,0 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0"
+        android:fillColor="#1C3557"/>
+
+    <!--
+        ③ HANDLE RING RIGHT — center (142, 52)  r=18
+        Top of ring = 34  ✓
+    -->
+    <path
+        android:pathData="M142,52 m-18,0 a18,18 0 1,0 36,0 a18,18 0 1,0 -36,0"
+        android:fillColor="#FFFFFF"/>
+    <path
+        android:pathData="M142,52 m-9,0 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0"
+        android:fillColor="#1C3557"/>
+
+    <!--
+        ④ BLADE 1 — left handle (58,52) → pivot (100,104) → tip
+           Wide parallelogram tapering to a point
+    -->
+    <path
+        android:pathData="M 44,52
+                           L 72,52
+                           L 110,104
+                           L 90,104
+                           Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!--
+        ⑤ BLADE 2 — right handle (142,52) → pivot (100,104) → tip
+    -->
+    <path
+        android:pathData="M 156,52
+                           L 128,52
+                           L 90,104
+                           L 110,104
+                           Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!--
+        ⑥ PIVOT CIRCLE — gold ring at blade crossing (100,104)
+    -->
+    <path
+        android:pathData="M100,104 m-12,0 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0"
+        android:fillColor="#C8952A"/>
+    <path
+        android:pathData="M100,104 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0"
+        android:fillColor="#1C3557"/>
+
+    <!--
+        ⑦ COMB — spine + 8 teeth
+           Spine top = 128, teeth bottom = 164
+           Bottom margin = 200-164 = 36 ✓
+    -->
+    <!-- Spine bar -->
+    <path
+        android:pathData="M46,128 L154,128 L154,140 L46,140 Z"
+        android:fillColor="#C8952A"/>
+
+    <!-- 8 teeth, each 6px wide, 12px gap, starting at x=52 -->
+    <path android:pathData="M 52,140 L 58,140 L 58,164 L 52,164 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M 64,140 L 70,140 L 70,164 L 64,164 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M 76,140 L 82,140 L 82,164 L 76,164 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M 88,140 L 94,140 L 94,164 L 88,164 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M100,140 L106,140 L106,164 L100,164 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M112,140 L118,140 L118,164 L112,164 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M124,140 L130,140 L130,164 L124,164 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M136,140 L142,140 L142,164 L136,164 Z" android:fillColor="#C8952A"/>
+
+</vector>

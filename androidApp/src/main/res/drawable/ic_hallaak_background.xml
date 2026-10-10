@@ -1,0 +1,30 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!--
+        Adaptive icon background layer.
+        Solid Deep Slate Blue with a subtle
+        gold corner glow for depth.
+    -->
+
+    <!-- Base fill -->
+    <path
+        android:pathData="M0,0 L108,0 L108,108 L0,108 Z"
+        android:fillColor="#1C3557"/>
+
+    <!-- Top-right radial gold glow -->
+    <path
+        android:pathData="M108,0 Q90,0 80,18 Q108,28 108,0 Z"
+        android:fillColor="#C8952A"
+        android:fillAlpha="0.2"/>
+
+    <!-- Bottom-left radial glow -->
+    <path
+        android:pathData="M0,108 Q18,108 28,90 Q0,80 0,108 Z"
+        android:fillColor="#C8952A"
+        android:fillAlpha="0.12"/>
+
+</vector>

@@ -1,0 +1,52 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- ══════════════════════════════════════════
+         Halla'ak – Icon mark (no background)
+         White scissors + gold pivot + gold comb
+         Used for notifications, share sheets, etc.
+         ══════════════════════════════════════════ -->
+
+    <!-- BLADE 1 -->
+    <path
+        android:pathData="M 18,10 L 46,10 L 66,58 L 50,58 Z"
+        android:fillColor="#FFFFFF"/>
+    <path
+        android:pathData="M32,10 m-16,0 a16,16 0 1,0 32,0 a16,16 0 1,0 -32,0"
+        android:fillColor="#FFFFFF"/>
+    <path
+        android:pathData="M32,10 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0"
+        android:fillColor="#1C3557"/>
+
+    <!-- BLADE 2 -->
+    <path
+        android:pathData="M 90,10 L 62,10 L 42,58 L 58,58 Z"
+        android:fillColor="#FFFFFF"/>
+    <path
+        android:pathData="M76,10 m-16,0 a16,16 0 1,0 32,0 a16,16 0 1,0 -32,0"
+        android:fillColor="#FFFFFF"/>
+    <path
+        android:pathData="M76,10 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0"
+        android:fillColor="#1C3557"/>
+
+    <!-- PIVOT -->
+    <path
+        android:pathData="M54,52 m-10,0 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0"
+        android:fillColor="#C8952A"/>
+    <path
+        android:pathData="M54,52 m-5,0 a5,5 0 1,0 10,0 a10,10 0 1,0 -10,0"
+        android:fillColor="#1C3557"/>
+
+    <!-- COMB -->
+    <path android:pathData="M20,76 L88,76 L88,83 L20,83 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M23,83 L28,83 L28,95 L23,95 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M34,83 L39,83 L39,95 L34,95 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M45,83 L50,83 L50,95 L45,95 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M56,83 L61,83 L61,95 L56,95 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M67,83 L72,83 L72,95 L67,95 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M78,83 L83,83 L83,95 L78,95 Z" android:fillColor="#C8952A"/>
+
+</vector>

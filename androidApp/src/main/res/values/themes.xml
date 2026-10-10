@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        Halla'ak app theme.
+        NoActionBar so Compose controls the full window.
+        windowBackground matches the splash Deep Slate Blue
+        so there is zero white flash before Compose renders.
+    -->
+    <style name="Theme.Hallaak" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Matches HallaakTheme primary (#1C3557) – no white flash on cold start -->
+        <item name="android:windowBackground">@color/hallaak_primary</item>
+        <item name="android:statusBarColor">@color/hallaak_primary</item>
+        <item name="android:navigationBarColor">@color/hallaak_primary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+</resources>

@@ -1,30 +1,61 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path android:pathData="M31,63.928c0,0 6.4,-11 12.1,-13.1c7.2,-2.6 26,-1.4 26,-1.4l38.1,38.1L107,108.928l-32,-1L31,63.928z">
-        <aapt:attr name="android:fillColor">
-            <gradient
-                android:endX="85.84757"
-                android:endY="92.4963"
-                android:startX="42.9492"
-                android:startY="49.59793"
-                android:type="linear">
-                <item
-                    android:color="#44000000"
-                    android:offset="0.0" />
-                <item
-                    android:color="#00000000"
-                    android:offset="1.0" />
-            </gradient>
-        </aapt:attr>
-    </path>
+
+    <!--
+        Halla'ak – Launcher Foreground v4
+        Safe zone: 72×72 at (18,18)→(90,90)
+        ALL content kept strictly within (20,20)→(88,88)
+    -->
+
+    <!-- HANDLE RING LEFT  center=(36,36) r=12 -->
     <path
-        android:fillColor="#FFFFFF"
-        android:fillType="nonZero"
-        android:pathData="M65.3,45.828l3.8,-6.6c0.2,-0.4 0.1,-0.9 -0.3,-1.1c-0.4,-0.2 -0.9,-0.1 -1.1,0.3l-3.9,6.7c-6.3,-2.8 -13.4,-2.8 -19.7,0l-3.9,-6.7c-0.2,-0.4 -0.7,-0.5 -1.1,-0.3C38.8,38.328 38.7,38.828 38.9,39.228l3.8,6.6C36.2,49.428 31.7,56.028 31,63.928h46C76.3,56.028 71.8,49.428 65.3,45.828zM43.4,57.328c-0.8,0 -1.5,-0.5 -1.8,-1.2c-0.3,-0.7 -0.1,-1.5 0.4,-2.1c0.5,-0.5 1.4,-0.7 2.1,-0.4c0.7,0.3 1.2,1 1.2,1.8C45.3,56.528 44.5,57.328 43.4,57.328L43.4,57.328zM64.6,57.328c-0.8,0 -1.5,-0.5 -1.8,-1.2s-0.1,-1.5 0.4,-2.1c0.5,-0.5 1.4,-0.7 2.1,-0.4c0.7,0.3 1.2,1 1.2,1.8C66.5,56.528 65.6,57.328 64.6,57.328L64.6,57.328z"
-        android:strokeWidth="1"
-        android:strokeColor="#00000000" />
+        android:pathData="M36,36 m-12,0 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0"
+        android:fillColor="#FFFFFF"/>
+    <path
+        android:pathData="M36,36 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0"
+        android:fillColor="#1C3557"/>
+
+    <!-- HANDLE RING RIGHT  center=(72,36) r=12 -->
+    <path
+        android:pathData="M72,36 m-12,0 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0"
+        android:fillColor="#FFFFFF"/>
+    <path
+        android:pathData="M72,36 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0"
+        android:fillColor="#1C3557"/>
+
+    <!-- BLADE 1 — left handle → pivot -->
+    <path
+        android:pathData="M 26,36 L 46,36 L 58,58 L 46,58 Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- BLADE 2 — right handle → pivot -->
+    <path
+        android:pathData="M 82,36 L 62,36 L 50,58 L 62,58 Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- PIVOT  center=(54,56) r=8 -->
+    <path
+        android:pathData="M54,56 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0"
+        android:fillColor="#C8952A"/>
+    <path
+        android:pathData="M54,56 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"
+        android:fillColor="#1C3557"/>
+
+    <!-- COMB spine  y=70→76 -->
+    <path
+        android:pathData="M22,70 L86,70 L86,76 L22,76 Z"
+        android:fillColor="#C8952A"/>
+
+    <!-- 7 teeth  y=76→86 — all within safe zone -->
+    <path android:pathData="M25,76 L29,76 L29,86 L25,86 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M34,76 L38,76 L38,86 L34,86 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M43,76 L47,76 L47,86 L43,86 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M52,76 L56,76 L56,86 L52,86 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M61,76 L65,76 L65,86 L61,86 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M70,76 L74,76 L74,86 L70,86 Z" android:fillColor="#C8952A"/>
+    <path android:pathData="M79,76 L83,76 L83,86 L79,86 Z" android:fillColor="#C8952A"/>
+
 </vector>
