@@ -21,6 +21,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,45 +35,219 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.daragly.daraglyhair.common.ui.navigation.IDestination
+import com.daragly.daraglyhair.common.ui.navigation.IMainGraph
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.ic_bookings
+import daraglyhair.shared.generated.resources.ic_bookings_outlined
+import daraglyhair.shared.generated.resources.ic_explore
+import daraglyhair.shared.generated.resources.ic_explore_outlined
+import daraglyhair.shared.generated.resources.ic_favorite
+import daraglyhair.shared.generated.resources.ic_favorite_outlined
+import daraglyhair.shared.generated.resources.ic_home
+import daraglyhair.shared.generated.resources.ic_home_outlined
+import daraglyhair.shared.generated.resources.ic_profile
+import daraglyhair.shared.generated.resources.ic_profile_outlined
+import org.jetbrains.compose.resources.painterResource
 
-// ─────────────────────────────────────────────
-//  HallaakBottomNavBar + HallaakBottomNavItem
+// ─────────────────────────────────────────────────────────────────────────────
+//  HallaakBottomNavBar — Production-ready navigation bar
 //
-//  72dp bar with slide-in/out animation.
-//  Selected items: primary-blue icon + gold
-//  circular indicator pill.
-//  Unselected: muted gray.
-//
-//  Mirrors DelivaryUserNavigationBar / Item.
-// ─────────────────────────────────────────────
+//  Mirrors DelivaryUserNavigationBar pattern:
+//    • 5 equal-width destinations
+//    • Filled/outlined icon variants for selected/unselected
+//    • Gold indicator pill on selected
+//    • Slide-in/out animation controlled by current route
+//    • NavController integration with hierarchy check
+//    • Bilingual labels (English + Arabic)
+// ─────────────────────────────────────────────────────────────────────────────
 
-// ── Item state contract ───────────────────────
+// ── Bottom Destination Model ───────────────────────────────────────────────────
+
+sealed class BottomDestination(
+    override val labelEn: String,
+    override val labelAr: String,
+    val iconSelected: org.jetbrains.compose.resources.DrawableResource,
+    val iconUnselected: org.jetbrains.compose.resources.DrawableResource,
+    val route: IDestination,
+) : HallaakNavItemState {
+    
+    data object Home : BottomDestination(
+        labelEn = "Home",
+        labelAr = "الرئيسية",
+        iconSelected = Res.drawable.ic_home,
+        iconUnselected = Res.drawable.ic_home_outlined,
+        route = IMainGraph.Home,
+    )
+    
+    data object Explore : BottomDestination(
+        labelEn = "Explore",
+        labelAr = "اكتشف",
+        iconSelected = Res.drawable.ic_explore,
+        iconUnselected = Res.drawable.ic_explore_outlined,
+        route = IMainGraph.Explore,
+    )
+    
+    data object Bookings : BottomDestination(
+        labelEn = "Bookings",
+        labelAr = "حجوزاتي",
+        iconSelected = Res.drawable.ic_bookings,
+        iconUnselected = Res.drawable.ic_bookings_outlined,
+        route = IMainGraph.Bookings,
+    )
+    
+    data object Favorites : BottomDestination(
+        labelEn = "Favorites",
+        labelAr = "المفضلة",
+        iconSelected = Res.drawable.ic_favorite,
+        iconUnselected = Res.drawable.ic_favorite_outlined,
+        route = IMainGraph.Favorites,
+    )
+    
+    data object Profile : BottomDestination(
+        labelEn = "Profile",
+        labelAr = "حسابي",
+        iconSelected = Res.drawable.ic_profile,
+        iconUnselected = Res.drawable.ic_profile_outlined,
+        route = IMainGraph.Profile,
+    )
+    
+    companion object {
+        val destinations = listOf(Home, Explore, Bookings, Favorites, Profile)
+    }
+}
+
+// ── Item state contract (for generic rendering) ────────────────────────────────
 
 interface HallaakNavItemState {
     val labelEn: String
     val labelAr: String
-    val icon: ImageVector
 }
 
-// ── Single nav item ───────────────────────────
+// ── Main navigation bar with NavController integration ──────────────────────────
 
 @Composable
-fun RowScope.HallaakBottomNavItem(
-    item: HallaakNavItemState,
+fun HallaakBottomNavBar(
+    navController: NavHostController,
+    destinations: List<BottomDestination> = BottomDestination.destinations,
+    modifier: Modifier = Modifier,
+    useArabicLabels: Boolean = true,
+    containerColor: Color = HallaakNavBarDefaults.containerColor,
+    elevation: Dp = HallaakNavBarDefaults.elevation,
+) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination by remember { derivedStateOf { navBackStackEntry?.destination } }
+    
+    // Show bar only when on a bottom destination
+    val navigationBarState by remember {
+        derivedStateOf {
+            destinations.any { currentDestination?.hasRoute(it.route::class) == true }
+        }
+    }
+    
+    HallaakBottomNavBarContent(
+        isVisible = navigationBarState,
+        currentDestination = currentDestination,
+        destinations = destinations,
+        useArabicLabels = useArabicLabels,
+        onClick = { destination ->
+            navController.navigate(destination.route) {
+                // Pop up to start destination to avoid stack buildup
+                navController.graph.startDestinationRoute?.let {
+                    popUpTo(it) {
+                        saveState = true
+                    }
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        },
+        modifier = modifier,
+        containerColor = containerColor,
+        elevation = elevation,
+    )
+}
+
+// ── Internal bar content ────────────────────────────────────────────────────────
+
+@Composable
+private fun HallaakBottomNavBarContent(
+    isVisible: Boolean,
+    currentDestination: NavDestination?,
+    destinations: List<BottomDestination>,
+    useArabicLabels: Boolean,
+    onClick: (BottomDestination) -> Unit,
+    modifier: Modifier = Modifier,
+    containerColor: Color = HallaakNavBarDefaults.containerColor,
+    elevation: Dp = HallaakNavBarDefaults.elevation,
+) {
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = isVisible,
+        enter = slideInVertically(initialOffsetY = { it }),
+        exit = slideOutVertically(targetOffsetY = { it }),
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(HallaakTheme.dimensions.bottomNavHeight),
+            color = containerColor,
+            shadowElevation = elevation,
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = HallaakTheme.dimensions.space16,
+                        vertical = HallaakTheme.dimensions.space8,
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                destinations.forEach { destination ->
+                    val isSelected = currentDestination?.hierarchy?.any {
+                        it.hasRoute(destination.route::class)
+                    } == true
+                    
+                    HallaakBottomNavItem(
+                        destination = destination,
+                        isSelected = isSelected,
+                        useArabicLabel = useArabicLabels,
+                        onClick = { onClick(destination) },
+                    )
+                }
+            }
+        }
+    }
+}
+
+// ── Single nav item ─────────────────────────────────────────────────────────────
+
+@Composable
+private fun RowScope.HallaakBottomNavItem(
+    destination: BottomDestination,
     isSelected: Boolean,
-    label: String = item.labelAr,
-    interactionSource: MutableInteractionSource = MutableInteractionSource(),
+    useArabicLabel: Boolean = true,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     colors: HallaakNavItemColors = HallaakNavItemDefaults.colors(),
     textStyles: HallaakNavItemTextStyles = HallaakNavItemDefaults.textStyles(),
-    onClick: (HallaakNavItemState) -> Unit,
+    onClick: () -> Unit,
 ) {
+    val label = if (useArabicLabel) destination.labelAr else destination.labelEn
+    val icon = if (isSelected) destination.iconSelected else destination.iconUnselected
+    
     Column(
         modifier = Modifier
             .weight(1f)
             .height(HallaakNavItemDefaults.minHeight),
-        verticalArrangement   = Arrangement.Center,
-        horizontalAlignment   = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         // Icon container with indicator pill
         Box(
@@ -78,67 +255,34 @@ fun RowScope.HallaakBottomNavItem(
                 .size(HallaakNavItemDefaults.containerSize)
                 .clip(HallaakNavItemDefaults.iconShape)
                 .selectable(
-                    selected          = isSelected,
-                    onClick           = { onClick(item) },
-                    role              = Role.Tab,
+                    selected = isSelected,
+                    onClick = onClick,
+                    role = Role.Tab,
                     interactionSource = interactionSource,
-                    indication        = ripple(color = colors.iconColor(isSelected)),
+                    indication = ripple(color = colors.iconColor(isSelected)),
                 )
                 .background(color = colors.indicatorColor(isSelected)),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector        = item.icon,
-                contentDescription = null,
-                tint               = colors.iconColor(isSelected),
-                modifier           = Modifier.size(HallaakNavItemDefaults.iconSize),
+                painter = painterResource(icon),
+                contentDescription = label,
+                tint = colors.iconColor(isSelected),
+                modifier = Modifier.size(HallaakNavItemDefaults.iconSize),
             )
         }
-
+        
         Text(
-            text     = label,
-            style    = textStyles.labelStyle(isSelected),
-            color    = colors.labelColor(isSelected),
+            text = label,
+            style = textStyles.labelStyle(isSelected),
+            color = colors.labelColor(isSelected),
             modifier = Modifier.padding(top = 4.dp),
             maxLines = 1,
         )
     }
 }
 
-// ── Full bar ──────────────────────────────────
-
-@Composable
-fun HallaakBottomNavBar(
-    isVisible: Boolean,
-    modifier: Modifier = Modifier,
-    containerColor: Color = HallaakNavBarDefaults.containerColor,
-    content: @Composable RowScope.() -> Unit,
-) {
-    AnimatedVisibility(
-        modifier = modifier,
-        visible  = isVisible,
-        enter    = slideInVertically(initialOffsetY = { it }),
-        exit     = slideOutVertically(targetOffsetY = { it }),
-    ) {
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(HallaakTheme.dimensions.bottomNavHeight),
-            color = containerColor,
-            shadowElevation = 12.dp,
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = HallaakTheme.dimensions.space16, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                content = content,
-            )
-        }
-    }
-}
-
-// ── Color model ───────────────────────────────
+// ── Color model ─────────────────────────────────────────────────────────────────
 
 data class HallaakNavItemColors(
     val selectedIconColor: Color,
@@ -149,10 +293,10 @@ data class HallaakNavItemColors(
 ) {
     fun iconColor(isSelected: Boolean) =
         if (isSelected) selectedIconColor else unselectedIconColor
-
+    
     fun labelColor(isSelected: Boolean) =
         if (isSelected) selectedLabelColor else unselectedLabelColor
-
+    
     fun indicatorColor(isSelected: Boolean) =
         if (isSelected) indicatorColor else Color.Transparent
 }
@@ -165,35 +309,37 @@ data class HallaakNavItemTextStyles(
         if (isSelected) selectedStyle else unselectedStyle
 }
 
-// ── Defaults ──────────────────────────────────
+// ── Defaults ────────────────────────────────────────────────────────────────────
 
 object HallaakNavItemDefaults {
-    val minHeight: Dp    = 60.dp
+    val minHeight: Dp = 60.dp
     val iconShape: Shape = CircleShape
-    val iconSize: Dp     = 22.dp
-    val containerSize: Dp = 32.dp
-
+    val iconSize: Dp = 22.dp
+    val containerSize: Dp = 36.dp
+    
     @Composable
     fun colors(
-        selectedIconColor: Color   = HallaakTheme.colors.primary,
+        selectedIconColor: Color = HallaakTheme.colors.primary,
         unselectedIconColor: Color = HallaakTheme.colors.onSurfaceVariant,
-        selectedLabelColor: Color  = HallaakTheme.colors.primary,
+        selectedLabelColor: Color = HallaakTheme.colors.primary,
         unselectedLabelColor: Color = HallaakTheme.colors.onSurfaceVariant,
-        indicatorColor: Color      = HallaakTheme.colors.gold.copy(alpha = 0.25f),
+        indicatorColor: Color = HallaakTheme.colors.gold.copy(alpha = 0.25f),
     ) = HallaakNavItemColors(
-        selectedIconColor    = selectedIconColor,
-        unselectedIconColor  = unselectedIconColor,
-        selectedLabelColor   = selectedLabelColor,
+        selectedIconColor = selectedIconColor,
+        unselectedIconColor = unselectedIconColor,
+        selectedLabelColor = selectedLabelColor,
         unselectedLabelColor = unselectedLabelColor,
-        indicatorColor       = indicatorColor,
+        indicatorColor = indicatorColor,
     )
-
+    
     @Composable
     fun textStyles(
-        selectedStyle: TextStyle   = HallaakTheme.typography.label.medium.copy(fontWeight = FontWeight.Bold),
+        selectedStyle: TextStyle = HallaakTheme.typography.label.medium.copy(
+            fontWeight = FontWeight.Bold
+        ),
         unselectedStyle: TextStyle = HallaakTheme.typography.label.medium,
     ) = HallaakNavItemTextStyles(
-        selectedStyle   = selectedStyle,
+        selectedStyle = selectedStyle,
         unselectedStyle = unselectedStyle,
     )
 }
@@ -201,4 +347,6 @@ object HallaakNavItemDefaults {
 object HallaakNavBarDefaults {
     val containerColor: Color
         @Composable get() = HallaakTheme.colors.background.surfaceHigh
+    
+    val elevation: Dp = 12.dp
 }

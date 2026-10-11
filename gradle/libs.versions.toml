@@ -20,6 +20,7 @@ ktor = "3.1.3"
 # Kotlinx
 kotlinxSerialization = "1.8.1"
 kotlinxCoroutines = "1.10.2"
+kotlinxDatetime = "0.6.1"
 
 # Koin
 koinBom = "4.1.0"
@@ -60,6 +61,7 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 # Kotlinx
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
 # Koin
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }

@@ -91,6 +91,17 @@ class RemoteDataSourceProvider(
         serializer: KSerializer<ResponseBody>,
     ): ResponseBody {
         val text = response.bodyAsText()
-        return json.decodeFromString(serializer, text)
+        
+        // Log the response for debugging
+        println("API Response Status: ${response.status}")
+        println("API Response Body: $text")
+        
+        try {
+            return json.decodeFromString(serializer, text)
+        } catch (e: Exception) {
+            println("Failed to deserialize response: ${e.message}")
+            println("Expected type: ${serializer.descriptor.serialName}")
+            throw e
+        }
     }
 }

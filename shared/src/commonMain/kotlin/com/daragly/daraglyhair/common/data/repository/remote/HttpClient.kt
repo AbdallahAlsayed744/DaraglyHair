@@ -12,12 +12,15 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
+import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.AttributeKey
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 
 const val BASE_URL = "https://barberhub-api.runasp.net/"
@@ -54,14 +57,40 @@ fun provideHttpClient(
     defaultRequest {
         url(BASE_URL)
         contentType(ContentType.Application.Json)
+        header("tenant", "root")
+        
+        // Add language header using runBlocking
+        val lang = runBlocking {
+            try {
+                getLang()
+            } catch (_: Exception) {
+                "en"
+            }
+        }
+        header("Accept-Language", lang)
+
+        // Add Authorization header if token is available
+        val token = runBlocking {
+            try {
+                getToken()
+            } catch (_: Exception) {
+                null
+            }
+        }
+        
+        if (!token.isNullOrBlank()) {
+            header("Authorization", "Bearer $token")
+        }
     }
 
     HttpResponseValidator {
         handleResponseExceptionWithRequest { exception, _ ->
-            val lang = try {
-                getLang()
-            } catch (_: Exception) {
-                "en"
+            val lang = runBlocking {
+                try {
+                    getLang()
+                } catch (_: Exception) {
+                    "en"
+                }
             }
             throw when (exception) {
                 is ResponseException ->

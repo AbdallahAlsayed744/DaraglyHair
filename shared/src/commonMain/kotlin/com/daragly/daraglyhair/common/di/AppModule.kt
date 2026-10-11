@@ -16,6 +16,9 @@ import com.daragly.daraglyhair.common.ui.navigation.IAuthGraph
 import com.daragly.daraglyhair.common.ui.navigation.INavigator
 import com.daragly.daraglyhair.common.ui.navigation.Navigator
 import com.daragly.daraglyhair.feature.authentication.di.authModule
+import com.daragly.daraglyhair.feature.home.di.homeModule
+import com.daragly.daraglyhair.feature.user.di.userModule
+import com.daragly.daraglyhair.feature.user.domain.repository.IUserRepository
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
@@ -44,18 +47,14 @@ val appModule = module {
         provideHttpClient(
             engine = httpClientEngineFactory(),
             json = get(),
-            getToken = {
-                // Retrieve the stored access token; injected once user service is available
-                val localProvider: ILocalDataSourceProvider = get()
+            getToken = suspend {
+                // Retrieve the stored access token using UserRepository
+                val userRepository: IUserRepository = get()
                 try {
-                    localProvider.read(
-                        key = com.daragly.daraglyhair.common.data.repository.local.LocalDataSourceEnum.ACCESS_TOKEN,
-                        defaultValue = "",
-                        type = String::class,
-                    ).takeIf { it.isNotBlank() }
+                    userRepository.getToken().takeIf { it.isNotBlank() }
                 } catch (_: Exception) { null }
             },
-            getLang = {
+            getLang = suspend {
                 val localProvider: ILocalDataSourceProvider = get()
                 try {
                     localProvider.read(
@@ -80,5 +79,6 @@ val appModule = module {
     single<IEventController<ILanguageEvent>>(qualifier = named("LanguageEvent")) { EventController() }
 
     // Feature modules
-    includes(authModule)
+    includes(authModule, homeModule, userModule)
 }
+

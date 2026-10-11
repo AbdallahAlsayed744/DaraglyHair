@@ -28,6 +28,8 @@ import com.daragly.daraglyhair.common.ui.navigation.INavigator
 import com.daragly.daraglyhair.common.ui.navigation.NavigationEvent
 import com.daragly.daraglyhair.common.ui.navigation.buildAuthNavGraph
 import com.daragly.daraglyhair.common.ui.navigation.buildMainNavGraph
+import com.daragly.daraglyhair.designsystem.components.bars.BottomDestination
+import com.daragly.daraglyhair.designsystem.components.bars.HallaakBottomNavBar
 import com.daragly.daraglyhair.designsystem.components.dialogs.HallaakLoadingDialog
 import com.daragly.daraglyhair.designsystem.components.snackbar.HallaakSnackbar
 import com.daragly.daraglyhair.designsystem.components.snackbar.HallaakSnackbarType
@@ -90,13 +92,20 @@ fun HallaakApp(
             }
         }
 
-        // ── Scaffold (no bottom bar — will be added later) ───────────────
+        // ── Scaffold with bottom navigation ───────────────────────────
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
                 .navigationBarsPadding(),
             snackbarHost = {
                 HallaakSnackbarHost(snackbarHostState = snackbarHostState)
+            },
+            bottomBar = {
+                HallaakBottomNavBar(
+                    navController = navHostController,
+                    destinations = BottomDestination.destinations,
+                    useArabicLabels = true,  // TODO: Connect to language preference
+                )
             },
         ) { innerPadding ->
             CompositionLocalProvider(LocalPadding provides innerPadding) {
