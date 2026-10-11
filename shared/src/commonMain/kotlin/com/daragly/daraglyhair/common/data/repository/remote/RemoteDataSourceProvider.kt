@@ -99,8 +99,12 @@ class RemoteDataSourceProvider(
         try {
             return json.decodeFromString(serializer, text)
         } catch (e: Exception) {
+            println("========== DESERIALIZATION ERROR ==========")
             println("Failed to deserialize response: ${e.message}")
             println("Expected type: ${serializer.descriptor.serialName}")
+            println("Response status: ${response.status}")
+            println("Response body: $text")
+            println("==========================================")
             throw e
         }
     }

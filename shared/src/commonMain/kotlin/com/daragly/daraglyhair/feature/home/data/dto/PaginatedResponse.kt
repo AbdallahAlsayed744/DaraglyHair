@@ -5,8 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PaginatedResponse<T>(
+    @SerialName("data")
+    val data: List<T>? = null,
     @SerialName("items")
-    val items: List<T> = emptyList(),
+    val items: List<T>? = null,
     @SerialName("currentPage")
     val currentPage: Int = 1,
     @SerialName("totalPages")
@@ -19,4 +21,7 @@ data class PaginatedResponse<T>(
     val hasPreviousPage: Boolean = false,
     @SerialName("hasNextPage")
     val hasNextPage: Boolean = false,
-)
+) {
+    // Helper property to get the actual list regardless of field name
+    fun getItemsList(): List<T> = data ?: items ?: emptyList()
+}

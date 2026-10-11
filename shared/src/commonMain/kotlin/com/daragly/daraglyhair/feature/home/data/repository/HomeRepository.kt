@@ -55,7 +55,7 @@ class HomeRepository(
             emptySet()
         }
         
-        val shops = response.items.map { dto ->
+        val shops = response.getItemsList().map { dto ->
             dto.toDomain(isFavorite = favoriteIds.contains(dto.id))
         }
         
@@ -100,7 +100,7 @@ class HomeRepository(
         
         val response = remoteDataSource.searchAppointments(request)
         
-        val upcomingAppointments = response.items
+        val upcomingAppointments = response.getItemsList()
             .map { it.toDomain() }
             .filter { it.status.isUpcoming() && it.startAt > now }
             .sortedBy { it.startAt }

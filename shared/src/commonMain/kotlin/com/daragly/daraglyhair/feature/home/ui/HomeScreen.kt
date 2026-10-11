@@ -50,6 +50,8 @@ import com.daragly.daraglyhair.feature.home.domain.model.Appointment
 import com.daragly.daraglyhair.feature.home.domain.model.Barbershop
 import com.daragly.daraglyhair.feature.home.domain.model.ServiceCategory
 import com.daragly.daraglyhair.feature.home.ui.components.BarbershopCard
+import com.daragly.daraglyhair.feature.home.ui.components.BarbershopCardShimmer
+import com.daragly.daraglyhair.feature.home.ui.components.ServiceCategoriesShimmer
 import daraglyhair.shared.generated.resources.Res
 import daraglyhair.shared.generated.resources.ic_calendar
 import daraglyhair.shared.generated.resources.ic_close
@@ -167,15 +169,8 @@ fun HomeScreen(
             // Nearby Barbershops List
             when (val shopsState = state.nearbyShops) {
                 is NearbyShopsState.Loading -> {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(HallaakTheme.dimensions.space48),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            CircularProgressIndicator()
-                        }
+                    items(3) {
+                        BarbershopCardShimmer()
                     }
                 }
                 is NearbyShopsState.Success -> {
@@ -365,14 +360,7 @@ private fun ServiceCategoriesSection(
     when (categoriesState) {
         is CategoriesState.Loading -> {
             // Show loading shimmer
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = HallaakTheme.dimensions.space16),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(modifier = Modifier.size(32.dp))
-            }
+            ServiceCategoriesShimmer()
         }
         is CategoriesState.Success -> {
             if (categoriesState.categories.isNotEmpty()) {

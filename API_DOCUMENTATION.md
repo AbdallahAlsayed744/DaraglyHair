@@ -66,7 +66,7 @@ Search for barbershops with filters and pagination.
 **Response 200**:
 ```json
 {
-  "items": [
+  "data": [
     {
       "id": "string",
       "name": "string",
@@ -90,6 +90,9 @@ Search for barbershops with filters and pagination.
   "hasPreviousPage": false,
   "hasNextPage": true
 }
+```
+
+**Note**: The API returns barbershops in a `"data"` field, not `"items"`. The pagination metadata fields (`currentPage`, `totalPages`, etc.) may or may not be present in the response.
 ```
 
 ### GET /api/v1/barbershops/{id}
@@ -205,7 +208,7 @@ Search for appointments with filters.
 **Response 200**:
 ```json
 {
-  "items": [
+  "data": [
     {
       "id": "string",
       "shopId": "string",
@@ -226,6 +229,9 @@ Search for appointments with filters.
   "hasPreviousPage": false,
   "hasNextPage": false
 }
+```
+
+**Note**: The API returns appointments in a `"data"` field, not `"items"`. The pagination metadata fields may or may not be present in the response.
 ```
 
 ---
