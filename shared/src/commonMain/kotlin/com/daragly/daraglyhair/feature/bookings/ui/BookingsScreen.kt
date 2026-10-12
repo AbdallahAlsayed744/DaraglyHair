@@ -25,12 +25,12 @@ fun BookingsScreen() {
             verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
         ) {
             Text(
-                text = "Bookings — حجوزاتي",
+                text = "حجوزاتي",
                 style = HallaakTheme.typography.headline.medium,
                 color = HallaakTheme.colors.onSurface,
             )
             Text(
-                text = "Upcoming, past, and cancelled appointments",
+                text = "المواعيد القادمة والسابقة والملغاة",
                 style = HallaakTheme.typography.body.medium,
                 color = HallaakTheme.colors.onSurfaceVariant,
             )

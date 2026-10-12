@@ -94,7 +94,7 @@ private fun LoginContent(
             )
             Spacer(Modifier.height(6.dp))
             Text(
-                text  = "Welcome back — sign in to continue",
+                text  = "أهلاً بعودتك — سجّل الدخول للمتابعة",
                 style = HallaakTheme.typography.body.small,
                 color = Color.White.copy(alpha = 0.72f),
             )
@@ -111,13 +111,13 @@ private fun LoginContent(
                 .padding(horizontal = 24.dp, vertical = 28.dp),
         ) {
             Text(
-                text  = "Sign In",
+                text  = "تسجيل الدخول",
                 style = HallaakTheme.typography.headline.medium,
                 color = secondary,
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text  = "Enter your credentials below",
+                text  = "أدخل بيانات حسابك للمتابعة",
                 style = HallaakTheme.typography.body.small,
                 color = HallaakTheme.colors.onSurfaceVariant,
             )
@@ -129,7 +129,7 @@ private fun LoginContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.email,
                 onValueChange  = { onAction(LoginAction.EmailChanged(it)) },
-                placeholder    = "Email address",
+                placeholder    = "البريد الإلكتروني",
                 leadingIcon    = Outlined.Email,
                 supportingText = state.emailError,
                 isError        = state.emailError != null,
@@ -146,7 +146,7 @@ private fun LoginContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.password,
                 onValueChange  = { onAction(LoginAction.PasswordChanged(it)) },
-                placeholder    = "Password",
+                placeholder    = "كلمة المرور",
                 leadingIcon    = Outlined.Lock,
                 trailingIcon   = if (state.isPasswordVisible) Outlined.Visibility else Outlined.VisibilityOff,
                 onTrailingIconClicked = { onAction(LoginAction.TogglePasswordVisibility) },
@@ -164,7 +164,7 @@ private fun LoginContent(
 
             // Forgot password
             Text(
-                text     = "Forgot password?",
+                text     = "نسيت كلمة المرور؟",
                 style    = HallaakTheme.typography.label.large,
                 color    = primary,
                 modifier = Modifier
@@ -177,7 +177,7 @@ private fun LoginContent(
 
             HallaakButtonPrimary(
                 modifier  = Modifier.fillMaxWidth(),
-                label     = "Sign In",
+                label     = "تسجيل الدخول",
                 isEnabled = state.email.isNotBlank() && state.password.isNotBlank(),
                 onClick   = { onAction(LoginAction.LoginClicked) },
             )
@@ -191,10 +191,10 @@ private fun LoginContent(
                 Text(
                     text  = buildAnnotatedString {
                         withStyle(SpanStyle(color = HallaakTheme.colors.onSurfaceVariant)) {
-                            append("Don't have an account? ")
+                            append("ليس لديك حساب؟ ")
                         }
                         withStyle(SpanStyle(color = primary)) {
-                            append("Create one")
+                            append("إنشاء حساب")
                         }
                     },
                     style     = HallaakTheme.typography.body.small,

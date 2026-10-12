@@ -5,15 +5,12 @@ import com.daragly.daraglyhair.common.domain.Resource
 import com.daragly.daraglyhair.common.ui.viewmodel.BaseViewModel
 import com.daragly.daraglyhair.feature.home.domain.model.isUpcoming
 import com.daragly.daraglyhair.feature.home.domain.repository.IHomeRepository
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val repository: IHomeRepository,
 ) : BaseViewModel<HomeState, HomeAction, HomeEvent>(HomeState()) {
-
-    private var searchJob: Job? = null
 
     init {
         loadHomeData()
@@ -23,17 +20,17 @@ class HomeViewModel(
         when (action) {
             is HomeAction.LoadHomeData -> loadHomeData()
             is HomeAction.Refresh -> refresh()
-            is HomeAction.SearchKeywordChanged -> onSearchKeywordChanged(action.keyword)
-            is HomeAction.ClearSearch -> clearSearch()
+            is HomeAction.SearchKeywordChanged -> { /* search moved to ExploreViewModel */ }
+            is HomeAction.ClearSearch -> { /* search moved to ExploreViewModel */ }
             is HomeAction.ToggleFavorite -> toggleFavorite(action.shopId)
             is HomeAction.RetryProfile -> loadProfile()
             is HomeAction.RetryCategories -> loadCategories()
             is HomeAction.RetryNearbyShops -> loadNearbyShops()
             is HomeAction.RetryUpcomingAppointment -> loadUpcomingAppointment()
             is HomeAction.NotificationClicked -> emitEvent(HomeEvent.NavigateToNotifications)
-            is HomeAction.CategoryClicked -> emitEvent(HomeEvent.NavigateToExploreWithCategory(action.category.id))
-            is HomeAction.SeeAllShopsClicked -> emitEvent(HomeEvent.NavigateToExplore)
-            is HomeAction.ExploreClicked -> emitEvent(HomeEvent.NavigateToExplore)
+            is HomeAction.CategoryClicked -> emitEvent(HomeEvent.NavigateToExplore(action.category.name))
+            is HomeAction.SeeAllShopsClicked -> emitEvent(HomeEvent.NavigateToExplore())
+            is HomeAction.ExploreClicked -> emitEvent(HomeEvent.NavigateToExplore())
             is HomeAction.ShopCardClicked -> emitEvent(HomeEvent.NavigateToShopDetails(action.shopId))
             is HomeAction.AppointmentCardClicked -> emitEvent(HomeEvent.NavigateToAppointmentDetails)
         }
@@ -53,26 +50,6 @@ class HomeViewModel(
             delay(500) // Minimum refresh duration for better UX
             updateState { copy(isRefreshing = false) }
         }
-    }
-
-    private fun onSearchKeywordChanged(keyword: String) {
-        updateState { copy(searchKeyword = keyword) }
-        
-        // Debounce search
-        searchJob?.cancel()
-        if (keyword.isNotBlank()) {
-            searchJob = viewModelScope.launch {
-                delay(500) // Debounce delay
-                searchBarbershops(keyword)
-            }
-        } else {
-            loadNearbyShops()
-        }
-    }
-
-    private fun clearSearch() {
-        updateState { copy(searchKeyword = "") }
-        loadNearbyShops()
     }
 
     private fun toggleFavorite(shopId: String) {
@@ -179,36 +156,6 @@ class HomeViewModel(
                 is Resource.Failure -> {
                     updateState {
                         copy(nearbyShops = NearbyShopsState.Error(result.exception.message ?: "Failed to load barbershops"))
-                    }
-                }
-                is Resource.Loading -> {}
-            }
-        }
-    }
-
-    private fun searchBarbershops(keyword: String) {
-        updateState { copy(nearbyShops = NearbyShopsState.Loading) }
-        
-        viewModelScope.launch {
-            when (val result = repository.searchBarbershops(
-                pageNumber = 1,
-                pageSize = 20,
-                keyword = keyword
-            )) {
-                is Resource.Success -> {
-                    if (result.model.isEmpty()) {
-                        updateState {
-                            copy(nearbyShops = NearbyShopsState.Empty("No results for \"$keyword\""))
-                        }
-                    } else {
-                        updateState {
-                            copy(nearbyShops = NearbyShopsState.Success(result.model))
-                        }
-                    }
-                }
-                is Resource.Failure -> {
-                    updateState {
-                        copy(nearbyShops = NearbyShopsState.Error(result.exception.message ?: "Search failed"))
                     }
                 }
                 is Resource.Loading -> {}

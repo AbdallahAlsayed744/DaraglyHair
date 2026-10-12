@@ -12,9 +12,9 @@ class ResetPasswordUseCase(
 ) : BaseUseCase<Flow<Resource<String>>, ResetPasswordRequest>() {
     override suspend fun invoke(body: ResetPasswordRequest): Flow<Resource<String>> = flowExecute {
         if (body.password.length < 8)
-            throw DaraglyHairException.Local.RequestValidation(message = "Password must be at least 8 characters")
+            throw DaraglyHairException.Local.RequestValidation(message = "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل")
         if (body.token.isBlank())
-            throw DaraglyHairException.Local.RequestValidation(message = "Reset token is required")
+            throw DaraglyHairException.Local.RequestValidation(message = "رمز إعادة التعيين مطلوب")
         repository.resetPassword(body)
     }
 }

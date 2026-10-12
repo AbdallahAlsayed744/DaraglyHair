@@ -11,7 +11,6 @@ data class HomeState(
     val categories: CategoriesState = CategoriesState.Loading,
     val nearbyShops: NearbyShopsState = NearbyShopsState.Loading,
     val upcomingAppointment: UpcomingAppointmentState = UpcomingAppointmentState.Loading,
-    val searchKeyword: String = "",
     val isRefreshing: Boolean = false,
     val favoriteToggleInProgress: Set<String> = emptySet(),
 )
@@ -63,8 +62,8 @@ sealed interface HomeAction {
 // ── Events (one-shot side-effects) ────────────────────────────────────────────
 sealed interface HomeEvent {
     data object NavigateToNotifications : HomeEvent
-    data object NavigateToExplore : HomeEvent
-    data class NavigateToExploreWithCategory(val categoryId: String) : HomeEvent
+    /** Navigate to Explore, optionally pre-seeding the search query. */
+    data class NavigateToExplore(val query: String = "") : HomeEvent
     data class NavigateToShopDetails(val shopId: String) : HomeEvent
     data object NavigateToAppointmentDetails : HomeEvent
 }

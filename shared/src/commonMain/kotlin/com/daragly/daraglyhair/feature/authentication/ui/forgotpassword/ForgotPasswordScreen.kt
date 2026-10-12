@@ -105,7 +105,7 @@ private fun ForgotPasswordContent(
                     )
                 }
                 Text(
-                    text  = "Reset Password",
+                    text  = "إعادة تعيين كلمة المرور",
                     style = HallaakTheme.typography.headline.large,
                     color = Color.White,
                 )
@@ -131,7 +131,7 @@ private fun ForgotPasswordContent(
             ) {
                 Icon(
                     imageVector        = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = "رجوع",
                     tint               = HallaakTheme.colors.onSurface,
                 )
             }
@@ -155,12 +155,12 @@ private fun ForgotPasswordContent(
                         modifier           = Modifier.size(72.dp),
                     )
                     Text(
-                        text  = "Email Sent!",
+                        text  = "تم إرسال البريد!",
                         style = HallaakTheme.typography.headline.medium,
                         color = HallaakTheme.colors.onSurface,
                     )
                     Text(
-                        text      = "Check your inbox and follow the instructions to reset your password.",
+                        text      = "تحقق من بريدك الوارد واتبع التعليمات لإعادة تعيين كلمة المرور.",
                         style     = HallaakTheme.typography.body.small,
                         color     = HallaakTheme.colors.onSurfaceVariant,
                         textAlign = TextAlign.Center,
@@ -168,7 +168,7 @@ private fun ForgotPasswordContent(
                     Spacer(Modifier.height(8.dp))
                     HallaakButtonPrimary(
                         modifier = Modifier.fillMaxWidth(),
-                        label    = "Back to Sign In",
+                        label    = "العودة لتسجيل الدخول",
                         onClick  = { onAction(ForgotPasswordAction.BackClicked) },
                     )
                 }
@@ -178,13 +178,13 @@ private fun ForgotPasswordContent(
             AnimatedVisibility(visible = !state.isSuccess) {
                 Column {
                     Text(
-                        text  = "Forgot your password?",
+                        text  = "نسيت كلمة المرور؟",
                         style = HallaakTheme.typography.headline.small,
                         color = HallaakTheme.colors.onSurface,
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text  = "Enter your email and we'll send you a reset link.",
+                        text  = "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين.",
                         style = HallaakTheme.typography.body.small,
                         color = HallaakTheme.colors.onSurfaceVariant,
                     )
@@ -194,7 +194,7 @@ private fun ForgotPasswordContent(
                         modifier       = Modifier.fillMaxWidth(),
                         value          = state.email,
                         onValueChange  = { onAction(ForgotPasswordAction.EmailChanged(it)) },
-                        placeholder    = "Email address",
+                        placeholder    = "البريد الإلكتروني",
                         leadingIcon    = Icons.Outlined.Email,
                         supportingText = state.emailError,
                         isError        = state.emailError != null,
@@ -207,7 +207,7 @@ private fun ForgotPasswordContent(
 
                     HallaakButtonPrimary(
                         modifier  = Modifier.fillMaxWidth(),
-                        label     = "Send Reset Link",
+                        label     = "إرسال رابط إعادة التعيين",
                         isEnabled = state.email.isNotBlank(),
                         onClick   = { onAction(ForgotPasswordAction.SendClicked) },
                     )

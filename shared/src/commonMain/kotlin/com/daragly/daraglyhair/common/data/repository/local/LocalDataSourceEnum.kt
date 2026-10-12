@@ -13,4 +13,6 @@ enum class LocalDataSourceEnum(override val keyValue: String) : ILocalDataSource
     IS_AUTHENTICATED("is_authenticated"),
     LANGUAGE("language"),
     FIRST_LAUNCH_COMPLETE("first_launch_complete"),
+    THEME("theme"),                              // "system" | "light" | "dark"
+    NOTIFICATIONS_ENABLED("notifications_enabled"),
 }

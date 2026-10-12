@@ -28,7 +28,6 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -54,7 +53,6 @@ import com.daragly.daraglyhair.feature.home.ui.components.BarbershopCardShimmer
 import com.daragly.daraglyhair.feature.home.ui.components.ServiceCategoriesShimmer
 import daraglyhair.shared.generated.resources.Res
 import daraglyhair.shared.generated.resources.ic_calendar
-import daraglyhair.shared.generated.resources.ic_close
 import daraglyhair.shared.generated.resources.ic_location
 import daraglyhair.shared.generated.resources.ic_notifications_outlined
 import daraglyhair.shared.generated.resources.ic_search
@@ -82,10 +80,7 @@ fun HomeScreen(
                     // TODO: Navigate to notifications
                 }
                 is HomeEvent.NavigateToExplore -> {
-                    navigator.navigate(IMainGraph.Explore)
-                }
-                is HomeEvent.NavigateToExploreWithCategory -> {
-                    navigator.navigate(IMainGraph.Explore)
+                    navigator.navigate(IMainGraph.Explore(query = event.query))
                 }
                 is HomeEvent.NavigateToShopDetails -> {
                     // TODO: Navigate to shop details
@@ -120,13 +115,10 @@ fun HomeScreen(
                 )
             }
 
-            // Search Bar
+            // Search Bar — tapping navigates to Explore with focus
             item {
                 Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space16))
                 SearchBar(
-                    keyword = state.searchKeyword,
-                    onKeywordChanged = { viewModel.onAction(HomeAction.SearchKeywordChanged(it)) },
-                    onClearClick = { viewModel.onAction(HomeAction.ClearSearch) },
                     onSearchClick = { viewModel.onAction(HomeAction.ExploreClicked) },
                     modifier = Modifier.padding(horizontal = HallaakTheme.dimensions.space16),
                 )
@@ -159,7 +151,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space24))
                 SectionHeader(
                     title = "صالونات قريبة منك",
-                    titleAr = "Nearby Barbershops",
+                    titleAr = "صالونات قريبة منك",
                     onSeeAllClick = { viewModel.onAction(HomeAction.SeeAllShopsClicked) },
                     modifier = Modifier.padding(horizontal = HallaakTheme.dimensions.space16),
                 )
@@ -251,13 +243,13 @@ private fun HomeHeader(
                 when (profileState) {
                     is ProfileState.Loading -> {
                         Text(
-                            text = "Hello",
+                            text = "مرحباً",
                             style = HallaakTheme.typography.headline.large,
                             color = HallaakTheme.colors.background.canvas,
                         )
                     }
                     is ProfileState.Success -> {
-                        val firstName = profileState.profile.firstName?.takeIf { it.isNotBlank() } ?: "Guest"
+                        val firstName = profileState.profile.firstName?.takeIf { it.isNotBlank() } ?: "ضيف"
                         Text(
                             text = "مرحباً، $firstName",
                             style = HallaakTheme.typography.headline.large,
@@ -294,7 +286,7 @@ private fun HomeHeader(
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_notifications_outlined),
-                    contentDescription = "Notifications",
+                    contentDescription = "الإشعارات",
                     tint = HallaakTheme.colors.background.canvas,
                     modifier = Modifier.size(24.dp),
                 )
@@ -304,12 +296,10 @@ private fun HomeHeader(
 }
 
 // ── Search Bar ────────────────────────────────────────────────────────────────
+// Read-only on Home — tapping navigates to Explore where real search happens.
 
 @Composable
 private fun SearchBar(
-    keyword: String,
-    onKeywordChanged: (String) -> Unit,
-    onClearClick: () -> Unit,
     onSearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -334,11 +324,11 @@ private fun SearchBar(
         ) {
             Icon(
                 painter = painterResource(Res.drawable.ic_search),
-                contentDescription = "Search",
+                contentDescription = "بحث",
                 tint = HallaakTheme.colors.onSurfaceVariant,
                 modifier = Modifier.size(24.dp),
             )
-            
+
             Text(
                 text = "ابحث عن صالونات الحلاقة...",
                 style = HallaakTheme.typography.body.medium,
@@ -624,5 +614,5 @@ private fun formatAppointmentDateTime(instant: Instant): String {
     val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
     val date = "${localDateTime.dayOfMonth}/${localDateTime.monthNumber}/${localDateTime.year}"
     val time = "${localDateTime.hour.toString().padStart(2, '0')}:${localDateTime.minute.toString().padStart(2, '0')}"
-    return "$date at $time"
+    return "$date الساعة $time"
 }

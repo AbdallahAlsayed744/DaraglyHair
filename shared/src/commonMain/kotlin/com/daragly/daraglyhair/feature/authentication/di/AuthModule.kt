@@ -2,6 +2,7 @@ package com.daragly.daraglyhair.feature.authentication.di
 
 import com.daragly.daraglyhair.feature.authentication.data.remote.AuthRemoteDataSource
 import com.daragly.daraglyhair.feature.authentication.data.repository.AuthRepository
+import com.daragly.daraglyhair.feature.authentication.domain.interactors.FetchAndSaveUserProfileUseCase
 import com.daragly.daraglyhair.feature.authentication.domain.interactors.ForgotPasswordUseCase
 import com.daragly.daraglyhair.feature.authentication.domain.interactors.GetIsAuthenticatedUseCase
 import com.daragly.daraglyhair.feature.authentication.domain.interactors.LoginUseCase
@@ -32,6 +33,7 @@ val authModule = module {
     factoryOf(::ForgotPasswordUseCase)
     factoryOf(::ResetPasswordUseCase)
     factoryOf(::GetIsAuthenticatedUseCase)
+    factoryOf(::FetchAndSaveUserProfileUseCase)
 
     // ViewModels
     viewModelOf(::SplashViewModel)

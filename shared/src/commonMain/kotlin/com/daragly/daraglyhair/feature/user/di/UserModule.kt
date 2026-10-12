@@ -6,6 +6,7 @@ import com.daragly.daraglyhair.feature.user.domain.repository.IUserRepository
 import com.daragly.daraglyhair.feature.user.domain.repository.local.IUserLocalDataSource
 import com.daragly.daraglyhair.feature.user.domain.usecase.GetTokenUseCase
 import com.daragly.daraglyhair.feature.user.domain.usecase.GetUserUseCase
+import com.daragly.daraglyhair.feature.user.domain.usecase.LogoutUseCase
 import com.daragly.daraglyhair.feature.user.domain.usecase.SaveIsAuthenticatedUseCase
 import com.daragly.daraglyhair.feature.user.domain.usecase.SaveTokenUseCase
 import com.daragly.daraglyhair.feature.user.domain.usecase.SaveUserUseCase
@@ -27,4 +28,5 @@ val userModule = module {
     factoryOf(::GetTokenUseCase)
     factoryOf(::SaveTokenUseCase)
     factoryOf(::SaveIsAuthenticatedUseCase)
+    factoryOf(::LogoutUseCase)
 }

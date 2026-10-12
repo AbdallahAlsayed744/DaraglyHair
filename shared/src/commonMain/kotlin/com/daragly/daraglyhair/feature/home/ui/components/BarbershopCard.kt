@@ -80,7 +80,7 @@ fun BarbershopCard(
                         Spacer(modifier = Modifier.width(HallaakTheme.dimensions.space4))
                         Icon(
                             painter = painterResource(Res.drawable.ic_verified),
-                            contentDescription = "Verified",
+                            contentDescription = "موثّق",
                             tint = HallaakTheme.colors.primary,
                             modifier = Modifier.size(18.dp),
                         )
@@ -98,7 +98,7 @@ fun BarbershopCard(
                             if (barbershop.isFavorite) Res.drawable.ic_favorite
                             else Res.drawable.ic_favorite_outlined
                         ),
-                        contentDescription = if (barbershop.isFavorite) "Remove from favorites" else "Add to favorites",
+                        contentDescription = if (barbershop.isFavorite) "إزالة من المفضلة" else "إضافة للمفضلة",
                         tint = if (barbershop.isFavorite) HallaakTheme.colors.status.error else HallaakTheme.colors.onSurfaceVariant,
                         modifier = Modifier.size(22.dp),
                     )
@@ -144,7 +144,7 @@ fun BarbershopCard(
             ) {
                 if (barbershop.isBookingEnabled) {
                     StatusChip(
-                        text = "Booking Available",
+                        text = "الحجز متاح",
                         icon = Res.drawable.ic_booking_enabled,
                         backgroundColor = HallaakTheme.colors.status.success.copy(alpha = 0.1f),
                         textColor = HallaakTheme.colors.status.success,
@@ -197,10 +197,9 @@ private fun buildLocationString(barbershop: Barbershop): String {
 
 private fun formatDistance(distanceKm: Double): String {
     return if (distanceKm < 1.0) {
-        "${(distanceKm * 1000).toInt()}m"
+        "${(distanceKm * 1000).toInt()} م"
     } else {
-        // Format to 1 decimal place
         val rounded = (distanceKm * 10).toInt() / 10.0
-        "$rounded km"
+        "$rounded كم"
     }
 }

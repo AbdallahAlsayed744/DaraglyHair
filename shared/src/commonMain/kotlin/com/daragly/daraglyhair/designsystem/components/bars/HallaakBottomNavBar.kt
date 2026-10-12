@@ -91,7 +91,7 @@ sealed class BottomDestination(
         labelAr = "اكتشف",
         iconSelected = Res.drawable.ic_explore,
         iconUnselected = Res.drawable.ic_explore_outlined,
-        route = IMainGraph.Explore,
+        route = IMainGraph.Explore(),
     )
     
     data object Bookings : BottomDestination(

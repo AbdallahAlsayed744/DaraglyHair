@@ -108,7 +108,7 @@ private fun ResetPasswordContent(
                     )
                 }
                 Text(
-                    text  = "New Password",
+                    text  = "كلمة مرور جديدة",
                     style = HallaakTheme.typography.headline.large,
                     color = Color.White,
                 )
@@ -134,7 +134,7 @@ private fun ResetPasswordContent(
             ) {
                 Icon(
                     imageVector        = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = "رجوع",
                     tint               = HallaakTheme.colors.onSurface,
                 )
             }
@@ -142,13 +142,13 @@ private fun ResetPasswordContent(
             Spacer(Modifier.height(20.dp))
 
             Text(
-                text  = "Set a new password",
+                text  = "تعيين كلمة مرور جديدة",
                 style = HallaakTheme.typography.headline.small,
                 color = HallaakTheme.colors.onSurface,
             )
             Spacer(Modifier.height(6.dp))
             Text(
-                text  = "Enter the reset token from your email and choose a new password.",
+                text  = "أدخل رمز إعادة التعيين من بريدك الإلكتروني واختر كلمة مرور جديدة.",
                 style = HallaakTheme.typography.body.small,
                 color = HallaakTheme.colors.onSurfaceVariant,
             )
@@ -160,7 +160,7 @@ private fun ResetPasswordContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.token,
                 onValueChange  = { onAction(ResetPasswordAction.TokenChanged(it)) },
-                placeholder    = "Reset token from email",
+                placeholder    = "رمز إعادة التعيين من البريد",
                 leadingIcon    = Icons.Outlined.Key,
                 supportingText = state.tokenError,
                 isError        = state.tokenError != null,
@@ -176,7 +176,7 @@ private fun ResetPasswordContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.password,
                 onValueChange  = { onAction(ResetPasswordAction.PasswordChanged(it)) },
-                placeholder    = "New password",
+                placeholder    = "كلمة المرور الجديدة",
                 leadingIcon    = Icons.Outlined.Lock,
                 trailingIcon   = if (state.isPasswordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
                 onTrailingIconClicked = { onAction(ResetPasswordAction.TogglePasswordVisibility) },
@@ -193,7 +193,7 @@ private fun ResetPasswordContent(
 
             HallaakButtonPrimary(
                 modifier  = Modifier.fillMaxWidth(),
-                label     = "Reset Password",
+                label     = "إعادة تعيين كلمة المرور",
                 isEnabled = state.token.isNotBlank() && state.password.isNotBlank(),
                 onClick   = { onAction(ResetPasswordAction.ConfirmClicked) },
             )

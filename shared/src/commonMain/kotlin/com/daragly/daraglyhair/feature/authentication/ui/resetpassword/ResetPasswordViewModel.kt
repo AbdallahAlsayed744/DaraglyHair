@@ -35,7 +35,7 @@ class ResetPasswordViewModel(
                 ResetPasswordRequest(email = email, password = s.password, token = s.token.trim())
             ).collectResource(
                 onSuccess = {
-                    fireMessage("Password reset successfully!", HallaakMessageType.SUCCESS)
+                    fireMessage("تم إعادة تعيين كلمة المرور بنجاح!", HallaakMessageType.SUCCESS)
                     fireNavigate(IAuthGraph.Login, builder = {
                         popUpTo(0) { inclusive = true }
                     })

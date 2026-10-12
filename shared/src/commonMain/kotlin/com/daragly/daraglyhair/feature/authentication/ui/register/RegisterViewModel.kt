@@ -45,7 +45,7 @@ class RegisterViewModel(
                 )
             ).collectResource(
                 onSuccess = {
-                    fireMessage("Account created! Please sign in.", HallaakMessageType.SUCCESS)
+                    fireMessage("تم إنشاء الحساب بنجاح! يرجى تسجيل الدخول.", HallaakMessageType.SUCCESS)
                     fireNavigate(IAuthGraph.Login, builder = {
                         popUpTo(IAuthGraph.Register) { inclusive = true }
                     })
@@ -57,11 +57,11 @@ class RegisterViewModel(
     override fun onRequestValidation(errors: Map<IErrorKeyEnum, String>) {
         updateState {
             copy(
-                firstNameError       = errors[ErrorKeyEnum.NAME]?.let { "First name must be at least 2 characters" },
-                emailError           = errors[ErrorKeyEnum.EMAIL]?.let { "Invalid email address" },
-                phoneError           = errors[ErrorKeyEnum.PHONE_NUMBER]?.let { "Invalid phone number" },
-                passwordError        = errors[ErrorKeyEnum.PASSWORD]?.let { "Password must be at least 8 characters" },
-                confirmPasswordError = errors[ErrorKeyEnum.CONFIRMATION_PASSWORD]?.let { "Passwords do not match" },
+                firstNameError       = errors[ErrorKeyEnum.NAME]?.let { "يجب أن يتكون الاسم الأول من حرفين على الأقل" },
+                emailError           = errors[ErrorKeyEnum.EMAIL]?.let { "البريد الإلكتروني غير صحيح" },
+                phoneError           = errors[ErrorKeyEnum.PHONE_NUMBER]?.let { "رقم الهاتف غير صحيح" },
+                passwordError        = errors[ErrorKeyEnum.PASSWORD]?.let { "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل" },
+                confirmPasswordError = errors[ErrorKeyEnum.CONFIRMATION_PASSWORD]?.let { "كلمتا المرور غير متطابقتين" },
             )
         }
     }

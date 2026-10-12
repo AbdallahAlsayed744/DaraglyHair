@@ -12,7 +12,7 @@ class ForgotPasswordUseCase(
 ) : BaseUseCase<Flow<Resource<String>>, ForgotPasswordRequest>() {
     override suspend fun invoke(body: ForgotPasswordRequest): Flow<Resource<String>> = flowExecute {
         if (!body.email.contains("@") || body.email.length < 5)
-            throw DaraglyHairException.Local.RequestValidation(message = "Please enter a valid email address")
+            throw DaraglyHairException.Local.RequestValidation(message = "يرجى إدخال بريد إلكتروني صحيح")
         repository.forgotPassword(body)
     }
 }

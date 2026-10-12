@@ -10,5 +10,5 @@ data class FavoriteDto(
     @SerialName("shopId")
     val shopId: String,
     @SerialName("createdAt")
-    val createdAt: String,
+    val createdAt: String? = null,
 )

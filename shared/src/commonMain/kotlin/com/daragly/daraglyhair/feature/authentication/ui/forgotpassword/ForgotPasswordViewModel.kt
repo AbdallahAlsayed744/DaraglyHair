@@ -28,13 +28,13 @@ class ForgotPasswordViewModel(
                 .collectResource(
                     onSuccess = {
                         updateState { copy(isSuccess = true) }
-                        fireMessage("Password reset email sent successfully", HallaakMessageType.SUCCESS)
+                        fireMessage("تم إرسال بريد إعادة تعيين كلمة المرور بنجاح", HallaakMessageType.SUCCESS)
                     },
                 )
         }
     }
 
     override fun onRequestValidation(errors: Map<IErrorKeyEnum, String>) {
-        updateState { copy(emailError = "Please enter a valid email address") }
+        updateState { copy(emailError = "يرجى إدخال بريد إلكتروني صحيح") }
     }
 }
