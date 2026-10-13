@@ -17,7 +17,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.AddAPhoto
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
@@ -41,6 +40,16 @@ import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonPrim
 import com.daragly.daraglyhair.designsystem.components.textfield.HallaakTextField
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.feature.settings.ui.UserAvatar
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.back
+import daraglyhair.shared.generated.resources.cd_pick_image
+import daraglyhair.shared.generated.resources.edit_profile_save
+import daraglyhair.shared.generated.resources.edit_profile_title
+import daraglyhair.shared.generated.resources.field_email
+import daraglyhair.shared.generated.resources.field_full_name
+import daraglyhair.shared.generated.resources.field_phone
+import daraglyhair.shared.generated.resources.user_fallback
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -73,8 +82,6 @@ fun EditProfileScreen(
         }
     }
 
-    val isArabic = true
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -84,7 +91,6 @@ fun EditProfileScreen(
         EditProfileHeroHeader(
             state            = state,
             displayPainter   = displayPainter,
-            isArabic         = isArabic,
             onBack           = { viewModel.onAction(EditProfileAction.BackClicked) },
             onPickImage      = { launchImagePicker() },
         )
@@ -104,7 +110,7 @@ fun EditProfileScreen(
             HallaakTextField(
                 value         = state.name,
                 onValueChange = { viewModel.onAction(EditProfileAction.NameChanged(it)) },
-                placeholder   = if (isArabic) "الاسم الكامل" else "Full name",
+                placeholder   = stringResource(Res.string.field_full_name),
                 leadingIcon   = Icons.Outlined.Person,
                 isError       = state.nameError != null,
                 supportingText = state.nameError,
@@ -119,7 +125,7 @@ fun EditProfileScreen(
             HallaakTextField(
                 value         = state.phone,
                 onValueChange = { viewModel.onAction(EditProfileAction.PhoneChanged(it)) },
-                placeholder   = if (isArabic) "رقم الهاتف" else "Phone number",
+                placeholder   = stringResource(Res.string.field_phone),
                 leadingIcon   = Icons.Outlined.Phone,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
@@ -132,7 +138,7 @@ fun EditProfileScreen(
             HallaakTextField(
                 value         = state.email,
                 onValueChange = { viewModel.onAction(EditProfileAction.EmailChanged(it)) },
-                placeholder   = if (isArabic) "البريد الإلكتروني" else "Email address",
+                placeholder   = stringResource(Res.string.field_email),
                 leadingIcon   = Icons.Outlined.Email,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
@@ -145,7 +151,7 @@ fun EditProfileScreen(
 
             // ── Save button ───────────────────────────────────────────────
             HallaakButtonPrimary(
-                label     = if (isArabic) "حفظ التغييرات" else "Save Changes",
+                label     = stringResource(Res.string.edit_profile_save),
                 onClick   = { viewModel.onAction(EditProfileAction.SaveClicked) },
                 isEnabled = !state.isSaving,
                 modifier  = Modifier.fillMaxWidth(),
@@ -165,7 +171,6 @@ fun EditProfileScreen(
 private fun EditProfileHeroHeader(
     state: EditProfileState,
     displayPainter: androidx.compose.ui.graphics.painter.Painter?,
-    isArabic: Boolean,
     onBack: () -> Unit,
     onPickImage: () -> Unit,
 ) {
@@ -188,9 +193,8 @@ private fun EditProfileHeroHeader(
             // ── Back button ───────────────────────────────────────────────
             IconButton(onClick = onBack) {
                 Icon(
-                    imageVector        = if (isArabic) Icons.AutoMirrored.Outlined.ArrowForward
-                                         else          Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = if (isArabic) "رجوع" else "Back",
+                    imageVector        = Icons.AutoMirrored.Outlined.ArrowBack,
+                    contentDescription = stringResource(Res.string.back),
                     tint               = HallaakTheme.colors.background.canvas,
                 )
             }
@@ -201,12 +205,12 @@ private fun EditProfileHeroHeader(
                 verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space4),
             ) {
                 Text(
-                    text  = if (isArabic) "تعديل الملف الشخصي" else "Edit Profile",
+                    text  = stringResource(Res.string.edit_profile_title),
                     style = HallaakTheme.typography.headline.large,
                     color = HallaakTheme.colors.background.canvas,
                 )
                 val displayName = state.name.trim()
-                    .ifBlank { if (isArabic) "مستخدم" else "User" }
+                    .ifBlank { stringResource(Res.string.user_fallback) }
                 Text(
                     text     = displayName,
                     style    = HallaakTheme.typography.body.medium,
@@ -244,7 +248,7 @@ private fun EditProfileHeroHeader(
                 ) {
                     Icon(
                         imageVector        = Icons.Outlined.AddAPhoto,
-                        contentDescription = if (isArabic) "اختر صورة" else "Pick image",
+                        contentDescription = stringResource(Res.string.cd_pick_image),
                         tint               = HallaakTheme.colors.primary,
                         modifier           = Modifier.size(14.dp),
                     )

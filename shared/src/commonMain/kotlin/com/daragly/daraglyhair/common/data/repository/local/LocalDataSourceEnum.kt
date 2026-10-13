@@ -8,6 +8,7 @@ import com.daragly.daraglyhair.common.domain.local.ILocalDataSourceEnum
  */
 enum class LocalDataSourceEnum(override val keyValue: String) : ILocalDataSourceEnum {
     ACCESS_TOKEN("access_token"),
+    REFRESH_TOKEN("refresh_token"),
     USER("user"),
     REMEMBER_ME("remember_me"),
     IS_AUTHENTICATED("is_authenticated"),

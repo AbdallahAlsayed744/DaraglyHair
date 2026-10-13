@@ -91,20 +91,12 @@ class RemoteDataSourceProvider(
         serializer: KSerializer<ResponseBody>,
     ): ResponseBody {
         val text = response.bodyAsText()
-        
-        // Log the response for debugging
-        println("API Response Status: ${response.status}")
-        println("API Response Body: $text")
-        
         try {
             return json.decodeFromString(serializer, text)
         } catch (e: Exception) {
-            println("========== DESERIALIZATION ERROR ==========")
-            println("Failed to deserialize response: ${e.message}")
-            println("Expected type: ${serializer.descriptor.serialName}")
-            println("Response status: ${response.status}")
-            println("Response body: $text")
-            println("==========================================")
+            // Bodies are never printed: auth responses carry tokens. The Ktor Logging plugin
+            // shows the raw payload with Authorization sanitized.
+            DebugLog.d { "AUTH decode failed: ${e.message} type=${serializer.descriptor.serialName} status=${response.status}" }
             throw e
         }
     }

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ── App / shared ─────────────────────────────────────────────────── -->
+    <string name="app_name">حلاقك</string>
+    <string name="back">رجوع</string>
+    <string name="retry">إعادة المحاولة</string>
+    <string name="cancel">إلغاء</string>
+    <string name="ok">حسناً</string>
+    <string name="user_fallback">مستخدم</string>
+    <string name="guest">ضيف</string>
+    <string name="see_all">عرض الكل</string>
+    <string name="coming_soon">قريباً</string>
+    <string name="error_generic_title">حصلت مشكلة، حاول تاني</string>
+    <string name="price_format">%1$s جنيه</string>
+
+    <!-- ── Content descriptions ─────────────────────────────────────────── -->
+    <string name="cd_app_logo">شعار حلاقك</string>
+    <string name="cd_notifications">الإشعارات</string>
+    <string name="cd_search">بحث</string>
+    <string name="cd_verified">موثّق</string>
+    <string name="cd_add_favorite">إضافة للمفضلة</string>
+    <string name="cd_remove_favorite">إزالة من المفضلة</string>
+    <string name="cd_search_barbershops">البحث عن صالونات الحلاقة</string>
+    <string name="cd_clear_search">مسح البحث</string>
+    <string name="cd_retry">إعادة المحاولة</string>
+    <string name="cd_copy_number">نسخ الرقم</string>
+    <string name="cd_pick_image">اختر صورة</string>
+
+    <!-- ── Form field placeholders ──────────────────────────────────────── -->
+    <string name="field_email">البريد الإلكتروني</string>
+    <string name="field_password">كلمة المرور</string>
+    <string name="field_new_password">كلمة المرور الجديدة</string>
+    <string name="field_confirm_password">تأكيد كلمة المرور</string>
+    <string name="field_first_name">الاسم الأول</string>
+    <string name="field_last_name">اسم العائلة</string>
+    <string name="field_full_name">الاسم الكامل</string>
+    <string name="field_username">اسم المستخدم</string>
+    <string name="field_phone">رقم الهاتف</string>
+    <string name="field_reset_token">رمز إعادة التعيين من البريد</string>
+
+    <!-- ── Splash ───────────────────────────────────────────────────────── -->
+    <string name="splash_tagline">حلاقك في جيبك</string>
+    <string name="splash_version">v1.0</string>
+
+    <!-- ── Auth ─────────────────────────────────────────────────────────── -->
+    <string name="sign_in">تسجيل الدخول</string>
+    <string name="create_account">إنشاء حساب</string>
+    <string name="login_hero_subtitle">أهلاً بعودتك — سجّل الدخول للمتابعة</string>
+    <string name="login_form_subtitle">أدخل بيانات حسابك للمتابعة</string>
+    <string name="forgot_password_link">نسيت كلمة المرور؟</string>
+    <string name="no_account_prompt">ليس لديك حساب؟</string>
+    <string name="have_account_prompt">لديك حساب بالفعل؟</string>
+
+    <string name="register_hero_subtitle">انضم إلى حلاقك اليوم</string>
+    <string name="register_section_title">بياناتك الشخصية</string>
+
+    <string name="reset_password">إعادة تعيين كلمة المرور</string>
+    <string name="forgot_password_heading">نسيت كلمة المرور؟</string>
+    <string name="forgot_password_body">أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين.</string>
+    <string name="forgot_password_sent_title">تم إرسال البريد!</string>
+    <string name="forgot_password_sent_body">تحقق من بريدك الوارد واتبع التعليمات لإعادة تعيين كلمة المرور.</string>
+    <string name="back_to_sign_in">العودة لتسجيل الدخول</string>
+    <string name="new_password">كلمة مرور جديدة</string>
+    <string name="new_password_section">تعيين كلمة مرور جديدة</string>
+    <string name="new_password_body">أدخل رمز إعادة التعيين من بريدك الإلكتروني واختر كلمة مرور جديدة.</string>
+
+    <!-- ── Home ─────────────────────────────────────────────────────────── -->
+    <string name="greeting">مرحباً</string>
+    <string name="greeting_with_name">مرحباً، %1$s</string>
+    <string name="home_subtitle">ابحث عن أقرب صالون حلاقة</string>
+    <string name="home_search_placeholder">ابحث عن صالونات الحلاقة…</string>
+    <string name="home_services">الخدمات</string>
+    <string name="home_upcoming_appointment">موعدك القادم</string>
+    <string name="home_nearby_shops">صالونات قريبة منك</string>
+    <string name="home_explore_shops">استكشف الصالونات</string>
+    <string name="date_at_time">%1$s الساعة %2$s</string>
+
+    <!-- ── Barbershop card ──────────────────────────────────────────────── -->
+    <string name="booking_available">الحجز متاح</string>
+    <string name="barbershop_fallback">صالون حلاقة</string>
+    <string name="distance_meters">%1$d م</string>
+    <string name="distance_km">%1$s كم</string>
+
+    <!-- ── Explore ──────────────────────────────────────────────────────── -->
+    <string name="explore_title">اكتشف</string>
+    <string name="explore_subtitle">ابحث عن أفضل صالونات الحلاقة</string>
+    <string name="explore_search_placeholder">ابحث عن صالون أو مدينة…</string>
+    <string name="explore_empty_with_query">مفيش نتايج لـ &quot;%1$s&quot;</string>
+    <string name="explore_empty_no_query">مفيش صالونات متاحة حالياً</string>
+    <string name="explore_empty_subtitle">جرب كلمة بحث مختلفة أو تصفح كل الصالونات</string>
+    <string name="explore_clear_search">مسح البحث</string>
+
+    <!-- ── Bookings ─────────────────────────────────────────────────────── -->
+    <string name="bookings_title">حجوزاتي</string>
+    <string name="bookings_subtitle">مواعيدك القادمة والسابقة</string>
+    <string name="tab_upcoming">القادمة</string>
+    <string name="tab_completed">المكتملة</string>
+    <string name="tab_cancelled">الملغاة</string>
+
+    <string name="bookings_error_title">مش قادرين نجيب حجوزاتك دلوقتي</string>
+    <string name="bookings_error_subtitle">تأكد من اتصالك بالإنترنت وحاول تاني</string>
+
+    <string name="bookings_empty_upcoming_title">مفيش حجوزات جاية</string>
+    <string name="bookings_empty_upcoming_subtitle">ابحث عن صالون حلاقة قريب منك واحجز موعدك دلوقتي</string>
+    <string name="bookings_empty_completed_title">مفيش حجوزات مكتملة لحد دلوقتي</string>
+    <string name="bookings_empty_completed_subtitle">لما تخلص موعدك هيظهر هنا</string>
+    <string name="bookings_empty_cancelled_title">مفيش حجوزات ملغاة</string>
+    <string name="bookings_empty_cancelled_subtitle">الحجوزات اللي اتلغت هتظهر هنا</string>
+    <string name="explore_barbershops">اكتشف محلات الحلاقة</string>
+
+    <!-- ── Booking status ───────────────────────────────────────────────── -->
+    <string name="status_pending">قيد المراجعة</string>
+    <string name="status_confirmed">مؤكد</string>
+    <string name="status_arrived">وصل</string>
+    <string name="status_completed">مكتمل</string>
+    <string name="status_cancelled_by_customer">ألغيت</string>
+    <string name="status_cancelled_by_shop">ألغيت من الصالون</string>
+    <string name="status_no_show">لم يحضر</string>
+
+    <!-- ── Booking card ─────────────────────────────────────────────────── -->
+    <string name="booking_total">الإجمالي: %1$s</string>
+    <string name="booking_deposit">عربون: %1$s (%2$s)</string>
+    <string name="deposit_paid">مدفوع</string>
+    <string name="deposit_pending">معلق</string>
+    <string name="deposit_forfeited">مخسور</string>
+    <string name="deposit_refunded">مُسترد</string>
+    <string name="view_details">عرض التفاصيل</string>
+    <string name="cancel_booking">إلغاء الحجز</string>
+
+    <!-- ── Cancellation dialog ──────────────────────────────────────────── -->
+    <string name="cancel_booking_body">هل أنت متأكد إنك عايز تلغي الحجز ده؟ الإلغاء مش بيُضمن استرداد العربون. تواصل مع الصالون لو عندك أسئلة.</string>
+    <string name="cancel_booking_confirm">تأكيد الإلغاء</string>
+    <string name="cancel_booking_dismiss">تراجع</string>
+
+    <!-- ── Appointment detail ───────────────────────────────────────────── -->
+    <string name="appointment_detail_title">تفاصيل الحجز</string>
+    <string name="appointment_detail_error_title">مش قادرين نجيب تفاصيل الحجز دلوقتي</string>
+    <string name="back_to_bookings">الرجوع للحجوزات</string>
+    <string name="cancellation_success">تم إلغاء الحجز بنجاح</string>
+    <string name="section_shop">الصالون</string>
+    <string name="section_date_time">التاريخ والوقت</string>
+    <string name="label_date">التاريخ</string>
+    <string name="label_time">الوقت</string>
+    <string name="section_payment">الدفع</string>
+    <string name="label_total">الإجمالي</string>
+    <string name="section_notes">ملاحظات</string>
+    <string name="section_booking_id">رقم الحجز</string>
+    <string name="deposit_label">العربون</string>
+    <string name="deposit_label_paid">العربون (مدفوع)</string>
+    <string name="deposit_label_pending">العربون (معلق)</string>
+    <string name="deposit_label_forfeited">العربون (مخسور)</string>
+    <string name="deposit_label_refunded">العربون (مُسترد)</string>
+    <string name="time_range">%1$s — %2$s</string>
+    <string name="label_value">%1$s: %2$s</string>
+
+    <!-- ── Date / time formatting ───────────────────────────────────────── -->
+    <string name="date_format_full">%1$d %2$s %3$d</string>
+    <string name="time_format_12h">%1$s:%2$s %3$s</string>
+    <string name="date_time_short">%1$s • %2$s</string>
+    <string name="time_am">ص</string>
+    <string name="time_pm">م</string>
+    <string name="month_1">يناير</string>
+    <string name="month_2">فبراير</string>
+    <string name="month_3">مارس</string>
+    <string name="month_4">إبريل</string>
+    <string name="month_5">مايو</string>
+    <string name="month_6">يونيو</string>
+    <string name="month_7">يوليو</string>
+    <string name="month_8">أغسطس</string>
+    <string name="month_9">سبتمبر</string>
+    <string name="month_10">أكتوبر</string>
+    <string name="month_11">نوفمبر</string>
+    <string name="month_12">ديسمبر</string>
+
+    <!-- ── Favorites ────────────────────────────────────────────────────── -->
+    <string name="favorites_title">المفضلة</string>
+    <string name="favorites_subtitle">كل محلاتك المفضلة في مكان واحد</string>
+    <string name="favorites_subtitle_with_count">كل محلاتك المفضلة في مكان واحد · %1$d محل</string>
+    <string name="favorites_empty_title">لسه مفيش محلات في المفضلة</string>
+    <string name="favorites_empty_subtitle">احفظ محلات الحلاقة اللي تعجبك علشان تلاقيها هنا بسهولة في أي وقت.</string>
+
+    <!-- ── Profile ──────────────────────────────────────────────────────── -->
+    <string name="profile_title">حسابي</string>
+    <string name="settings">الإعدادات</string>
+    <string name="edit_profile_title">تعديل الملف الشخصي</string>
+    <string name="edit_profile_save">حفظ التغييرات</string>
+
+    <!-- ── Settings ─────────────────────────────────────────────────────── -->
+    <string name="section_account">الحساب</string>
+    <string name="section_appearance">المظهر</string>
+    <string name="section_language">اللغة</string>
+    <string name="section_notifications">الإشعارات</string>
+    <string name="section_privacy_security">الخصوصية والأمان</string>
+    <string name="section_help_support">المساعدة والدعم</string>
+    <string name="section_about">حول التطبيق</string>
+    <string name="change_password">تغيير كلمة المرور</string>
+    <string name="send_reset_link">إرسال رابط إعادة التعيين</string>
+    <string name="send_reset_link_email">إرسال رابط إعادة التعيين بالبريد</string>
+    <string name="theme_system">حسب إعدادات الجهاز</string>
+    <string name="theme_light">الوضع الفاتح</string>
+    <string name="theme_dark">الوضع الداكن</string>
+    <string name="enable_notifications">تفعيل الإشعارات</string>
+    <string name="notifications_subtitle">تنبيهات الحجوزات والتحديثات</string>
+    <string name="help_center">مركز المساعدة</string>
+    <string name="contact_support">تواصل مع الدعم</string>
+    <string name="about_app_icon_letter">ح</string>
+    <string name="about_app_tagline">تطبيق حجز الصالونات الرائد في مصر</string>
+    <string name="about_version">الإصدار 1.0  (1)</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="terms_conditions">الشروط والأحكام</string>
+    <string name="sign_out">تسجيل الخروج</string>
+    <string name="sign_out_message">هل أنت متأكد من تسجيل الخروج من حسابك؟</string>
+
+    <!-- ── Language names — intentionally identical in every locale ─────── -->
+    <string name="language_arabic">العربية</string>
+    <string name="language_arabic_latin">Arabic</string>
+    <string name="language_english">English</string>
+
+    <!-- ── Brand — intentionally identical in every locale ──────────────── -->
+    <string name="about_app_name">حلاقك  •  Halla\'ak</string>
+
+    <!-- ── Bottom navigation ────────────────────────────────────────────── -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_explore">اكتشف</string>
+    <string name="nav_bookings">حجوزاتي</string>
+    <string name="nav_favorites">المفضلة</string>
+    <string name="nav_profile">حسابي</string>
+
+    <!-- ── Design-system component defaults ─────────────────────────────── -->
+    <string name="search_field_placeholder">ابحث عن حلاق أو صالون...</string>
+    <string name="district_distance">%1$s · %2$s كم</string>
+    <string name="book_online">حجز أونلاين</string>
+    <string name="duration_minutes">%1$s دقيقة</string>
+    <string name="price_egp_short">%1$s ج.م</string>
+    <string name="appointment_status_upcoming">قادم</string>
+    <string name="appointment_status_completed">مكتمل</string>
+    <string name="appointment_status_cancelled">ملغى</string>
+
+</resources>

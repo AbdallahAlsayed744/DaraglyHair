@@ -47,7 +47,16 @@ import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonPrim
 import com.daragly.daraglyhair.designsystem.components.dialogs.HallaakLoadingDialog
 import com.daragly.daraglyhair.designsystem.components.textfield.HallaakTextField
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.back
+import daraglyhair.shared.generated.resources.field_new_password
+import daraglyhair.shared.generated.resources.field_reset_token
+import daraglyhair.shared.generated.resources.new_password
+import daraglyhair.shared.generated.resources.new_password_body
+import daraglyhair.shared.generated.resources.new_password_section
+import daraglyhair.shared.generated.resources.reset_password
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -108,7 +117,7 @@ private fun ResetPasswordContent(
                     )
                 }
                 Text(
-                    text  = "كلمة مرور جديدة",
+                    text  = stringResource(Res.string.new_password),
                     style = HallaakTheme.typography.headline.large,
                     color = Color.White,
                 )
@@ -134,7 +143,7 @@ private fun ResetPasswordContent(
             ) {
                 Icon(
                     imageVector        = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = "رجوع",
+                    contentDescription = stringResource(Res.string.back),
                     tint               = HallaakTheme.colors.onSurface,
                 )
             }
@@ -142,13 +151,13 @@ private fun ResetPasswordContent(
             Spacer(Modifier.height(20.dp))
 
             Text(
-                text  = "تعيين كلمة مرور جديدة",
+                text  = stringResource(Res.string.new_password_section),
                 style = HallaakTheme.typography.headline.small,
                 color = HallaakTheme.colors.onSurface,
             )
             Spacer(Modifier.height(6.dp))
             Text(
-                text  = "أدخل رمز إعادة التعيين من بريدك الإلكتروني واختر كلمة مرور جديدة.",
+                text  = stringResource(Res.string.new_password_body),
                 style = HallaakTheme.typography.body.small,
                 color = HallaakTheme.colors.onSurfaceVariant,
             )
@@ -160,7 +169,7 @@ private fun ResetPasswordContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.token,
                 onValueChange  = { onAction(ResetPasswordAction.TokenChanged(it)) },
-                placeholder    = "رمز إعادة التعيين من البريد",
+                placeholder    = stringResource(Res.string.field_reset_token),
                 leadingIcon    = Icons.Outlined.Key,
                 supportingText = state.tokenError,
                 isError        = state.tokenError != null,
@@ -176,7 +185,7 @@ private fun ResetPasswordContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.password,
                 onValueChange  = { onAction(ResetPasswordAction.PasswordChanged(it)) },
-                placeholder    = "كلمة المرور الجديدة",
+                placeholder    = stringResource(Res.string.field_new_password),
                 leadingIcon    = Icons.Outlined.Lock,
                 trailingIcon   = if (state.isPasswordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
                 onTrailingIconClicked = { onAction(ResetPasswordAction.TogglePasswordVisibility) },
@@ -193,7 +202,7 @@ private fun ResetPasswordContent(
 
             HallaakButtonPrimary(
                 modifier  = Modifier.fillMaxWidth(),
-                label     = "إعادة تعيين كلمة المرور",
+                label     = stringResource(Res.string.reset_password),
                 isEnabled = state.token.isNotBlank() && state.password.isNotBlank(),
                 onClick   = { onAction(ResetPasswordAction.ConfirmClicked) },
             )

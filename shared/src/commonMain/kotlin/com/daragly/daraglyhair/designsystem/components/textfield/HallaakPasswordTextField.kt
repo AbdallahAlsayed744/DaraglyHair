@@ -16,6 +16,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.field_password
+import org.jetbrains.compose.resources.stringResource
 
 // ─────────────────────────────────────────────
 //  HallaakPasswordTextField
@@ -30,7 +33,7 @@ fun HallaakPasswordTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: String = "كلمة المرور",
+    placeholder: String = stringResource(Res.string.field_password),
     supportingText: String? = null,
     imeAction: ImeAction = ImeAction.Done,
 ) {

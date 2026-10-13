@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ── App / shared ─────────────────────────────────────────────────── -->
+    <string name="app_name">Halla\'ak</string>
+    <string name="back">Back</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="user_fallback">User</string>
+    <string name="guest">Guest</string>
+    <string name="see_all">See all</string>
+    <string name="coming_soon">Coming soon</string>
+    <string name="error_generic_title">Something went wrong. Please try again</string>
+    <string name="price_format">%1$s EGP</string>
+
+    <!-- ── Content descriptions ─────────────────────────────────────────── -->
+    <string name="cd_app_logo">Halla\'ak Logo</string>
+    <string name="cd_notifications">Notifications</string>
+    <string name="cd_search">Search</string>
+    <string name="cd_verified">Verified</string>
+    <string name="cd_add_favorite">Add to favorites</string>
+    <string name="cd_remove_favorite">Remove from favorites</string>
+    <string name="cd_search_barbershops">Search barbershops</string>
+    <string name="cd_clear_search">Clear search</string>
+    <string name="cd_retry">Retry</string>
+    <string name="cd_copy_number">Copy number</string>
+    <string name="cd_pick_image">Pick image</string>
+
+    <!-- ── Form field placeholders ──────────────────────────────────────── -->
+    <string name="field_email">Email address</string>
+    <string name="field_password">Password</string>
+    <string name="field_new_password">New password</string>
+    <string name="field_confirm_password">Confirm password</string>
+    <string name="field_first_name">First name</string>
+    <string name="field_last_name">Last name</string>
+    <string name="field_full_name">Full name</string>
+    <string name="field_username">Username</string>
+    <string name="field_phone">Phone number</string>
+    <string name="field_reset_token">Reset token from email</string>
+
+    <!-- ── Splash ───────────────────────────────────────────────────────── -->
+    <string name="splash_tagline">Your barber, in your pocket</string>
+    <string name="splash_version">v1.0</string>
+
+    <!-- ── Auth ─────────────────────────────────────────────────────────── -->
+    <string name="sign_in">Sign In</string>
+    <string name="create_account">Create Account</string>
+    <string name="login_hero_subtitle">Welcome back — sign in to continue</string>
+    <string name="login_form_subtitle">Enter your account details to continue</string>
+    <string name="forgot_password_link">Forgot password?</string>
+    <string name="no_account_prompt">Don\'t have an account?</string>
+    <string name="have_account_prompt">Already have an account?</string>
+
+    <string name="register_hero_subtitle">Join Halla\'ak today</string>
+    <string name="register_section_title">Your personal details</string>
+
+    <string name="reset_password">Reset Password</string>
+    <string name="forgot_password_heading">Forgot your password?</string>
+    <string name="forgot_password_body">Enter your email and we\'ll send you a reset link.</string>
+    <string name="forgot_password_sent_title">Email sent!</string>
+    <string name="forgot_password_sent_body">Check your inbox and follow the instructions to reset your password.</string>
+    <string name="back_to_sign_in">Back to Sign In</string>
+    <string name="new_password">New Password</string>
+    <string name="new_password_section">Set a new password</string>
+    <string name="new_password_body">Enter the reset token from your email and choose a new password.</string>
+
+    <!-- ── Home ─────────────────────────────────────────────────────────── -->
+    <string name="greeting">Hello</string>
+    <string name="greeting_with_name">Hello, %1$s</string>
+    <string name="home_subtitle">Find the nearest barbershop</string>
+    <string name="home_search_placeholder">Search barbershops…</string>
+    <string name="home_services">Services</string>
+    <string name="home_upcoming_appointment">Your upcoming appointment</string>
+    <string name="home_nearby_shops">Barbershops near you</string>
+    <string name="home_explore_shops">Explore Barbershops</string>
+    <string name="date_at_time">%1$s at %2$s</string>
+
+    <!-- ── Barbershop card ──────────────────────────────────────────────── -->
+    <string name="booking_available">Booking available</string>
+    <string name="barbershop_fallback">Barbershop</string>
+    <string name="distance_meters">%1$d m</string>
+    <string name="distance_km">%1$s km</string>
+
+    <!-- ── Explore ──────────────────────────────────────────────────────── -->
+    <string name="explore_title">Explore</string>
+    <string name="explore_subtitle">Find the best barbershops</string>
+    <string name="explore_search_placeholder">Search for a barbershop or city…</string>
+    <string name="explore_empty_with_query">No results for &quot;%1$s&quot;</string>
+    <string name="explore_empty_no_query">No barbershops available right now</string>
+    <string name="explore_empty_subtitle">Try a different search term or browse all barbershops</string>
+    <string name="explore_clear_search">Clear Search</string>
+
+    <!-- ── Bookings ─────────────────────────────────────────────────────── -->
+    <string name="bookings_title">My Bookings</string>
+    <string name="bookings_subtitle">Your upcoming and past appointments</string>
+    <string name="tab_upcoming">Upcoming</string>
+    <string name="tab_completed">Completed</string>
+    <string name="tab_cancelled">Cancelled</string>
+
+    <string name="bookings_error_title">We can\'t load your bookings right now</string>
+    <string name="bookings_error_subtitle">Check your internet connection and try again</string>
+
+    <string name="bookings_empty_upcoming_title">No upcoming bookings</string>
+    <string name="bookings_empty_upcoming_subtitle">Find a barbershop near you and book your appointment now</string>
+    <string name="bookings_empty_completed_title">No completed bookings yet</string>
+    <string name="bookings_empty_completed_subtitle">Your finished appointments will appear here</string>
+    <string name="bookings_empty_cancelled_title">No cancelled bookings</string>
+    <string name="bookings_empty_cancelled_subtitle">Cancelled bookings will appear here</string>
+    <string name="explore_barbershops">Explore Barbershops</string>
+
+    <!-- ── Booking status ───────────────────────────────────────────────── -->
+    <string name="status_pending">Under review</string>
+    <string name="status_confirmed">Confirmed</string>
+    <string name="status_arrived">Arrived</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_cancelled_by_customer">Cancelled</string>
+    <string name="status_cancelled_by_shop">Cancelled by shop</string>
+    <string name="status_no_show">No show</string>
+
+    <!-- ── Booking card ─────────────────────────────────────────────────── -->
+    <string name="booking_total">Total: %1$s</string>
+    <string name="booking_deposit">Deposit: %1$s (%2$s)</string>
+    <string name="deposit_paid">Paid</string>
+    <string name="deposit_pending">Pending</string>
+    <string name="deposit_forfeited">Forfeited</string>
+    <string name="deposit_refunded">Refunded</string>
+    <string name="view_details">View Details</string>
+    <string name="cancel_booking">Cancel Booking</string>
+
+    <!-- ── Cancellation dialog ──────────────────────────────────────────── -->
+    <string name="cancel_booking_body">Are you sure you want to cancel this booking? Cancellation does not guarantee a deposit refund. Contact the barbershop if you have any questions.</string>
+    <string name="cancel_booking_confirm">Confirm Cancellation</string>
+    <string name="cancel_booking_dismiss">Go Back</string>
+
+    <!-- ── Appointment detail ───────────────────────────────────────────── -->
+    <string name="appointment_detail_title">Booking Details</string>
+    <string name="appointment_detail_error_title">We can\'t load the booking details right now</string>
+    <string name="back_to_bookings">Back to Bookings</string>
+    <string name="cancellation_success">Booking cancelled successfully</string>
+    <string name="section_shop">Barbershop</string>
+    <string name="section_date_time">Date &amp; Time</string>
+    <string name="label_date">Date</string>
+    <string name="label_time">Time</string>
+    <string name="section_payment">Payment</string>
+    <string name="label_total">Total</string>
+    <string name="section_notes">Notes</string>
+    <string name="section_booking_id">Booking Reference</string>
+    <string name="deposit_label">Deposit</string>
+    <string name="deposit_label_paid">Deposit (Paid)</string>
+    <string name="deposit_label_pending">Deposit (Pending)</string>
+    <string name="deposit_label_forfeited">Deposit (Forfeited)</string>
+    <string name="deposit_label_refunded">Deposit (Refunded)</string>
+    <string name="time_range">%1$s — %2$s</string>
+    <string name="label_value">%1$s: %2$s</string>
+
+    <!-- ── Date / time formatting ───────────────────────────────────────── -->
+    <string name="date_format_full">%1$d %2$s %3$d</string>
+    <string name="time_format_12h">%1$s:%2$s %3$s</string>
+    <string name="date_time_short">%1$s • %2$s</string>
+    <string name="time_am">AM</string>
+    <string name="time_pm">PM</string>
+    <string name="month_1">January</string>
+    <string name="month_2">February</string>
+    <string name="month_3">March</string>
+    <string name="month_4">April</string>
+    <string name="month_5">May</string>
+    <string name="month_6">June</string>
+    <string name="month_7">July</string>
+    <string name="month_8">August</string>
+    <string name="month_9">September</string>
+    <string name="month_10">October</string>
+    <string name="month_11">November</string>
+    <string name="month_12">December</string>
+
+    <!-- ── Favorites ────────────────────────────────────────────────────── -->
+    <string name="favorites_title">Favorites</string>
+    <string name="favorites_subtitle">All your favorite shops in one place</string>
+    <string name="favorites_subtitle_with_count">All your favorite shops in one place · %1$d shops</string>
+    <string name="favorites_empty_title">No favorite shops yet</string>
+    <string name="favorites_empty_subtitle">Save the barbershops you like so you can easily find them here anytime.</string>
+
+    <!-- ── Profile ──────────────────────────────────────────────────────── -->
+    <string name="profile_title">My Account</string>
+    <string name="settings">Settings</string>
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="edit_profile_save">Save Changes</string>
+
+    <!-- ── Settings ─────────────────────────────────────────────────────── -->
+    <string name="section_account">Account</string>
+    <string name="section_appearance">Appearance</string>
+    <string name="section_language">Language</string>
+    <string name="section_notifications">Notifications</string>
+    <string name="section_privacy_security">Privacy &amp; Security</string>
+    <string name="section_help_support">Help &amp; Support</string>
+    <string name="section_about">About</string>
+    <string name="change_password">Change Password</string>
+    <string name="send_reset_link">Send a reset link</string>
+    <string name="send_reset_link_email">Send a reset link to your email</string>
+    <string name="theme_system">System Default</string>
+    <string name="theme_light">Light Mode</string>
+    <string name="theme_dark">Dark Mode</string>
+    <string name="enable_notifications">Enable Notifications</string>
+    <string name="notifications_subtitle">Booking alerts and updates</string>
+    <string name="help_center">Help Center</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="about_app_icon_letter">H</string>
+    <string name="about_app_tagline">Egypt\'s leading barber-booking app</string>
+    <string name="about_version">Version 1.0  (1)</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_conditions">Terms &amp; Conditions</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="sign_out_message">Are you sure you want to sign out?</string>
+
+    <!-- ── Language names — intentionally identical in every locale ─────── -->
+    <string name="language_arabic">العربية</string>
+    <string name="language_arabic_latin">Arabic</string>
+    <string name="language_english">English</string>
+
+    <!-- ── Brand — intentionally identical in every locale ──────────────── -->
+    <string name="about_app_name">حلاقك  •  Halla\'ak</string>
+
+    <!-- ── Bottom navigation ────────────────────────────────────────────── -->
+    <string name="nav_home">Home</string>
+    <string name="nav_explore">Explore</string>
+    <string name="nav_bookings">Bookings</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- ── Design-system component defaults ─────────────────────────────── -->
+    <string name="search_field_placeholder">Search for a barber or salon…</string>
+    <string name="district_distance">%1$s · %2$s km</string>
+    <string name="book_online">Book online</string>
+    <string name="duration_minutes">%1$s min</string>
+    <string name="price_egp_short">%1$s EGP</string>
+    <string name="appointment_status_upcoming">Upcoming</string>
+    <string name="appointment_status_completed">Completed</string>
+    <string name="appointment_status_cancelled">Cancelled</string>
+
+</resources>

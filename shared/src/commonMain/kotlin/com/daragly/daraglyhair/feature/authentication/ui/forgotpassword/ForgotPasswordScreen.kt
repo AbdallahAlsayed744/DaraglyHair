@@ -46,7 +46,18 @@ import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonPrim
 import com.daragly.daraglyhair.designsystem.components.dialogs.HallaakLoadingDialog
 import com.daragly.daraglyhair.designsystem.components.textfield.HallaakTextField
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.back
+import daraglyhair.shared.generated.resources.back_to_sign_in
+import daraglyhair.shared.generated.resources.field_email
+import daraglyhair.shared.generated.resources.forgot_password_body
+import daraglyhair.shared.generated.resources.forgot_password_heading
+import daraglyhair.shared.generated.resources.forgot_password_sent_body
+import daraglyhair.shared.generated.resources.forgot_password_sent_title
+import daraglyhair.shared.generated.resources.reset_password
+import daraglyhair.shared.generated.resources.send_reset_link
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -105,7 +116,7 @@ private fun ForgotPasswordContent(
                     )
                 }
                 Text(
-                    text  = "إعادة تعيين كلمة المرور",
+                    text  = stringResource(Res.string.reset_password),
                     style = HallaakTheme.typography.headline.large,
                     color = Color.White,
                 )
@@ -131,7 +142,7 @@ private fun ForgotPasswordContent(
             ) {
                 Icon(
                     imageVector        = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = "رجوع",
+                    contentDescription = stringResource(Res.string.back),
                     tint               = HallaakTheme.colors.onSurface,
                 )
             }
@@ -155,12 +166,12 @@ private fun ForgotPasswordContent(
                         modifier           = Modifier.size(72.dp),
                     )
                     Text(
-                        text  = "تم إرسال البريد!",
+                        text  = stringResource(Res.string.forgot_password_sent_title),
                         style = HallaakTheme.typography.headline.medium,
                         color = HallaakTheme.colors.onSurface,
                     )
                     Text(
-                        text      = "تحقق من بريدك الوارد واتبع التعليمات لإعادة تعيين كلمة المرور.",
+                        text      = stringResource(Res.string.forgot_password_sent_body),
                         style     = HallaakTheme.typography.body.small,
                         color     = HallaakTheme.colors.onSurfaceVariant,
                         textAlign = TextAlign.Center,
@@ -168,7 +179,7 @@ private fun ForgotPasswordContent(
                     Spacer(Modifier.height(8.dp))
                     HallaakButtonPrimary(
                         modifier = Modifier.fillMaxWidth(),
-                        label    = "العودة لتسجيل الدخول",
+                        label    = stringResource(Res.string.back_to_sign_in),
                         onClick  = { onAction(ForgotPasswordAction.BackClicked) },
                     )
                 }
@@ -178,13 +189,13 @@ private fun ForgotPasswordContent(
             AnimatedVisibility(visible = !state.isSuccess) {
                 Column {
                     Text(
-                        text  = "نسيت كلمة المرور؟",
+                        text  = stringResource(Res.string.forgot_password_heading),
                         style = HallaakTheme.typography.headline.small,
                         color = HallaakTheme.colors.onSurface,
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text  = "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين.",
+                        text  = stringResource(Res.string.forgot_password_body),
                         style = HallaakTheme.typography.body.small,
                         color = HallaakTheme.colors.onSurfaceVariant,
                     )
@@ -194,7 +205,7 @@ private fun ForgotPasswordContent(
                         modifier       = Modifier.fillMaxWidth(),
                         value          = state.email,
                         onValueChange  = { onAction(ForgotPasswordAction.EmailChanged(it)) },
-                        placeholder    = "البريد الإلكتروني",
+                        placeholder    = stringResource(Res.string.field_email),
                         leadingIcon    = Icons.Outlined.Email,
                         supportingText = state.emailError,
                         isError        = state.emailError != null,
@@ -207,7 +218,7 @@ private fun ForgotPasswordContent(
 
                     HallaakButtonPrimary(
                         modifier  = Modifier.fillMaxWidth(),
-                        label     = "إرسال رابط إعادة التعيين",
+                        label     = stringResource(Res.string.send_reset_link),
                         isEnabled = state.email.isNotBlank(),
                         onClick   = { onAction(ForgotPasswordAction.SendClicked) },
                     )

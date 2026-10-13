@@ -26,9 +26,14 @@ import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.common.ui.extension.ObserveAsEvents
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.app_name
+import daraglyhair.shared.generated.resources.cd_app_logo
 import daraglyhair.shared.generated.resources.ic_hallaak_logo
+import daraglyhair.shared.generated.resources.splash_tagline
+import daraglyhair.shared.generated.resources.splash_version
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -70,7 +75,7 @@ private fun SplashContent() {
         ) {
             Image(
                 painter            = painterResource(Res.drawable.ic_hallaak_logo),
-                contentDescription = "Halla'ak Logo",
+                contentDescription = stringResource(Res.string.cd_app_logo),
                 modifier           = Modifier
                     .size(140.dp)
                     .scale(logoScale.value)
@@ -78,14 +83,14 @@ private fun SplashContent() {
             )
             Spacer(Modifier.height(28.dp))
             Text(
-                text     = "حلاقك",
+                text     = stringResource(Res.string.app_name),
                 style    = HallaakTheme.typography.headline.extraLarge,
                 color    = Color.White,
                 modifier = Modifier.alpha(textAlpha.value),
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text     = "حلاقك في جيبك",
+                text     = stringResource(Res.string.splash_tagline),
                 style    = HallaakTheme.typography.body.medium,
                 color    = HallaakTheme.colors.gold,
                 modifier = Modifier.alpha(tagAlpha.value),
@@ -93,7 +98,7 @@ private fun SplashContent() {
         }
 
         Text(
-            text     = "v1.0",
+            text     = stringResource(Res.string.splash_version),
             style    = HallaakTheme.typography.label.small,
             color    = Color.White.copy(alpha = 0.35f),
             modifier = Modifier

@@ -11,6 +11,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.search_field_placeholder
+import org.jetbrains.compose.resources.stringResource
 
 // ─────────────────────────────────────────────
 //  HallaakSearchField
@@ -25,7 +28,7 @@ fun HallaakSearchField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: String = "ابحث عن حلاق أو صالون...",
+    placeholder: String = stringResource(Res.string.search_field_placeholder),
     onSearch: () -> Unit = {},
 ) {
     HallaakTextField(

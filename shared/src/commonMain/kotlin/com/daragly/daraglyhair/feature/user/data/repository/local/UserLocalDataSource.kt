@@ -27,6 +27,22 @@ class UserLocalDataSource(
         )
     }
 
+    override suspend fun saveRefreshToken(refreshToken: String) {
+        localProvider.save(
+            key = LocalDataSourceEnum.REFRESH_TOKEN,
+            value = refreshToken,
+            type = String::class
+        )
+    }
+
+    override suspend fun getRefreshToken(): String {
+        return localProvider.read(
+            key = LocalDataSourceEnum.REFRESH_TOKEN,
+            defaultValue = "",
+            type = String::class
+        )
+    }
+
     override suspend fun saveUser(user: User) {
         val userJson = json.encodeToString(User.serializer(), user)
         localProvider.save(
@@ -68,6 +84,13 @@ class UserLocalDataSource(
     override suspend fun deleteToken() {
         localProvider.delete<String>(
             key = LocalDataSourceEnum.ACCESS_TOKEN,
+            type = String::class
+        )
+    }
+
+    override suspend fun deleteRefreshToken() {
+        localProvider.delete<String>(
+            key = LocalDataSourceEnum.REFRESH_TOKEN,
             type = String::class
         )
     }

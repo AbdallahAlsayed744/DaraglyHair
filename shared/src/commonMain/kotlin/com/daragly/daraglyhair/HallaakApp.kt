@@ -26,11 +26,14 @@ import com.daragly.daraglyhair.common.domain.local.ILocalDataSourceProvider
 import com.daragly.daraglyhair.common.ui.eventcontroller.IEventController
 import com.daragly.daraglyhair.common.ui.extension.ObserveAsEvents
 import com.daragly.daraglyhair.common.ui.language.ILanguageEvent
+import com.daragly.daraglyhair.common.ui.language.LanguageHolder
 import com.daragly.daraglyhair.common.ui.language.ObserveLanguageEvent
 import com.daragly.daraglyhair.common.ui.loading.ILoadingEvent
 import com.daragly.daraglyhair.common.ui.message.IMessageEvent
+import com.daragly.daraglyhair.common.ui.navigation.IAuthGraph
 import com.daragly.daraglyhair.common.ui.navigation.INavigator
 import com.daragly.daraglyhair.common.ui.navigation.NavigationEvent
+import com.daragly.daraglyhair.common.ui.session.ISessionEvent
 import com.daragly.daraglyhair.common.ui.navigation.buildAuthNavGraph
 import com.daragly.daraglyhair.common.ui.navigation.buildMainNavGraph
 import com.daragly.daraglyhair.common.ui.theme.IThemeEvent
@@ -61,12 +64,13 @@ fun HallaakApp(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     val localProvider: ILocalDataSourceProvider = koinInject()
+    val languageHolder: LanguageHolder = koinInject()
+    val languageEvent: IEventController<ILanguageEvent> =
+        koinInject(qualifier = named("LanguageEvent"))
     val systemDark = isSystemInDarkTheme()
     var isDarkTheme by remember { mutableStateOf(systemDark) }
-    // Default to Arabic; overridden once persisted language is loaded
-    var isArabic by remember { mutableStateOf(true) }
 
-    // ── Load persisted theme & language on first launch ───────────────────
+    // ── Load persisted theme & apply persisted language on first launch ───
     LaunchedEffect(Unit) {
         val savedTheme = localProvider.read(
             key          = LocalDataSourceEnum.THEME,
@@ -84,7 +88,8 @@ fun HallaakApp(
             defaultValue = "ar",
             type         = String::class,
         )
-        isArabic = savedLanguage == "ar"
+        languageHolder.languageCode = savedLanguage
+        languageEvent.emit(ILanguageEvent.ChangeLanguage(savedLanguage))
     }
 
     // ── Observe theme change events for immediate app-wide switching ──────
@@ -103,16 +108,6 @@ fun HallaakApp(
         }
     }
 
-    // ── Observe language change events so the nav bar updates instantly ───
-    val languageEvent: IEventController<ILanguageEvent> =
-        koinInject(qualifier = named("LanguageEvent"))
-
-    ObserveAsEvents(languageEvent.event) { event ->
-        when (event) {
-            is ILanguageEvent.ChangeLanguage -> isArabic = event.languageCode == "ar"
-        }
-    }
-
     HallaakTheme(isDarkTheme = isDarkTheme) {
 
         ObserveLanguageEvent()
@@ -120,6 +115,8 @@ fun HallaakApp(
         ObserveMessageEvent(snackbarHostState = snackbarHostState, coroutineScope = coroutineScope)
 
         ObserveLoadingEvent()
+
+        ObserveSessionExpiredEvent(navigator = navigator)
 
         ObserveAsEvents(navigator.navigationEvent) { event ->
             when (event) {
@@ -139,7 +136,6 @@ fun HallaakApp(
                 HallaakBottomNavBar(
                     navController   = navHostController,
                     destinations    = BottomDestination.destinations,
-                    useArabicLabels = isArabic,
                 )
             },
         ) { innerPadding ->
@@ -177,6 +173,23 @@ private fun ObserveLoadingEvent() {
         }
     }
     if (isLoading) HallaakLoadingDialog()
+}
+
+@Composable
+private fun ObserveSessionExpiredEvent(navigator: INavigator) {
+    val sessionEvents: IEventController<ISessionEvent> =
+        koinInject(qualifier = named("SessionEvent"))
+    ObserveAsEvents(sessionEvents.event) { event ->
+        when (event) {
+            ISessionEvent.Expired -> navigator.navigate(
+                destination = IAuthGraph.Login,
+                builder = {
+                    popUpTo(0) { inclusive = true }
+                    launchSingleTop = true
+                },
+            )
+        }
+    }
 }
 
 @Composable

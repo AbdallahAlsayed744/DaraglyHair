@@ -20,6 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.app_name
+import org.jetbrains.compose.resources.stringResource
 
 // ─────────────────────────────────────────────
 //  HallaakTopBar
@@ -97,7 +100,7 @@ fun HallaakTopBar(
                 else -> {
                     // Logo placeholder – replace with actual image resource
                     Text(
-                        text = "حلاقك",
+                        text = stringResource(Res.string.app_name),
                         style = HallaakTheme.typography.headline.medium,
                         color = colors.contentColor,
                     )

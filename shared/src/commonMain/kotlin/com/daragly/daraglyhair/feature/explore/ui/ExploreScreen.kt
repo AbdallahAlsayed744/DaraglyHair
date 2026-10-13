@@ -33,9 +33,22 @@ import com.daragly.daraglyhair.designsystem.components.textfield.HallaakSearchFi
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.feature.home.ui.components.BarbershopCard
 import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.cd_clear_search
+import daraglyhair.shared.generated.resources.cd_retry
+import daraglyhair.shared.generated.resources.cd_search_barbershops
+import daraglyhair.shared.generated.resources.error_generic_title
+import daraglyhair.shared.generated.resources.explore_clear_search
+import daraglyhair.shared.generated.resources.explore_empty_no_query
+import daraglyhair.shared.generated.resources.explore_empty_subtitle
+import daraglyhair.shared.generated.resources.explore_empty_with_query
+import daraglyhair.shared.generated.resources.explore_search_placeholder
+import daraglyhair.shared.generated.resources.explore_subtitle
+import daraglyhair.shared.generated.resources.explore_title
 import daraglyhair.shared.generated.resources.ic_explore
 import daraglyhair.shared.generated.resources.ic_explore_outlined
+import daraglyhair.shared.generated.resources.retry
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -170,30 +183,31 @@ private fun ExploreHeader(
                 ),
         ) {
             Text(
-                text = "اكتشف",
+                text = stringResource(Res.string.explore_title),
                 style = HallaakTheme.typography.headline.large,
                 color = HallaakTheme.colors.background.canvas,
             )
             Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space4))
             Text(
-                text = "ابحث عن أفضل صالونات الحلاقة",
+                text = stringResource(Res.string.explore_subtitle),
                 style = HallaakTheme.typography.body.medium,
                 color = HallaakTheme.colors.background.canvas.copy(alpha = 0.85f),
             )
         }
 
         // Search field — sits just below the banner
+        val searchFieldDescription = stringResource(Res.string.cd_search_barbershops)
         HallaakSearchField(
             value = keyword,
             onValueChange = onKeywordChanged,
-            placeholder = "ابحث عن صالون أو مدينة...",
+            placeholder = stringResource(Res.string.explore_search_placeholder),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = HallaakTheme.dimensions.space16,
                     vertical = HallaakTheme.dimensions.space12,
                 )
-                .semantics { contentDescription = "Search barbershops" },
+                .semantics { contentDescription = searchFieldDescription },
         )
     }
 }
@@ -224,14 +238,18 @@ private fun ExploreEmptyState(
         )
 
         Text(
-            text = if (query.isNotBlank()) "مفيش نتايج لـ \"$query\"" else "مفيش صالونات متاحة حالياً",
+            text = if (query.isNotBlank()) {
+                stringResource(Res.string.explore_empty_with_query, query)
+            } else {
+                stringResource(Res.string.explore_empty_no_query)
+            },
             style = HallaakTheme.typography.headline.extraSmall,
             color = HallaakTheme.colors.onSurface,
             textAlign = TextAlign.Center,
         )
 
         Text(
-            text = "جرب كلمة بحث مختلفة أو تصفح كل الصالونات",
+            text = stringResource(Res.string.explore_empty_subtitle),
             style = HallaakTheme.typography.body.medium,
             color = HallaakTheme.colors.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -240,12 +258,13 @@ private fun ExploreEmptyState(
         Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space8))
 
         if (query.isNotBlank()) {
+            val clearSearchDescription = stringResource(Res.string.cd_clear_search)
             HallaakButtonPrimary(
-                label = "مسح البحث",
+                label = stringResource(Res.string.explore_clear_search),
                 onClick = onClearSearch,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { contentDescription = "Clear search" },
+                    .semantics { contentDescription = clearSearchDescription },
             )
         }
     }
@@ -277,7 +296,7 @@ private fun ExploreErrorState(
         )
 
         Text(
-            text = "حصلت مشكلة، حاول تاني",
+            text = stringResource(Res.string.error_generic_title),
             style = HallaakTheme.typography.headline.extraSmall,
             color = HallaakTheme.colors.onSurface,
             textAlign = TextAlign.Center,
@@ -292,12 +311,13 @@ private fun ExploreErrorState(
 
         Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space8))
 
+        val retryDescription = stringResource(Res.string.cd_retry)
         HallaakButtonPrimary(
-            label = "إعادة المحاولة",
+            label = stringResource(Res.string.retry),
             onClick = onRetry,
             modifier = Modifier
                 .fillMaxWidth()
-                .semantics { contentDescription = "Retry" },
+                .semantics { contentDescription = retryDescription },
         )
     }
 }

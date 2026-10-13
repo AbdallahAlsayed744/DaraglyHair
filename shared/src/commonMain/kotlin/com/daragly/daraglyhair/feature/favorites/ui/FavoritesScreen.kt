@@ -36,9 +36,18 @@ import com.daragly.daraglyhair.feature.favorites.ui.components.FavoritesShimmerL
 import com.daragly.daraglyhair.feature.home.domain.model.Barbershop
 import com.daragly.daraglyhair.feature.home.ui.components.BarbershopCard
 import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.error_generic_title
+import daraglyhair.shared.generated.resources.explore_barbershops
+import daraglyhair.shared.generated.resources.favorites_empty_subtitle
+import daraglyhair.shared.generated.resources.favorites_empty_title
+import daraglyhair.shared.generated.resources.favorites_subtitle
+import daraglyhair.shared.generated.resources.favorites_subtitle_with_count
+import daraglyhair.shared.generated.resources.favorites_title
 import daraglyhair.shared.generated.resources.ic_explore
 import daraglyhair.shared.generated.resources.ic_favorite_outlined
+import daraglyhair.shared.generated.resources.retry
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -157,11 +166,11 @@ private fun FavoritesHeader(
                 bottom = HallaakTheme.dimensions.space24,
             ),
     ) {
-        val titleText = "المفضلة"
+        val titleText = stringResource(Res.string.favorites_title)
         val subtitleText = if (shopCount != null && shopCount > 0) {
-            "كل محلاتك المفضلة في مكان واحد · $shopCount محل"
+            stringResource(Res.string.favorites_subtitle_with_count, shopCount)
         } else {
-            "كل محلاتك المفضلة في مكان واحد"
+            stringResource(Res.string.favorites_subtitle)
         }
 
         Text(
@@ -243,14 +252,14 @@ private fun FavoritesEmptyState(
         Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space8))
 
         Text(
-            text = "لسه مفيش محلات في المفضلة",
+            text = stringResource(Res.string.favorites_empty_title),
             style = HallaakTheme.typography.headline.extraSmall,
             color = HallaakTheme.colors.onSurface,
             textAlign = TextAlign.Center,
         )
 
         Text(
-            text = "احفظ محلات الحلاقة اللي تعجبك علشان تلاقيها هنا بسهولة في أي وقت.",
+            text = stringResource(Res.string.favorites_empty_subtitle),
             style = HallaakTheme.typography.body.medium,
             color = HallaakTheme.colors.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -258,12 +267,13 @@ private fun FavoritesEmptyState(
 
         Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space8))
 
+        val exploreLabel = stringResource(Res.string.explore_barbershops)
         HallaakButtonPrimary(
-            label = "اكتشف محلات الحلاقة",
+            label = exploreLabel,
             onClick = onExploreClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .semantics { contentDescription = "Explore Barbershops" },
+                .semantics { contentDescription = exploreLabel },
         )
     }
 }
@@ -294,7 +304,7 @@ private fun FavoritesErrorState(
         )
 
         Text(
-            text = "حصلت مشكلة، حاول تاني",
+            text = stringResource(Res.string.error_generic_title),
             style = HallaakTheme.typography.headline.extraSmall,
             color = HallaakTheme.colors.onSurface,
             textAlign = TextAlign.Center,
@@ -309,12 +319,13 @@ private fun FavoritesErrorState(
 
         Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space8))
 
+        val retryLabel = stringResource(Res.string.retry)
         HallaakButtonPrimary(
-            label = "إعادة المحاولة",
+            label = retryLabel,
             onClick = onRetryClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .semantics { contentDescription = "Retry" },
+                .semantics { contentDescription = retryLabel },
         )
     }
 }

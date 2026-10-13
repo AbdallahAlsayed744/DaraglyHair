@@ -21,6 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.duration_minutes
+import daraglyhair.shared.generated.resources.price_egp_short
+import org.jetbrains.compose.resources.stringResource
 
 // ─────────────────────────────────────────────
 //  HallaakServiceCard
@@ -98,7 +102,7 @@ fun HallaakServiceCard(
                             contentDescription = null,
                         )
                         Text(
-                            text  = "$durationMinutes دقيقة",
+                            text  = stringResource(Res.string.duration_minutes, durationMinutes),
                             style = HallaakTheme.typography.label.large,
                             color = HallaakTheme.colors.onSurfaceVariant,
                         )
@@ -108,7 +112,7 @@ fun HallaakServiceCard(
 
             // End: price
             Text(
-                text  = "$priceEgp ج.م",
+                text  = stringResource(Res.string.price_egp_short, priceEgp),
                 style = HallaakTheme.typography.headline.extraSmall,
                 color = HallaakTheme.colors.primary,
             )

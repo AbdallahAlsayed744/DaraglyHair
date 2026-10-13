@@ -47,7 +47,18 @@ import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonPrim
 import com.daragly.daraglyhair.designsystem.components.textfield.HallaakTextField
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.designsystem.util.clickableNoRipple
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.app_name
+import daraglyhair.shared.generated.resources.create_account
+import daraglyhair.shared.generated.resources.field_email
+import daraglyhair.shared.generated.resources.field_password
+import daraglyhair.shared.generated.resources.forgot_password_link
+import daraglyhair.shared.generated.resources.login_form_subtitle
+import daraglyhair.shared.generated.resources.login_hero_subtitle
+import daraglyhair.shared.generated.resources.no_account_prompt
+import daraglyhair.shared.generated.resources.sign_in
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -88,13 +99,13 @@ private fun LoginContent(
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text  = "حلاقك",
+                text  = stringResource(Res.string.app_name),
                 style = HallaakTheme.typography.headline.extraLarge,
                 color = Color.White,
             )
             Spacer(Modifier.height(6.dp))
             Text(
-                text  = "أهلاً بعودتك — سجّل الدخول للمتابعة",
+                text  = stringResource(Res.string.login_hero_subtitle),
                 style = HallaakTheme.typography.body.small,
                 color = Color.White.copy(alpha = 0.72f),
             )
@@ -111,13 +122,13 @@ private fun LoginContent(
                 .padding(horizontal = 24.dp, vertical = 28.dp),
         ) {
             Text(
-                text  = "تسجيل الدخول",
+                text  = stringResource(Res.string.sign_in),
                 style = HallaakTheme.typography.headline.medium,
                 color = secondary,
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text  = "أدخل بيانات حسابك للمتابعة",
+                text  = stringResource(Res.string.login_form_subtitle),
                 style = HallaakTheme.typography.body.small,
                 color = HallaakTheme.colors.onSurfaceVariant,
             )
@@ -129,7 +140,7 @@ private fun LoginContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.email,
                 onValueChange  = { onAction(LoginAction.EmailChanged(it)) },
-                placeholder    = "البريد الإلكتروني",
+                placeholder    = stringResource(Res.string.field_email),
                 leadingIcon    = Outlined.Email,
                 supportingText = state.emailError,
                 isError        = state.emailError != null,
@@ -146,7 +157,7 @@ private fun LoginContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.password,
                 onValueChange  = { onAction(LoginAction.PasswordChanged(it)) },
-                placeholder    = "كلمة المرور",
+                placeholder    = stringResource(Res.string.field_password),
                 leadingIcon    = Outlined.Lock,
                 trailingIcon   = if (state.isPasswordVisible) Outlined.Visibility else Outlined.VisibilityOff,
                 onTrailingIconClicked = { onAction(LoginAction.TogglePasswordVisibility) },
@@ -164,7 +175,7 @@ private fun LoginContent(
 
             // Forgot password
             Text(
-                text     = "نسيت كلمة المرور؟",
+                text     = stringResource(Res.string.forgot_password_link),
                 style    = HallaakTheme.typography.label.large,
                 color    = primary,
                 modifier = Modifier
@@ -177,12 +188,15 @@ private fun LoginContent(
 
             HallaakButtonPrimary(
                 modifier  = Modifier.fillMaxWidth(),
-                label     = "تسجيل الدخول",
+                label     = stringResource(Res.string.sign_in),
                 isEnabled = state.email.isNotBlank() && state.password.isNotBlank(),
                 onClick   = { onAction(LoginAction.LoginClicked) },
             )
 
             Spacer(Modifier.height(24.dp))
+
+            val noAccountPrompt = stringResource(Res.string.no_account_prompt)
+            val createAccount   = stringResource(Res.string.create_account)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -191,10 +205,10 @@ private fun LoginContent(
                 Text(
                     text  = buildAnnotatedString {
                         withStyle(SpanStyle(color = HallaakTheme.colors.onSurfaceVariant)) {
-                            append("ليس لديك حساب؟ ")
+                            append("$noAccountPrompt ")
                         }
                         withStyle(SpanStyle(color = primary)) {
-                            append("إنشاء حساب")
+                            append(createAccount)
                         }
                     },
                     style     = HallaakTheme.typography.body.small,

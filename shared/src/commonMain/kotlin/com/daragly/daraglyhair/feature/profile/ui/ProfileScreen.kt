@@ -30,7 +30,11 @@ import com.daragly.daraglyhair.LocalPadding
 import com.daragly.daraglyhair.common.ui.navigation.IMainGraph
 import com.daragly.daraglyhair.common.ui.navigation.INavigator
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.profile_title
+import daraglyhair.shared.generated.resources.settings
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 
 @Composable
@@ -76,7 +80,7 @@ fun ProfileScreen(
             }
 
             Text(
-                text  = "حسابي",
+                text  = stringResource(Res.string.profile_title),
                 style = HallaakTheme.typography.headline.medium,
                 color = HallaakTheme.colors.background.surface,
             )
@@ -114,7 +118,7 @@ fun ProfileScreen(
             }
 
             Text(
-                text     = "الإعدادات",
+                text     = stringResource(Res.string.settings),
                 style    = HallaakTheme.typography.body.medium,
                 color    = HallaakTheme.colors.onSurface,
                 modifier = Modifier.weight(1f),

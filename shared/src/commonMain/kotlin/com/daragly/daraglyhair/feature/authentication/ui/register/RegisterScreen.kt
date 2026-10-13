@@ -50,7 +50,21 @@ import com.daragly.daraglyhair.designsystem.components.dialogs.HallaakLoadingDia
 import com.daragly.daraglyhair.designsystem.components.textfield.HallaakTextField
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.designsystem.util.clickableNoRipple
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.create_account
+import daraglyhair.shared.generated.resources.field_confirm_password
+import daraglyhair.shared.generated.resources.field_email
+import daraglyhair.shared.generated.resources.field_first_name
+import daraglyhair.shared.generated.resources.field_last_name
+import daraglyhair.shared.generated.resources.field_password
+import daraglyhair.shared.generated.resources.field_phone
+import daraglyhair.shared.generated.resources.field_username
+import daraglyhair.shared.generated.resources.have_account_prompt
+import daraglyhair.shared.generated.resources.register_hero_subtitle
+import daraglyhair.shared.generated.resources.register_section_title
+import daraglyhair.shared.generated.resources.sign_in
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -93,13 +107,13 @@ private fun RegisterContent(
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text  = "إنشاء حساب",
+                text  = stringResource(Res.string.create_account),
                 style = HallaakTheme.typography.headline.large,
                 color = Color.White,
             )
             Spacer(Modifier.height(6.dp))
             Text(
-                text  = "انضم إلى حلاقك اليوم",
+                text  = stringResource(Res.string.register_hero_subtitle),
                 style = HallaakTheme.typography.body.small,
                 color = Color.White.copy(alpha = 0.72f),
             )
@@ -116,7 +130,7 @@ private fun RegisterContent(
                 .padding(horizontal = 24.dp, vertical = 24.dp),
         ) {
             Text(
-                text  = "بياناتك الشخصية",
+                text  = stringResource(Res.string.register_section_title),
                 style = HallaakTheme.typography.headline.small,
                 color = secondary,
             )
@@ -132,7 +146,7 @@ private fun RegisterContent(
                     modifier       = Modifier.weight(1f),
                     value          = state.firstName,
                     onValueChange  = { onAction(RegisterAction.FirstNameChanged(it)) },
-                    placeholder    = "الاسم الأول",
+                    placeholder    = stringResource(Res.string.field_first_name),
                     leadingIcon    = Icons.Outlined.Badge,
                     supportingText = state.firstNameError,
                     isError        = state.firstNameError != null,
@@ -141,7 +155,7 @@ private fun RegisterContent(
                     modifier       = Modifier.weight(1f),
                     value          = state.lastName,
                     onValueChange  = { onAction(RegisterAction.LastNameChanged(it)) },
-                    placeholder    = "اسم العائلة",
+                    placeholder    = stringResource(Res.string.field_last_name),
                     leadingIcon    = Icons.Outlined.Badge,
                     supportingText = state.lastNameError,
                     isError        = state.lastNameError != null,
@@ -155,7 +169,7 @@ private fun RegisterContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.userName,
                 onValueChange  = { onAction(RegisterAction.UserNameChanged(it)) },
-                placeholder    = "اسم المستخدم",
+                placeholder    = stringResource(Res.string.field_username),
                 leadingIcon    = Icons.Outlined.AccountCircle,
                 supportingText = state.userNameError,
                 isError        = state.userNameError != null,
@@ -166,7 +180,7 @@ private fun RegisterContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.email,
                 onValueChange  = { onAction(RegisterAction.EmailChanged(it)) },
-                placeholder    = "البريد الإلكتروني",
+                placeholder    = stringResource(Res.string.field_email),
                 leadingIcon    = Icons.Outlined.Email,
                 supportingText = state.emailError,
                 isError        = state.emailError != null,
@@ -181,7 +195,7 @@ private fun RegisterContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.phone,
                 onValueChange  = { onAction(RegisterAction.PhoneChanged(it)) },
-                placeholder    = "رقم الهاتف",
+                placeholder    = stringResource(Res.string.field_phone),
                 leadingIcon    = Icons.Outlined.Phone,
                 supportingText = state.phoneError,
                 isError        = state.phoneError != null,
@@ -196,7 +210,7 @@ private fun RegisterContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.password,
                 onValueChange  = { onAction(RegisterAction.PasswordChanged(it)) },
-                placeholder    = "كلمة المرور",
+                placeholder    = stringResource(Res.string.field_password),
                 leadingIcon    = Icons.Outlined.Lock,
                 trailingIcon   = if (state.isPasswordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
                 onTrailingIconClicked = { onAction(RegisterAction.TogglePasswordVisibility) },
@@ -214,7 +228,7 @@ private fun RegisterContent(
                 modifier       = Modifier.fillMaxWidth(),
                 value          = state.confirmPassword,
                 onValueChange  = { onAction(RegisterAction.ConfirmPasswordChanged(it)) },
-                placeholder    = "تأكيد كلمة المرور",
+                placeholder    = stringResource(Res.string.field_confirm_password),
                 leadingIcon    = Icons.Outlined.Lock,
                 trailingIcon   = if (state.isConfirmPasswordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
                 onTrailingIconClicked = { onAction(RegisterAction.ToggleConfirmPasswordVisibility) },
@@ -231,12 +245,15 @@ private fun RegisterContent(
 
             HallaakButtonPrimary(
                 modifier  = Modifier.fillMaxWidth(),
-                label     = "إنشاء حساب",
+                label     = stringResource(Res.string.create_account),
                 isEnabled = state.firstName.isNotBlank() && state.email.isNotBlank() && state.password.isNotBlank(),
                 onClick   = { onAction(RegisterAction.RegisterClicked) },
             )
 
             Spacer(Modifier.height(20.dp))
+
+            val haveAccountPrompt = stringResource(Res.string.have_account_prompt)
+            val signInLabel       = stringResource(Res.string.sign_in)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -245,9 +262,9 @@ private fun RegisterContent(
                 Text(
                     text  = buildAnnotatedString {
                         withStyle(SpanStyle(color = HallaakTheme.colors.onSurfaceVariant)) {
-                            append("لديك حساب بالفعل؟ ")
+                            append("$haveAccountPrompt ")
                         }
-                        withStyle(SpanStyle(color = primary)) { append("تسجيل الدخول") }
+                        withStyle(SpanStyle(color = primary)) { append(signInLabel) }
                     },
                     style     = HallaakTheme.typography.body.small,
                     textAlign = TextAlign.Center,

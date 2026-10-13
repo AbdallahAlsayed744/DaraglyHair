@@ -9,7 +9,10 @@ interface IUserRepository {
     suspend fun getUser(): User
     suspend fun saveToken(token: String)
     suspend fun getToken(): String
+    suspend fun saveRefreshToken(refreshToken: String)
+    suspend fun getRefreshToken(): String
     suspend fun deleteToken()
+    suspend fun deleteRefreshToken()
     suspend fun deleteUser()
     suspend fun deleteIsAuthenticated()
 }

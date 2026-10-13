@@ -27,12 +27,19 @@ import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.feature.home.domain.model.Barbershop
 import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.booking_available
+import daraglyhair.shared.generated.resources.cd_add_favorite
+import daraglyhair.shared.generated.resources.cd_remove_favorite
+import daraglyhair.shared.generated.resources.cd_verified
+import daraglyhair.shared.generated.resources.distance_km
+import daraglyhair.shared.generated.resources.distance_meters
 import daraglyhair.shared.generated.resources.ic_booking_enabled
 import daraglyhair.shared.generated.resources.ic_favorite
 import daraglyhair.shared.generated.resources.ic_favorite_outlined
 import daraglyhair.shared.generated.resources.ic_location
 import daraglyhair.shared.generated.resources.ic_verified
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun BarbershopCard(
@@ -80,7 +87,7 @@ fun BarbershopCard(
                         Spacer(modifier = Modifier.width(HallaakTheme.dimensions.space4))
                         Icon(
                             painter = painterResource(Res.drawable.ic_verified),
-                            contentDescription = "موثّق",
+                            contentDescription = stringResource(Res.string.cd_verified),
                             tint = HallaakTheme.colors.primary,
                             modifier = Modifier.size(18.dp),
                         )
@@ -98,7 +105,11 @@ fun BarbershopCard(
                             if (barbershop.isFavorite) Res.drawable.ic_favorite
                             else Res.drawable.ic_favorite_outlined
                         ),
-                        contentDescription = if (barbershop.isFavorite) "إزالة من المفضلة" else "إضافة للمفضلة",
+                        contentDescription = if (barbershop.isFavorite) {
+                            stringResource(Res.string.cd_remove_favorite)
+                        } else {
+                            stringResource(Res.string.cd_add_favorite)
+                        },
                         tint = if (barbershop.isFavorite) HallaakTheme.colors.status.error else HallaakTheme.colors.onSurfaceVariant,
                         modifier = Modifier.size(22.dp),
                     )
@@ -144,7 +155,7 @@ fun BarbershopCard(
             ) {
                 if (barbershop.isBookingEnabled) {
                     StatusChip(
-                        text = "الحجز متاح",
+                        text = stringResource(Res.string.booking_available),
                         icon = Res.drawable.ic_booking_enabled,
                         backgroundColor = HallaakTheme.colors.status.success.copy(alpha = 0.1f),
                         textColor = HallaakTheme.colors.status.success,
@@ -195,11 +206,12 @@ private fun buildLocationString(barbershop: Barbershop): String {
     return parts.joinToString(", ")
 }
 
+@Composable
 private fun formatDistance(distanceKm: Double): String {
     return if (distanceKm < 1.0) {
-        "${(distanceKm * 1000).toInt()} م"
+        stringResource(Res.string.distance_meters, (distanceKm * 1000).toInt())
     } else {
         val rounded = (distanceKm * 10).toInt() / 10.0
-        "$rounded كم"
+        stringResource(Res.string.distance_km, rounded.toString())
     }
 }

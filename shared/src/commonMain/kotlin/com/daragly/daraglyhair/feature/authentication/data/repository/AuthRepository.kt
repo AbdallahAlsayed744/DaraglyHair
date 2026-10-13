@@ -1,5 +1,6 @@
 package com.daragly.daraglyhair.feature.authentication.data.repository
 
+import com.daragly.daraglyhair.common.data.repository.remote.SessionManager
 import com.daragly.daraglyhair.feature.authentication.data.mapper.AuthMapper
 import com.daragly.daraglyhair.feature.authentication.data.remote.AuthRemoteDataSource
 import com.daragly.daraglyhair.feature.authentication.data.request.ForgotPasswordRequest
@@ -9,21 +10,16 @@ import com.daragly.daraglyhair.feature.authentication.data.request.RegisterReque
 import com.daragly.daraglyhair.feature.authentication.data.request.ResetPasswordRequest
 import com.daragly.daraglyhair.feature.authentication.domain.model.AuthToken
 import com.daragly.daraglyhair.feature.authentication.domain.repository.IAuthRepository
-import com.daragly.daraglyhair.feature.user.domain.usecase.SaveIsAuthenticatedUseCase
-import com.daragly.daraglyhair.feature.user.domain.usecase.SaveTokenUseCase
 
 class AuthRepository(
     private val remote: AuthRemoteDataSource,
-    private val saveTokenUseCase: SaveTokenUseCase,
-    private val saveIsAuthenticatedUseCase: SaveIsAuthenticatedUseCase,
+    private val sessionManager: SessionManager,
 ) : IAuthRepository {
 
     override suspend fun login(request: LoginRequest): AuthToken {
         val dto   = remote.login(request)
         val token = AuthMapper.toDomain(dto)
-        // Persist token and auth flag using use cases
-        saveTokenUseCase.invoke(token.token)
-        saveIsAuthenticatedUseCase.invoke(true)
+        persistSession(token)
         return token
     }
 
@@ -39,9 +35,11 @@ class AuthRepository(
     override suspend fun refreshToken(request: RefreshTokenRequest): AuthToken {
         val dto   = remote.refreshToken(request)
         val token = AuthMapper.toDomain(dto)
-        // Persist token and auth flag using use cases
-        saveTokenUseCase.invoke(token.token)
-        saveIsAuthenticatedUseCase.invoke(true)
+        persistSession(token)
         return token
+    }
+
+    private suspend fun persistSession(token: AuthToken) {
+        sessionManager.saveSession(accessToken = token.token, refreshToken = token.refreshToken)
     }
 }

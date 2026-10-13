@@ -54,7 +54,14 @@ import daraglyhair.shared.generated.resources.ic_home
 import daraglyhair.shared.generated.resources.ic_home_outlined
 import daraglyhair.shared.generated.resources.ic_profile
 import daraglyhair.shared.generated.resources.ic_profile_outlined
+import daraglyhair.shared.generated.resources.nav_bookings
+import daraglyhair.shared.generated.resources.nav_explore
+import daraglyhair.shared.generated.resources.nav_favorites
+import daraglyhair.shared.generated.resources.nav_home
+import daraglyhair.shared.generated.resources.nav_profile
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  HallaakBottomNavBar — Production-ready navigation bar
@@ -71,48 +78,42 @@ import org.jetbrains.compose.resources.painterResource
 // ── Bottom Destination Model ───────────────────────────────────────────────────
 
 sealed class BottomDestination(
-    override val labelEn: String,
-    override val labelAr: String,
+    val labelRes: StringResource,
     val iconSelected: org.jetbrains.compose.resources.DrawableResource,
     val iconUnselected: org.jetbrains.compose.resources.DrawableResource,
     val route: IDestination,
-) : HallaakNavItemState {
+) {
     
     data object Home : BottomDestination(
-        labelEn = "Home",
-        labelAr = "الرئيسية",
+        labelRes = Res.string.nav_home,
         iconSelected = Res.drawable.ic_home,
         iconUnselected = Res.drawable.ic_home_outlined,
         route = IMainGraph.Home,
     )
     
     data object Explore : BottomDestination(
-        labelEn = "Explore",
-        labelAr = "اكتشف",
+        labelRes = Res.string.nav_explore,
         iconSelected = Res.drawable.ic_explore,
         iconUnselected = Res.drawable.ic_explore_outlined,
         route = IMainGraph.Explore(),
     )
     
     data object Bookings : BottomDestination(
-        labelEn = "Bookings",
-        labelAr = "حجوزاتي",
+        labelRes = Res.string.nav_bookings,
         iconSelected = Res.drawable.ic_bookings,
         iconUnselected = Res.drawable.ic_bookings_outlined,
         route = IMainGraph.Bookings,
     )
     
     data object Favorites : BottomDestination(
-        labelEn = "Favorites",
-        labelAr = "المفضلة",
+        labelRes = Res.string.nav_favorites,
         iconSelected = Res.drawable.ic_favorite,
         iconUnselected = Res.drawable.ic_favorite_outlined,
         route = IMainGraph.Favorites,
     )
     
     data object Profile : BottomDestination(
-        labelEn = "Profile",
-        labelAr = "حسابي",
+        labelRes = Res.string.nav_profile,
         iconSelected = Res.drawable.ic_profile,
         iconUnselected = Res.drawable.ic_profile_outlined,
         route = IMainGraph.Profile,
@@ -123,13 +124,6 @@ sealed class BottomDestination(
     }
 }
 
-// ── Item state contract (for generic rendering) ────────────────────────────────
-
-interface HallaakNavItemState {
-    val labelEn: String
-    val labelAr: String
-}
-
 // ── Main navigation bar with NavController integration ──────────────────────────
 
 @Composable
@@ -137,7 +131,6 @@ fun HallaakBottomNavBar(
     navController: NavHostController,
     destinations: List<BottomDestination> = BottomDestination.destinations,
     modifier: Modifier = Modifier,
-    useArabicLabels: Boolean = true,
     containerColor: Color = HallaakNavBarDefaults.containerColor,
     elevation: Dp = HallaakNavBarDefaults.elevation,
 ) {
@@ -155,7 +148,6 @@ fun HallaakBottomNavBar(
         isVisible = navigationBarState,
         currentDestination = currentDestination,
         destinations = destinations,
-        useArabicLabels = useArabicLabels,
         onClick = { destination ->
             navController.navigate(destination.route) {
                 // Pop up to start destination to avoid stack buildup
@@ -181,7 +173,6 @@ private fun HallaakBottomNavBarContent(
     isVisible: Boolean,
     currentDestination: NavDestination?,
     destinations: List<BottomDestination>,
-    useArabicLabels: Boolean,
     onClick: (BottomDestination) -> Unit,
     modifier: Modifier = Modifier,
     containerColor: Color = HallaakNavBarDefaults.containerColor,
@@ -218,7 +209,6 @@ private fun HallaakBottomNavBarContent(
                     HallaakBottomNavItem(
                         destination = destination,
                         isSelected = isSelected,
-                        useArabicLabel = useArabicLabels,
                         onClick = { onClick(destination) },
                     )
                 }
@@ -233,13 +223,12 @@ private fun HallaakBottomNavBarContent(
 private fun RowScope.HallaakBottomNavItem(
     destination: BottomDestination,
     isSelected: Boolean,
-    useArabicLabel: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     colors: HallaakNavItemColors = HallaakNavItemDefaults.colors(),
     textStyles: HallaakNavItemTextStyles = HallaakNavItemDefaults.textStyles(),
     onClick: () -> Unit,
 ) {
-    val label = if (useArabicLabel) destination.labelAr else destination.labelEn
+    val label = stringResource(destination.labelRes)
     val icon = if (isSelected) destination.iconSelected else destination.iconUnselected
     
     Column(

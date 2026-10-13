@@ -25,7 +25,7 @@ val authModule = module {
     factoryOf(::AuthRemoteDataSource)
 
     // Repository
-    single<IAuthRepository> { AuthRepository(get(), get(), get()) }
+    single<IAuthRepository> { AuthRepository(get(), get()) }
 
     // Use cases
     factoryOf(::LoginUseCase)

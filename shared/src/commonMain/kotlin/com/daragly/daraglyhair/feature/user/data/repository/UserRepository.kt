@@ -26,8 +26,17 @@ class UserRepository(
     override suspend fun getToken(): String =
         local.getToken()
 
+    override suspend fun saveRefreshToken(refreshToken: String) =
+        local.saveRefreshToken(refreshToken)
+
+    override suspend fun getRefreshToken(): String =
+        local.getRefreshToken()
+
     override suspend fun deleteToken() =
         local.deleteToken()
+
+    override suspend fun deleteRefreshToken() =
+        local.deleteRefreshToken()
 
     override suspend fun deleteUser() =
         local.deleteUser()

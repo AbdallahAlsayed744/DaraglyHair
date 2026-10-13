@@ -52,14 +52,30 @@ import com.daragly.daraglyhair.feature.home.ui.components.BarbershopCard
 import com.daragly.daraglyhair.feature.home.ui.components.BarbershopCardShimmer
 import com.daragly.daraglyhair.feature.home.ui.components.ServiceCategoriesShimmer
 import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.cd_notifications
+import daraglyhair.shared.generated.resources.cd_search
+import daraglyhair.shared.generated.resources.date_at_time
+import daraglyhair.shared.generated.resources.greeting
+import daraglyhair.shared.generated.resources.greeting_with_name
+import daraglyhair.shared.generated.resources.guest
+import daraglyhair.shared.generated.resources.home_explore_shops
+import daraglyhair.shared.generated.resources.home_nearby_shops
+import daraglyhair.shared.generated.resources.home_search_placeholder
+import daraglyhair.shared.generated.resources.home_services
+import daraglyhair.shared.generated.resources.home_subtitle
+import daraglyhair.shared.generated.resources.home_upcoming_appointment
 import daraglyhair.shared.generated.resources.ic_calendar
 import daraglyhair.shared.generated.resources.ic_location
 import daraglyhair.shared.generated.resources.ic_notifications_outlined
 import daraglyhair.shared.generated.resources.ic_search
+import daraglyhair.shared.generated.resources.price_format
+import daraglyhair.shared.generated.resources.retry
+import daraglyhair.shared.generated.resources.see_all
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -150,8 +166,7 @@ fun HomeScreen(
             item {
                 Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space24))
                 SectionHeader(
-                    title = "صالونات قريبة منك",
-                    titleAr = "صالونات قريبة منك",
+                    title = stringResource(Res.string.home_nearby_shops),
                     onSeeAllClick = { viewModel.onAction(HomeAction.SeeAllShopsClicked) },
                     modifier = Modifier.padding(horizontal = HallaakTheme.dimensions.space16),
                 )
@@ -187,7 +202,7 @@ fun HomeScreen(
                         EmptyState(
                             message = shopsState.message,
                             onActionClick = { viewModel.onAction(HomeAction.ExploreClicked) },
-                            actionText = "استكشف الصالونات",
+                            actionText = stringResource(Res.string.home_explore_shops),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(HallaakTheme.dimensions.space32),
@@ -243,15 +258,16 @@ private fun HomeHeader(
                 when (profileState) {
                     is ProfileState.Loading -> {
                         Text(
-                            text = "مرحباً",
+                            text = stringResource(Res.string.greeting),
                             style = HallaakTheme.typography.headline.large,
                             color = HallaakTheme.colors.background.canvas,
                         )
                     }
                     is ProfileState.Success -> {
-                        val firstName = profileState.profile.firstName?.takeIf { it.isNotBlank() } ?: "ضيف"
+                        val firstName = profileState.profile.firstName?.takeIf { it.isNotBlank() }
+                            ?: stringResource(Res.string.guest)
                         Text(
-                            text = "مرحباً، $firstName",
+                            text = stringResource(Res.string.greeting_with_name, firstName),
                             style = HallaakTheme.typography.headline.large,
                             color = HallaakTheme.colors.background.canvas,
                             maxLines = 1,
@@ -260,7 +276,7 @@ private fun HomeHeader(
                     }
                     is ProfileState.Error -> {
                         Text(
-                            text = "مرحباً",
+                            text = stringResource(Res.string.greeting),
                             style = HallaakTheme.typography.headline.large,
                             color = HallaakTheme.colors.background.canvas,
                         )
@@ -270,7 +286,7 @@ private fun HomeHeader(
                 Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space4))
                 
                 Text(
-                    text = "ابحث عن أقرب صالون حلاقة",
+                    text = stringResource(Res.string.home_subtitle),
                     style = HallaakTheme.typography.body.medium,
                     color = HallaakTheme.colors.background.canvas.copy(alpha = 0.85f),
                 )
@@ -286,7 +302,7 @@ private fun HomeHeader(
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_notifications_outlined),
-                    contentDescription = "الإشعارات",
+                    contentDescription = stringResource(Res.string.cd_notifications),
                     tint = HallaakTheme.colors.background.canvas,
                     modifier = Modifier.size(24.dp),
                 )
@@ -324,13 +340,13 @@ private fun SearchBar(
         ) {
             Icon(
                 painter = painterResource(Res.drawable.ic_search),
-                contentDescription = "بحث",
+                contentDescription = stringResource(Res.string.cd_search),
                 tint = HallaakTheme.colors.onSurfaceVariant,
                 modifier = Modifier.size(24.dp),
             )
 
             Text(
-                text = "ابحث عن صالونات الحلاقة...",
+                text = stringResource(Res.string.home_search_placeholder),
                 style = HallaakTheme.typography.body.medium,
                 color = HallaakTheme.colors.onSurfaceVariant,
                 modifier = Modifier.weight(1f),
@@ -356,7 +372,7 @@ private fun ServiceCategoriesSection(
             if (categoriesState.categories.isNotEmpty()) {
                 Column {
                     Text(
-                        text = "الخدمات",
+                        text = stringResource(Res.string.home_services),
                         style = HallaakTheme.typography.title.large,
                         color = HallaakTheme.colors.onSurface,
                         modifier = Modifier.padding(horizontal = HallaakTheme.dimensions.space16),
@@ -434,7 +450,7 @@ private fun UpcomingAppointmentSection(
             appointmentState.appointment?.let { appointment ->
                 Column(modifier = modifier) {
                     Text(
-                        text = "موعدك القادم",
+                        text = stringResource(Res.string.home_upcoming_appointment),
                         style = HallaakTheme.typography.title.large,
                         color = HallaakTheme.colors.onSurface,
                     )
@@ -515,7 +531,7 @@ private fun UpcomingAppointmentCard(
                     )
                     
                     Text(
-                        text = "EGP ${appointment.totalPriceEgp}",
+                        text = stringResource(Res.string.price_format, appointment.totalPriceEgp.toString()),
                         style = HallaakTheme.typography.label.large,
                         color = HallaakTheme.colors.primary,
                     )
@@ -530,7 +546,6 @@ private fun UpcomingAppointmentCard(
 @Composable
 private fun SectionHeader(
     title: String,
-    titleAr: String,
     onSeeAllClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -547,7 +562,7 @@ private fun SectionHeader(
         
         TextButton(onClick = onSeeAllClick) {
             Text(
-                text = "عرض الكل",
+                text = stringResource(Res.string.see_all),
                 style = HallaakTheme.typography.label.large,
                 color = HallaakTheme.colors.primary,
             )
@@ -574,7 +589,7 @@ private fun ErrorState(
             color = HallaakTheme.colors.status.error,
         )
         HallaakButtonPrimary(
-            label = "إعادة المحاولة",
+            label = stringResource(Res.string.retry),
             onClick = onRetryClick,
             modifier = Modifier.fillMaxWidth(),
         )
@@ -610,9 +625,10 @@ private fun EmptyState(
 
 // ── Utility Functions ─────────────────────────────────────────────────────────
 
+@Composable
 private fun formatAppointmentDateTime(instant: Instant): String {
     val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
     val date = "${localDateTime.dayOfMonth}/${localDateTime.monthNumber}/${localDateTime.year}"
     val time = "${localDateTime.hour.toString().padStart(2, '0')}:${localDateTime.minute.toString().padStart(2, '0')}"
-    return "$date الساعة $time"
+    return stringResource(Res.string.date_at_time, date, time)
 }

@@ -3,6 +3,7 @@ package com.daragly.daraglyhair.feature.settings.ui
 import androidx.lifecycle.viewModelScope
 import com.daragly.daraglyhair.common.domain.Resource
 import com.daragly.daraglyhair.common.ui.language.ILanguageEvent
+import com.daragly.daraglyhair.common.ui.language.LanguageHolder
 import com.daragly.daraglyhair.common.ui.navigation.IAuthGraph
 import com.daragly.daraglyhair.common.ui.navigation.IMainGraph
 import com.daragly.daraglyhair.common.ui.viewmodel.BaseViewModel
@@ -39,6 +40,8 @@ class SettingsViewModel(
 
     private val themeEventController: IEventController<IThemeEvent>
             by inject(qualifier = named("ThemeEvent"))
+
+    private val languageHolder: LanguageHolder by inject()
 
     init {
         onAction(SettingsAction.LoadSettings)
@@ -147,6 +150,7 @@ class SettingsViewModel(
         updateState { copy(language = code) }
         viewModelScope.launch {
             saveLanguageUseCase.invoke(code)
+            languageHolder.languageCode = code
             // Dispatch the global language event — triggers AppCompatDelegate / LocaleManager
             languageEventController.emit(ILanguageEvent.ChangeLanguage(code))
         }

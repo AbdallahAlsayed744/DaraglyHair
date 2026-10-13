@@ -20,6 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.appointment_status_cancelled
+import daraglyhair.shared.generated.resources.appointment_status_completed
+import daraglyhair.shared.generated.resources.appointment_status_upcoming
+import daraglyhair.shared.generated.resources.status_pending
+import org.jetbrains.compose.resources.stringResource
 
 // ─────────────────────────────────────────────
 //  HallaakAppointmentCard
@@ -114,10 +120,10 @@ fun HallaakStatusChip(
     modifier: Modifier = Modifier,
 ) {
     val (label, bgColor) = when (status) {
-        HallaakAppointmentStatus.UPCOMING   -> "قادم" to HallaakTheme.colors.status.info
-        HallaakAppointmentStatus.COMPLETED  -> "مكتمل" to HallaakTheme.colors.status.success
-        HallaakAppointmentStatus.CANCELLED  -> "ملغى" to HallaakTheme.colors.status.error
-        HallaakAppointmentStatus.PENDING    -> "قيد المراجعة" to HallaakTheme.colors.status.pending
+        HallaakAppointmentStatus.UPCOMING   -> stringResource(Res.string.appointment_status_upcoming) to HallaakTheme.colors.status.info
+        HallaakAppointmentStatus.COMPLETED  -> stringResource(Res.string.appointment_status_completed) to HallaakTheme.colors.status.success
+        HallaakAppointmentStatus.CANCELLED  -> stringResource(Res.string.appointment_status_cancelled) to HallaakTheme.colors.status.error
+        HallaakAppointmentStatus.PENDING    -> stringResource(Res.string.status_pending) to HallaakTheme.colors.status.pending
     }
 
     Box(

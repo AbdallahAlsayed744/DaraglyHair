@@ -7,8 +7,6 @@ import com.daragly.daraglyhair.feature.user.domain.repository.local.IUserLocalDa
 import com.daragly.daraglyhair.feature.user.domain.usecase.GetTokenUseCase
 import com.daragly.daraglyhair.feature.user.domain.usecase.GetUserUseCase
 import com.daragly.daraglyhair.feature.user.domain.usecase.LogoutUseCase
-import com.daragly.daraglyhair.feature.user.domain.usecase.SaveIsAuthenticatedUseCase
-import com.daragly.daraglyhair.feature.user.domain.usecase.SaveTokenUseCase
 import com.daragly.daraglyhair.feature.user.domain.usecase.SaveUserUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -26,7 +24,5 @@ val userModule = module {
     factoryOf(::GetUserUseCase)
     factoryOf(::SaveUserUseCase)
     factoryOf(::GetTokenUseCase)
-    factoryOf(::SaveTokenUseCase)
-    factoryOf(::SaveIsAuthenticatedUseCase)
     factoryOf(::LogoutUseCase)
 }

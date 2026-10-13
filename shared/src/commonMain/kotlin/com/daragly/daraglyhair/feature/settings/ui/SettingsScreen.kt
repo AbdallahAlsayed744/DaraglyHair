@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
@@ -64,6 +63,43 @@ import com.daragly.daraglyhair.common.ui.navigation.INavigator
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.feature.profile.ui.rememberUriPainter
 import com.daragly.daraglyhair.feature.settings.domain.model.AppTheme
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.about_app_icon_letter
+import daraglyhair.shared.generated.resources.about_app_name
+import daraglyhair.shared.generated.resources.about_app_tagline
+import daraglyhair.shared.generated.resources.about_version
+import daraglyhair.shared.generated.resources.cancel
+import daraglyhair.shared.generated.resources.change_password
+import daraglyhair.shared.generated.resources.coming_soon
+import daraglyhair.shared.generated.resources.contact_support
+import daraglyhair.shared.generated.resources.edit_profile_title
+import daraglyhair.shared.generated.resources.enable_notifications
+import daraglyhair.shared.generated.resources.greeting_with_name
+import daraglyhair.shared.generated.resources.help_center
+import daraglyhair.shared.generated.resources.language_arabic
+import daraglyhair.shared.generated.resources.language_arabic_latin
+import daraglyhair.shared.generated.resources.language_english
+import daraglyhair.shared.generated.resources.notifications_subtitle
+import daraglyhair.shared.generated.resources.privacy_policy
+import daraglyhair.shared.generated.resources.section_about
+import daraglyhair.shared.generated.resources.section_account
+import daraglyhair.shared.generated.resources.section_appearance
+import daraglyhair.shared.generated.resources.section_help_support
+import daraglyhair.shared.generated.resources.section_language
+import daraglyhair.shared.generated.resources.section_notifications
+import daraglyhair.shared.generated.resources.section_privacy_security
+import daraglyhair.shared.generated.resources.send_reset_link
+import daraglyhair.shared.generated.resources.send_reset_link_email
+import daraglyhair.shared.generated.resources.settings
+import daraglyhair.shared.generated.resources.sign_out
+import daraglyhair.shared.generated.resources.sign_out_message
+import daraglyhair.shared.generated.resources.terms_conditions
+import daraglyhair.shared.generated.resources.theme_dark
+import daraglyhair.shared.generated.resources.theme_light
+import daraglyhair.shared.generated.resources.theme_system
+import daraglyhair.shared.generated.resources.user_fallback
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -76,7 +112,6 @@ fun SettingsScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val uriHandler = LocalUriHandler.current
-    val isArabic = state.language == "ar"
 
     // Resolve stored image URI → Painter every time user.image changes
     val resolvedPainter = rememberUriPainter(state.user.image)
@@ -96,16 +131,17 @@ fun SettingsScreen(
     LaunchedEffect(Unit) {
         viewModel.event.collect { event ->
             when (event) {
-                SettingsEvent.NavigateBack             -> navigator.navigateUp()
-                SettingsEvent.NavigateToLogin          -> navigator.navigate(IAuthGraph.Login) {
+                SettingsEvent.NavigateBack -> navigator.navigateUp()
+                SettingsEvent.NavigateToLogin -> navigator.navigate(IAuthGraph.Login) {
                     popUpTo(0) { inclusive = true }
                     launchSingleTop = true
                 }
-                SettingsEvent.NavigateToProfile        -> navigator.navigateUp()
-                SettingsEvent.NavigateToEditProfile    -> navigator.navigate(IMainGraph.EditProfile)
+
+                SettingsEvent.NavigateToProfile -> navigator.navigateUp()
+                SettingsEvent.NavigateToEditProfile -> navigator.navigate(IMainGraph.EditProfile)
                 SettingsEvent.NavigateToForgotPassword -> navigator.navigate(IAuthGraph.ForgotPassword)
-                SettingsEvent.NavigateToNotifications  -> Unit
-                is SettingsEvent.OpenUrl               -> runCatching { uriHandler.openUri(event.url) }
+                SettingsEvent.NavigateToNotifications -> Unit
+                is SettingsEvent.OpenUrl -> runCatching { uriHandler.openUri(event.url) }
             }
         }
     }
@@ -113,7 +149,6 @@ fun SettingsScreen(
     // Sign-out dialog
     if (state.showSignOutDialog) {
         SignOutDialog(
-            isArabic  = isArabic,
             onConfirm = { viewModel.onAction(SettingsAction.SignOutConfirmed) },
             onDismiss = { viewModel.onAction(SettingsAction.SignOutDismissed) },
         )
@@ -134,10 +169,7 @@ fun SettingsScreen(
         ) {
             // ── Hero header (same pattern as FavoritesHeader / HomeHeader) ──
             item(key = "header") {
-                SettingsHeroHeader(
-                    state    = state,
-                    isArabic = isArabic,
-                )
+                SettingsHeroHeader(state = state)
             }
 
             item(key = "space_after_header") {
@@ -146,13 +178,12 @@ fun SettingsScreen(
 
             // A. Account
             item(key = "sec_account") {
-                SectionHeader(if (isArabic) "الحساب" else "Account")
+                SectionHeader(Res.string.section_account)
             }
             item(key = "card_account") {
                 AccountCard(
-                    state            = state,
-                    isArabic         = isArabic,
-                    onEditProfile    = { viewModel.onAction(SettingsAction.EditProfileClicked) },
+                    state = state,
+                    onEditProfile = { viewModel.onAction(SettingsAction.EditProfileClicked) },
                     onChangePassword = { viewModel.onAction(SettingsAction.ChangePasswordClicked) },
                 )
             }
@@ -160,12 +191,11 @@ fun SettingsScreen(
             // B. Appearance
             item(key = "sec_appearance") {
                 Spacer(Modifier.height(HallaakTheme.dimensions.space8))
-                SectionHeader(if (isArabic) "المظهر" else "Appearance")
+                SectionHeader(Res.string.section_appearance)
             }
             item(key = "card_appearance") {
                 AppearanceCard(
-                    selectedTheme   = state.theme,
-                    isArabic        = isArabic,
+                    selectedTheme = state.theme,
                     onThemeSelected = { viewModel.onAction(SettingsAction.ThemeSelected(it)) },
                 )
             }
@@ -173,12 +203,11 @@ fun SettingsScreen(
             // C. Language
             item(key = "sec_language") {
                 Spacer(Modifier.height(HallaakTheme.dimensions.space8))
-                SectionHeader(if (isArabic) "اللغة" else "Language")
+                SectionHeader(Res.string.section_language)
             }
             item(key = "card_language") {
                 LanguageCard(
-                    selectedLanguage   = state.language,
-                    isArabic           = isArabic,
+                    selectedLanguage = state.language,
                     onLanguageSelected = { viewModel.onAction(SettingsAction.LanguageSelected(it)) },
                 )
             }
@@ -186,24 +215,22 @@ fun SettingsScreen(
             // D. Notifications
             item(key = "sec_notif") {
                 Spacer(Modifier.height(HallaakTheme.dimensions.space8))
-                SectionHeader(if (isArabic) "الإشعارات" else "Notifications")
+                SectionHeader(Res.string.section_notifications)
             }
             item(key = "card_notif") {
                 NotificationsCard(
                     notificationsEnabled = state.notificationsEnabled,
-                    isArabic             = isArabic,
-                    onToggle             = { viewModel.onAction(SettingsAction.NotificationsToggled(it)) },
+                    onToggle = { viewModel.onAction(SettingsAction.NotificationsToggled(it)) },
                 )
             }
 
             // E. Privacy & Security — Change Password ONLY
             item(key = "sec_privacy") {
                 Spacer(Modifier.height(HallaakTheme.dimensions.space8))
-                SectionHeader(if (isArabic) "الخصوصية والأمان" else "Privacy & Security")
+                SectionHeader(Res.string.section_privacy_security)
             }
             item(key = "card_privacy") {
                 PrivacyCard(
-                    isArabic         = isArabic,
                     onChangePassword = { viewModel.onAction(SettingsAction.ChangePasswordClicked) },
                 )
             }
@@ -211,20 +238,19 @@ fun SettingsScreen(
             // F. Help & Support
             item(key = "sec_help") {
                 Spacer(Modifier.height(HallaakTheme.dimensions.space8))
-                SectionHeader(if (isArabic) "المساعدة والدعم" else "Help & Support")
+                SectionHeader(Res.string.section_help_support)
             }
-            item(key = "card_help") { HelpCard(isArabic = isArabic) }
+            item(key = "card_help") { HelpCard() }
 
             // G. About — Privacy Policy + Terms only here
             item(key = "sec_about") {
                 Spacer(Modifier.height(HallaakTheme.dimensions.space8))
-                SectionHeader(if (isArabic) "حول التطبيق" else "About")
+                SectionHeader(Res.string.section_about)
             }
             item(key = "card_about") {
                 AboutCard(
-                    isArabic        = isArabic,
                     onPrivacyPolicy = { viewModel.onAction(SettingsAction.PrivacyPolicyClicked) },
-                    onTerms         = { viewModel.onAction(SettingsAction.TermsClicked) },
+                    onTerms = { viewModel.onAction(SettingsAction.TermsClicked) },
                 )
             }
 
@@ -233,8 +259,7 @@ fun SettingsScreen(
                 Spacer(Modifier.height(HallaakTheme.dimensions.space16))
                 SignOutRow(
                     isLoading = state.isSigningOut,
-                    isArabic  = isArabic,
-                    onClick   = { viewModel.onAction(SettingsAction.SignOutClicked) },
+                    onClick = { viewModel.onAction(SettingsAction.SignOutClicked) },
                 )
             }
         }
@@ -250,35 +275,34 @@ fun SettingsScreen(
 @Composable
 private fun SettingsHeroHeader(
     state: SettingsState,
-    isArabic: Boolean,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(HallaakTheme.colors.primary)
             .padding(
-                top    = 48.dp,
-                start  = HallaakTheme.dimensions.space20,
-                end    = HallaakTheme.dimensions.space20,
+                top = 48.dp,
+                start = HallaakTheme.dimensions.space20,
+                end = HallaakTheme.dimensions.space20,
                 bottom = HallaakTheme.dimensions.space24,
             ),
-        verticalAlignment     = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         // Title + greeting
         Column(
-            modifier            = Modifier.weight(1f),
+            modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space4),
         ) {
             Text(
-                text  = if (isArabic) "الإعدادات" else "Settings",
+                text = stringResource(Res.string.settings),
                 style = HallaakTheme.typography.headline.large,
                 color = HallaakTheme.colors.background.canvas,
             )
             val displayName = state.user.name.trim()
-                .ifBlank { if (isArabic) "مستخدم" else "User" }
+                .ifBlank { stringResource(Res.string.user_fallback) }
             Text(
-                text  = if (isArabic) "مرحباً، $displayName" else "Hello, $displayName",
+                text = stringResource(Res.string.greeting_with_name, displayName),
                 style = HallaakTheme.typography.body.medium,
                 color = HallaakTheme.colors.background.canvas.copy(alpha = 0.85f),
                 maxLines = 1,
@@ -291,9 +315,9 @@ private fun SettingsHeroHeader(
         // User avatar (real image if available)
         UserAvatar(
             imagePainter = state.userImagePainter,
-            isLoading    = state.isLoadingUser,
-            size         = HallaakTheme.dimensions.avatarMedium.value.toInt(),
-            borderColor  = HallaakTheme.colors.background.canvas.copy(alpha = 0.4f),
+            isLoading = state.isLoadingUser,
+            size = HallaakTheme.dimensions.avatarMedium.value.toInt(),
+            borderColor = HallaakTheme.colors.background.canvas.copy(alpha = 0.4f),
         )
     }
 }
@@ -303,16 +327,16 @@ private fun SettingsHeroHeader(
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Composable
-private fun SectionHeader(title: String) {
+private fun SectionHeader(title: StringResource) {
     Text(
-        text     = title,
-        style    = HallaakTheme.typography.label.extraLarge,
-        color    = HallaakTheme.colors.primary,
+        text = stringResource(title),
+        style = HallaakTheme.typography.label.extraLarge,
+        color = HallaakTheme.colors.primary,
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                start  = HallaakTheme.dimensions.space16,
-                end    = HallaakTheme.dimensions.space16,
+                start = HallaakTheme.dimensions.space16,
+                end = HallaakTheme.dimensions.space16,
                 bottom = HallaakTheme.dimensions.space4,
             ),
     )
@@ -325,13 +349,13 @@ private fun SectionHeader(title: String) {
 @Composable
 private fun SettingsCard(content: @Composable () -> Unit) {
     Card(
-        modifier  = Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = HallaakTheme.dimensions.space16),
-        shape     = HallaakTheme.shapes.card,
-        colors    = CardDefaults.cardColors(containerColor = HallaakTheme.colors.background.surface),
+        shape = HallaakTheme.shapes.card,
+        colors = CardDefaults.cardColors(containerColor = HallaakTheme.colors.background.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        content   = { content() },
+        content = { content() },
     )
 }
 
@@ -344,7 +368,6 @@ internal fun SettingsRow(
     icon: ImageVector,
     title: String,
     subtitle: String? = null,
-    isArabic: Boolean = true,
     showArrow: Boolean = true,
     onClick: (() -> Unit)? = null,
     trailingContent: @Composable (() -> Unit)? = null,
@@ -355,9 +378,9 @@ internal fun SettingsRow(
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .padding(
                 horizontal = HallaakTheme.dimensions.space16,
-                vertical   = HallaakTheme.dimensions.space12,
+                vertical = HallaakTheme.dimensions.space12,
             ),
-        verticalAlignment     = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space12),
     ) {
         Box(
@@ -368,27 +391,27 @@ internal fun SettingsRow(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector        = icon,
+                imageVector = icon,
                 contentDescription = null,
-                tint               = HallaakTheme.colors.primary,
-                modifier           = Modifier.size(20.dp),
+                tint = HallaakTheme.colors.primary,
+                modifier = Modifier.size(20.dp),
             )
         }
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text     = title,
-                style    = HallaakTheme.typography.body.small,
-                color    = HallaakTheme.colors.onSurface,
+                text = title,
+                style = HallaakTheme.typography.body.small,
+                color = HallaakTheme.colors.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             if (subtitle != null) {
                 Spacer(Modifier.height(2.dp))
                 Text(
-                    text     = subtitle,
-                    style    = HallaakTheme.typography.label.large,
-                    color    = HallaakTheme.colors.onSurfaceVariant,
+                    text = subtitle,
+                    style = HallaakTheme.typography.label.large,
+                    color = HallaakTheme.colors.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -398,11 +421,10 @@ internal fun SettingsRow(
         when {
             trailingContent != null -> trailingContent()
             showArrow -> Icon(
-                imageVector        = if (isArabic) Icons.AutoMirrored.Outlined.ArrowBack
-                                     else         Icons.AutoMirrored.Outlined.ArrowForward,
+                imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
                 contentDescription = null,
-                tint               = HallaakTheme.colors.onSurfaceVariant,
-                modifier           = Modifier.size(HallaakTheme.dimensions.iconSize),
+                tint = HallaakTheme.colors.onSurfaceVariant,
+                modifier = Modifier.size(HallaakTheme.dimensions.iconSize),
             )
         }
     }
@@ -435,26 +457,28 @@ internal fun UserAvatar(
             .background(HallaakTheme.colors.primary.copy(alpha = 0.12f))
 
     Box(
-        modifier         = borderMod,
+        modifier = borderMod,
         contentAlignment = Alignment.Center,
     ) {
         when {
             isLoading -> CircularProgressIndicator(
-                modifier    = Modifier.size((size * 0.35f).dp),
-                color       = HallaakTheme.colors.primary,
+                modifier = Modifier.size((size * 0.35f).dp),
+                color = HallaakTheme.colors.primary,
                 strokeWidth = 2.dp,
             )
+
             imagePainter != null -> Image(
-                painter            = imagePainter,
+                painter = imagePainter,
                 contentDescription = null,
-                contentScale       = ContentScale.Crop,
-                modifier           = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
             )
+
             else -> Icon(
-                imageVector        = Icons.Outlined.AccountCircle,
+                imageVector = Icons.Outlined.AccountCircle,
                 contentDescription = null,
-                tint               = HallaakTheme.colors.background.canvas,
-                modifier           = Modifier.size((size * 0.65f).dp),
+                tint = HallaakTheme.colors.background.canvas,
+                modifier = Modifier.size((size * 0.65f).dp),
             )
         }
     }
@@ -467,7 +491,6 @@ internal fun UserAvatar(
 @Composable
 private fun AccountCard(
     state: SettingsState,
-    isArabic: Boolean,
     onEditProfile: () -> Unit,
     onChangePassword: () -> Unit,
 ) {
@@ -478,30 +501,30 @@ private fun AccountCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(HallaakTheme.dimensions.space16),
-                verticalAlignment     = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space12),
             ) {
                 UserAvatar(
                     imagePainter = state.userImagePainter,
-                    isLoading    = state.isLoadingUser,
-                    size         = HallaakTheme.dimensions.avatarMedium.value.toInt(),
+                    isLoading = state.isLoadingUser,
+                    size = HallaakTheme.dimensions.avatarMedium.value.toInt(),
                 )
 
                 Column(
-                    modifier            = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space4),
                 ) {
                     if (state.isLoadingUser) {
                         CircularProgressIndicator(
-                            modifier    = Modifier.size(16.dp),
-                            color       = HallaakTheme.colors.primary,
+                            modifier = Modifier.size(16.dp),
+                            color = HallaakTheme.colors.primary,
                             strokeWidth = 2.dp,
                         )
                     } else {
                         Text(
-                            text     = state.user.name.ifBlank { if (isArabic) "مستخدم" else "User" },
-                            style    = HallaakTheme.typography.title.extraLarge,
-                            color    = HallaakTheme.colors.onSurface,
+                            text = state.user.name.ifBlank { stringResource(Res.string.user_fallback) },
+                            style = HallaakTheme.typography.title.extraLarge,
+                            color = HallaakTheme.colors.onSurface,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -518,20 +541,18 @@ private fun AccountCard(
             HorizontalDivider(color = HallaakTheme.colors.stroke, thickness = 0.5.dp)
 
             SettingsRow(
-                icon     = Icons.Outlined.Person,
-                title    = if (isArabic) "تعديل الملف الشخصي" else "Edit Profile",
-                isArabic = isArabic,
-                onClick  = onEditProfile,
+                icon = Icons.Outlined.Person,
+                title = stringResource(Res.string.edit_profile_title),
+                onClick = onEditProfile,
             )
 
             HorizontalDivider(color = HallaakTheme.colors.stroke, thickness = 0.5.dp)
 
             SettingsRow(
-                icon     = Icons.Outlined.Lock,
-                title    = if (isArabic) "تغيير كلمة المرور" else "Change Password",
-                subtitle = if (isArabic) "إرسال رابط إعادة التعيين" else "Send a reset link",
-                isArabic = isArabic,
-                onClick  = onChangePassword,
+                icon = Icons.Outlined.Lock,
+                title = stringResource(Res.string.change_password),
+                subtitle = stringResource(Res.string.send_reset_link),
+                onClick = onChangePassword,
             )
         }
     }
@@ -540,19 +561,19 @@ private fun AccountCard(
 @Composable
 private fun ContactLine(icon: ImageVector, label: String) {
     Row(
-        verticalAlignment     = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Icon(
-            imageVector        = icon,
+            imageVector = icon,
             contentDescription = null,
-            tint               = HallaakTheme.colors.onSurfaceVariant,
-            modifier           = Modifier.size(14.dp),
+            tint = HallaakTheme.colors.onSurfaceVariant,
+            modifier = Modifier.size(14.dp),
         )
         Text(
-            text     = label,
-            style    = HallaakTheme.typography.label.large,
-            color    = HallaakTheme.colors.onSurfaceVariant,
+            text = label,
+            style = HallaakTheme.typography.label.large,
+            color = HallaakTheme.colors.onSurfaceVariant,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
@@ -566,15 +587,14 @@ private fun ContactLine(icon: ImageVector, label: String) {
 @Composable
 private fun AppearanceCard(
     selectedTheme: AppTheme,
-    isArabic: Boolean,
     onThemeSelected: (AppTheme) -> Unit,
 ) {
-    data class Option(val theme: AppTheme, val labelAr: String, val labelEn: String)
+    data class Option(val theme: AppTheme, val labelRes: StringResource)
 
     val options = listOf(
-        Option(AppTheme.SYSTEM, "حسب إعدادات الجهاز", "System Default"),
-        Option(AppTheme.LIGHT,  "الوضع الفاتح",        "Light Mode"),
-        Option(AppTheme.DARK,   "الوضع الداكن",        "Dark Mode"),
+        Option(AppTheme.SYSTEM, Res.string.theme_system),
+        Option(AppTheme.LIGHT, Res.string.theme_light),
+        Option(AppTheme.DARK, Res.string.theme_dark),
     )
 
     SettingsCard {
@@ -586,22 +606,22 @@ private fun AppearanceCard(
                         .clickable { onThemeSelected(opt.theme) }
                         .padding(
                             horizontal = HallaakTheme.dimensions.space16,
-                            vertical   = HallaakTheme.dimensions.space4,
+                            vertical = HallaakTheme.dimensions.space4,
                         ),
-                    verticalAlignment     = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text     = if (isArabic) opt.labelAr else opt.labelEn,
-                        style    = HallaakTheme.typography.body.small,
-                        color    = HallaakTheme.colors.onSurface,
+                        text = stringResource(opt.labelRes),
+                        style = HallaakTheme.typography.body.small,
+                        color = HallaakTheme.colors.onSurface,
                         modifier = Modifier.weight(1f),
                     )
                     RadioButton(
                         selected = selectedTheme == opt.theme,
-                        onClick  = { onThemeSelected(opt.theme) },
-                        colors   = RadioButtonDefaults.colors(
-                            selectedColor   = HallaakTheme.colors.primary,
+                        onClick = { onThemeSelected(opt.theme) },
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = HallaakTheme.colors.primary,
                             unselectedColor = HallaakTheme.colors.onSurfaceVariant,
                         ),
                     )
@@ -621,14 +641,17 @@ private fun AppearanceCard(
 @Composable
 private fun LanguageCard(
     selectedLanguage: String,
-    isArabic: Boolean,
     onLanguageSelected: (String) -> Unit,
 ) {
-    data class LangOpt(val code: String, val labelAr: String, val labelEn: String)
+    data class LangOpt(
+        val code: String,
+        val nativeLabelRes: StringResource,
+        val latinLabelRes: StringResource,
+    )
 
     val options = listOf(
-        LangOpt("ar", "العربية", "Arabic"),
-        LangOpt("en", "English", "English"),
+        LangOpt("ar", Res.string.language_arabic, Res.string.language_arabic_latin),
+        LangOpt("en", Res.string.language_english, Res.string.language_english),
     )
 
     SettingsCard {
@@ -640,20 +663,28 @@ private fun LanguageCard(
                         .clickable { onLanguageSelected(opt.code) }
                         .padding(
                             horizontal = HallaakTheme.dimensions.space16,
-                            vertical   = HallaakTheme.dimensions.space4,
+                            vertical = HallaakTheme.dimensions.space4,
                         ),
-                    verticalAlignment     = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = opt.labelAr, style = HallaakTheme.typography.body.small,  color = HallaakTheme.colors.onSurface)
-                        Text(text = opt.labelEn, style = HallaakTheme.typography.label.large, color = HallaakTheme.colors.onSurfaceVariant)
+                        Text(
+                            text = stringResource(opt.nativeLabelRes),
+                            style = HallaakTheme.typography.body.small,
+                            color = HallaakTheme.colors.onSurface
+                        )
+                        Text(
+                            text = stringResource(opt.latinLabelRes),
+                            style = HallaakTheme.typography.label.large,
+                            color = HallaakTheme.colors.onSurfaceVariant
+                        )
                     }
                     RadioButton(
                         selected = selectedLanguage == opt.code,
-                        onClick  = { onLanguageSelected(opt.code) },
-                        colors   = RadioButtonDefaults.colors(
-                            selectedColor   = HallaakTheme.colors.primary,
+                        onClick = { onLanguageSelected(opt.code) },
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = HallaakTheme.colors.primary,
                             unselectedColor = HallaakTheme.colors.onSurfaceVariant,
                         ),
                     )
@@ -673,23 +704,21 @@ private fun LanguageCard(
 @Composable
 private fun NotificationsCard(
     notificationsEnabled: Boolean,
-    isArabic: Boolean,
     onToggle: (Boolean) -> Unit,
 ) {
     SettingsCard {
         SettingsRow(
-            icon      = Icons.Outlined.Notifications,
-            title     = if (isArabic) "تفعيل الإشعارات" else "Enable Notifications",
-            subtitle  = if (isArabic) "تنبيهات الحجوزات والتحديثات" else "Booking alerts and updates",
-            isArabic  = isArabic,
+            icon = Icons.Outlined.Notifications,
+            title = stringResource(Res.string.enable_notifications),
+            subtitle = stringResource(Res.string.notifications_subtitle),
             showArrow = false,
             trailingContent = {
                 Switch(
-                    checked         = notificationsEnabled,
+                    checked = notificationsEnabled,
                     onCheckedChange = onToggle,
-                    colors          = SwitchDefaults.colors(
-                        checkedThumbColor   = HallaakTheme.colors.background.surface,
-                        checkedTrackColor   = HallaakTheme.colors.primary,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = HallaakTheme.colors.background.surface,
+                        checkedTrackColor = HallaakTheme.colors.primary,
                         uncheckedThumbColor = HallaakTheme.colors.background.surface,
                         uncheckedTrackColor = HallaakTheme.colors.onSurfaceVariant.copy(alpha = 0.4f),
                     ),
@@ -705,16 +734,14 @@ private fun NotificationsCard(
 
 @Composable
 private fun PrivacyCard(
-    isArabic: Boolean,
     onChangePassword: () -> Unit,
 ) {
     SettingsCard {
         SettingsRow(
-            icon     = Icons.Outlined.Lock,
-            title    = if (isArabic) "تغيير كلمة المرور" else "Change Password",
-            subtitle = if (isArabic) "إرسال رابط إعادة التعيين بالبريد" else "Send a reset link to your email",
-            isArabic = isArabic,
-            onClick  = onChangePassword,
+            icon = Icons.Outlined.Lock,
+            title = stringResource(Res.string.change_password),
+            subtitle = stringResource(Res.string.send_reset_link_email),
+            onClick = onChangePassword,
         )
     }
 }
@@ -724,22 +751,20 @@ private fun PrivacyCard(
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Composable
-private fun HelpCard(isArabic: Boolean) {
+private fun HelpCard() {
     SettingsCard {
         Column {
             SettingsRow(
-                icon      = Icons.AutoMirrored.Outlined.HelpOutline,
-                title     = if (isArabic) "مركز المساعدة" else "Help Center",
-                subtitle  = if (isArabic) "قريباً" else "Coming soon",
-                isArabic  = isArabic,
+                icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                title = stringResource(Res.string.help_center),
+                subtitle = stringResource(Res.string.coming_soon),
                 showArrow = false,
             )
             HorizontalDivider(color = HallaakTheme.colors.stroke, thickness = 0.5.dp)
             SettingsRow(
-                icon      = Icons.Outlined.Email,
-                title     = if (isArabic) "تواصل مع الدعم" else "Contact Support",
-                subtitle  = if (isArabic) "قريباً" else "Coming soon",
-                isArabic  = isArabic,
+                icon = Icons.Outlined.Email,
+                title = stringResource(Res.string.contact_support),
+                subtitle = stringResource(Res.string.coming_soon),
                 showArrow = false,
             )
         }
@@ -752,7 +777,6 @@ private fun HelpCard(isArabic: Boolean) {
 
 @Composable
 private fun AboutCard(
-    isArabic: Boolean,
     onPrivacyPolicy: () -> Unit,
     onTerms: () -> Unit,
 ) {
@@ -762,7 +786,7 @@ private fun AboutCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(HallaakTheme.dimensions.space16),
-                verticalAlignment     = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space12),
             ) {
                 Box(
@@ -773,28 +797,27 @@ private fun AboutCard(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text  = "ح",
+                        text = stringResource(Res.string.about_app_icon_letter),
                         style = HallaakTheme.typography.headline.medium,
                         color = HallaakTheme.colors.background.surface,
                     )
                 }
                 Column(
-                    modifier            = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space4),
                 ) {
                     Text(
-                        text  = "حلاقك  •  Halla'ak",
+                        text = stringResource(Res.string.about_app_name),
                         style = HallaakTheme.typography.title.extraLarge,
                         color = HallaakTheme.colors.onSurface,
                     )
                     Text(
-                        text  = if (isArabic) "تطبيق حجز الصالونات الرائد في مصر"
-                                else          "Egypt's leading barber-booking app",
+                        text = stringResource(Res.string.about_app_tagline),
                         style = HallaakTheme.typography.label.large,
                         color = HallaakTheme.colors.onSurfaceVariant,
                     )
                     Text(
-                        text  = if (isArabic) "الإصدار 1.0  (1)" else "Version 1.0  (1)",
+                        text = stringResource(Res.string.about_version),
                         style = HallaakTheme.typography.label.medium,
                         color = HallaakTheme.colors.onSurfaceVariant.copy(alpha = 0.7f),
                     )
@@ -804,19 +827,17 @@ private fun AboutCard(
             HorizontalDivider(color = HallaakTheme.colors.stroke, thickness = 0.5.dp)
 
             SettingsRow(
-                icon     = Icons.Outlined.Policy,
-                title    = if (isArabic) "سياسة الخصوصية" else "Privacy Policy",
-                isArabic = isArabic,
-                onClick  = onPrivacyPolicy,
+                icon = Icons.Outlined.Policy,
+                title = stringResource(Res.string.privacy_policy),
+                onClick = onPrivacyPolicy,
             )
 
             HorizontalDivider(color = HallaakTheme.colors.stroke, thickness = 0.5.dp)
 
             SettingsRow(
-                icon     = Icons.Outlined.Info,
-                title    = if (isArabic) "الشروط والأحكام" else "Terms & Conditions",
-                isArabic = isArabic,
-                onClick  = onTerms,
+                icon = Icons.Outlined.Info,
+                title = stringResource(Res.string.terms_conditions),
+                onClick = onTerms,
             )
         }
     }
@@ -829,16 +850,16 @@ private fun AboutCard(
 @Composable
 private fun SignOutRow(
     isLoading: Boolean,
-    isArabic: Boolean,
     onClick: () -> Unit,
 ) {
+    val signOutLabel = stringResource(Res.string.sign_out)
     Card(
-        modifier  = Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = HallaakTheme.dimensions.space16)
             .clickable(enabled = !isLoading, onClick = onClick),
-        shape     = HallaakTheme.shapes.card,
-        colors    = CardDefaults.cardColors(
+        shape = HallaakTheme.shapes.card,
+        colors = CardDefaults.cardColors(
             containerColor = HallaakTheme.colors.status.error.copy(alpha = 0.08f),
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -847,7 +868,7 @@ private fun SignOutRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(HallaakTheme.dimensions.space16),
-            verticalAlignment     = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space12),
         ) {
             Box(
@@ -859,21 +880,21 @@ private fun SignOutRow(
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
-                        modifier    = Modifier.size(20.dp),
-                        color       = HallaakTheme.colors.status.error,
+                        modifier = Modifier.size(20.dp),
+                        color = HallaakTheme.colors.status.error,
                         strokeWidth = 2.dp,
                     )
                 } else {
                     Icon(
-                        imageVector        = Icons.AutoMirrored.Outlined.ExitToApp,
-                        contentDescription = if (isArabic) "تسجيل الخروج" else "Sign Out",
-                        tint               = HallaakTheme.colors.status.error,
-                        modifier           = Modifier.size(20.dp),
+                        imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
+                        contentDescription = signOutLabel,
+                        tint = HallaakTheme.colors.status.error,
+                        modifier = Modifier.size(20.dp),
                     )
                 }
             }
             Text(
-                text  = if (isArabic) "تسجيل الخروج" else "Sign Out",
+                text = signOutLabel,
                 style = HallaakTheme.typography.body.small,
                 color = HallaakTheme.colors.status.error,
             )
@@ -887,33 +908,31 @@ private fun SignOutRow(
 
 @Composable
 private fun SignOutDialog(
-    isArabic: Boolean,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        shape            = HallaakTheme.shapes.dialog,
-        containerColor   = HallaakTheme.colors.background.surface,
+        shape = HallaakTheme.shapes.dialog,
+        containerColor = HallaakTheme.colors.background.surface,
         icon = {
             Icon(
-                imageVector        = Icons.AutoMirrored.Outlined.ExitToApp,
+                imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
                 contentDescription = null,
-                tint               = HallaakTheme.colors.status.error,
-                modifier           = Modifier.size(28.dp),
+                tint = HallaakTheme.colors.status.error,
+                modifier = Modifier.size(28.dp),
             )
         },
         title = {
             Text(
-                text  = if (isArabic) "تسجيل الخروج" else "Sign Out",
+                text = stringResource(Res.string.sign_out),
                 style = HallaakTheme.typography.title.extraLarge,
                 color = HallaakTheme.colors.onSurface,
             )
         },
         text = {
             Text(
-                text  = if (isArabic) "هل أنت متأكد من تسجيل الخروج من حسابك؟"
-                        else          "Are you sure you want to sign out?",
+                text = stringResource(Res.string.sign_out_message),
                 style = HallaakTheme.typography.body.small,
                 color = HallaakTheme.colors.onSurfaceVariant,
             )
@@ -921,7 +940,7 @@ private fun SignOutDialog(
         confirmButton = {
             TextButton(onClick = onConfirm) {
                 Text(
-                    text  = if (isArabic) "تسجيل الخروج" else "Sign Out",
+                    text = stringResource(Res.string.sign_out),
                     style = HallaakTheme.typography.body.small,
                     color = HallaakTheme.colors.status.error,
                 )
@@ -930,7 +949,7 @@ private fun SignOutDialog(
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text(
-                    text  = if (isArabic) "إلغاء" else "Cancel",
+                    text = stringResource(Res.string.cancel),
                     style = HallaakTheme.typography.body.small,
                     color = HallaakTheme.colors.primary,
                 )

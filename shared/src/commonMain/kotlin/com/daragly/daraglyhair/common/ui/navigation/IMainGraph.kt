@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import com.daragly.daraglyhair.feature.bookings.ui.AppointmentDetailScreen
 import com.daragly.daraglyhair.feature.bookings.ui.BookingsScreen
 import com.daragly.daraglyhair.feature.explore.ui.ExploreScreen
 import com.daragly.daraglyhair.feature.favorites.ui.FavoritesScreen
@@ -26,6 +27,8 @@ sealed interface IMainGraph : IDestination {
     /** Navigate to Explore, optionally pre-filling the search bar. */
     @Serializable data class  Explore(val query: String = "") : IMainGraph
     @Serializable data object Bookings    : IMainGraph
+    /** Appointment detail screen — nested inside the Bookings flow. */
+    @Serializable data class  AppointmentDetail(val appointmentId: String) : IMainGraph
     @Serializable data object Favorites   : IMainGraph
     @Serializable data object Profile     : IMainGraph   // tab — renders SettingsScreen
     @Serializable data object Settings    : IMainGraph   // alias kept for back-compat
@@ -42,6 +45,10 @@ fun NavGraphBuilder.buildMainNavGraph() {
             ExploreScreen(initialQuery = route.query)
         }
         composable<IMainGraph.Bookings>    { BookingsScreen() }
+        composable<IMainGraph.AppointmentDetail> { backStackEntry ->
+            val route = backStackEntry.toRoute<IMainGraph.AppointmentDetail>()
+            AppointmentDetailScreen(appointmentId = route.appointmentId)
+        }
         composable<IMainGraph.Favorites>   { FavoritesScreen() }
         // Profile tab and Settings route both show the same SettingsScreen
         composable<IMainGraph.Profile>     { SettingsScreen() }

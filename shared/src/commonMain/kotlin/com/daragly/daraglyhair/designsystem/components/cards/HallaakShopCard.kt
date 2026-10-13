@@ -28,6 +28,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.designsystem.util.HallaakShimmerBox
+import daraglyhair.shared.generated.resources.Res
+import daraglyhair.shared.generated.resources.book_online
+import daraglyhair.shared.generated.resources.district_distance
+import org.jetbrains.compose.resources.stringResource
 
 // ─────────────────────────────────────────────
 //  HallaakShopCard
@@ -129,7 +133,7 @@ fun HallaakShopCard(
                     )
                     Spacer(Modifier.width(2.dp))
                     Text(
-                        text  = "$districtName · $distanceKm كم",
+                        text  = stringResource(Res.string.district_distance, districtName, distanceKm),
                         style = HallaakTheme.typography.label.large,
                         color = HallaakTheme.colors.onSurfaceVariant,
                     )
@@ -191,7 +195,7 @@ fun HallaakBookingChip(modifier: Modifier = Modifier) {
             .padding(horizontal = 8.dp, vertical = 4.dp),
     ) {
         Text(
-            text  = "حجز أونلاين",
+            text  = stringResource(Res.string.book_online),
             style = HallaakTheme.typography.label.medium,
             color = Color.White,
         )
