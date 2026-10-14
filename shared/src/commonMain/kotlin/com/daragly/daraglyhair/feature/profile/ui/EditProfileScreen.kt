@@ -40,15 +40,23 @@ import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonPrim
 import com.daragly.daraglyhair.designsystem.components.textfield.HallaakTextField
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.feature.settings.ui.UserAvatar
+import com.daragly.daraglyhair.feature.user.domain.model.ProfileImage
 import daraglyhair.shared.generated.resources.Res
 import daraglyhair.shared.generated.resources.back
 import daraglyhair.shared.generated.resources.cd_pick_image
 import daraglyhair.shared.generated.resources.edit_profile_save
 import daraglyhair.shared.generated.resources.edit_profile_title
+import daraglyhair.shared.generated.resources.error_email_invalid
+import daraglyhair.shared.generated.resources.error_email_required
+import daraglyhair.shared.generated.resources.error_first_name_required
+import daraglyhair.shared.generated.resources.error_last_name_required
+import daraglyhair.shared.generated.resources.error_save_failed
 import daraglyhair.shared.generated.resources.field_email
-import daraglyhair.shared.generated.resources.field_full_name
+import daraglyhair.shared.generated.resources.field_first_name
+import daraglyhair.shared.generated.resources.field_last_name
 import daraglyhair.shared.generated.resources.field_phone
 import daraglyhair.shared.generated.resources.user_fallback
+import io.ktor.util.encodeBase64
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -68,8 +76,15 @@ fun EditProfileScreen(
     val displayPainter = state.imagePainter ?: storedPainter
 
     // Launch image picker — called when the user taps the camera badge
-    val launchImagePicker = rememberImagePickerLauncher { uriString, painter ->
-        viewModel.onAction(EditProfileAction.ImagePicked(uriString, painter))
+    val launchImagePicker = rememberImagePickerLauncher { uriString, painter, bytes, extension ->
+        val image = if (bytes != null && extension != null) {
+            ProfileImage(
+                fileName = "profile$extension",
+                extension = extension,
+                dataBase64 = bytes.encodeBase64(),
+            )
+        } else null
+        viewModel.onAction(EditProfileAction.ImagePicked(uriString, painter, image))
     }
 
     // ── Side effects ──────────────────────────────────────────────────────
@@ -106,14 +121,29 @@ fun EditProfileScreen(
         ) {
             Spacer(Modifier.height(HallaakTheme.dimensions.space8))
 
-            // ── Name field ────────────────────────────────────────────────
+            // ── First name field ────────────────────────────────────────────
             HallaakTextField(
-                value         = state.name,
-                onValueChange = { viewModel.onAction(EditProfileAction.NameChanged(it)) },
-                placeholder   = stringResource(Res.string.field_full_name),
+                value         = state.firstName,
+                onValueChange = { viewModel.onAction(EditProfileAction.FirstNameChanged(it)) },
+                placeholder   = stringResource(Res.string.field_first_name),
                 leadingIcon   = Icons.Outlined.Person,
-                isError       = state.nameError != null,
-                supportingText = state.nameError,
+                isError       = state.firstNameError != null,
+                supportingText = resolveMessage(state.firstNameError),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction    = ImeAction.Next,
+                ),
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            // ── Last name field ─────────────────────────────────────────────
+            HallaakTextField(
+                value         = state.lastName,
+                onValueChange = { viewModel.onAction(EditProfileAction.LastNameChanged(it)) },
+                placeholder   = stringResource(Res.string.field_last_name),
+                leadingIcon   = Icons.Outlined.Person,
+                isError       = state.lastNameError != null,
+                supportingText = resolveMessage(state.lastNameError),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction    = ImeAction.Next,
@@ -140,12 +170,25 @@ fun EditProfileScreen(
                 onValueChange = { viewModel.onAction(EditProfileAction.EmailChanged(it)) },
                 placeholder   = stringResource(Res.string.field_email),
                 leadingIcon   = Icons.Outlined.Email,
+                isError       = state.emailError != null,
+                supportingText = resolveMessage(state.emailError),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction    = ImeAction.Done,
                 ),
                 modifier = Modifier.fillMaxWidth(),
             )
+
+            // ── Save failure ──────────────────────────────────────────────
+            state.saveError?.let {
+                resolveMessage(it)?.let { text ->
+                    Text(
+                        text  = text,
+                        style = HallaakTheme.typography.body.small,
+                        color = HallaakTheme.colors.status.error,
+                    )
+                }
+            }
 
             Spacer(Modifier.height(HallaakTheme.dimensions.space8))
 
@@ -158,6 +201,23 @@ fun EditProfileScreen(
             )
         }
     }
+}
+
+// ViewModel error sentinels are keys, not text — resolve them here where resources are available.
+@Composable
+private fun resolveMessage(sentinel: String?): String? = when (sentinel) {
+    null -> null
+    EditProfileViewModel.ERROR_FIRST_NAME_REQUIRED ->
+        stringResource(Res.string.error_first_name_required)
+    EditProfileViewModel.ERROR_LAST_NAME_REQUIRED ->
+        stringResource(Res.string.error_last_name_required)
+    EditProfileViewModel.ERROR_EMAIL_REQUIRED ->
+        stringResource(Res.string.error_email_required)
+    EditProfileViewModel.ERROR_EMAIL_INVALID ->
+        stringResource(Res.string.error_email_invalid)
+    EditProfileViewModel.ERROR_SAVE_FAILED ->
+        stringResource(Res.string.error_save_failed)
+    else -> sentinel
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -209,7 +269,9 @@ private fun EditProfileHeroHeader(
                     style = HallaakTheme.typography.headline.large,
                     color = HallaakTheme.colors.background.canvas,
                 )
-                val displayName = state.name.trim()
+                val displayName = listOf(state.firstName, state.lastName)
+                    .filter { it.isNotBlank() }
+                    .joinToString(" ")
                     .ifBlank { stringResource(Res.string.user_fallback) }
                 Text(
                     text     = displayName,

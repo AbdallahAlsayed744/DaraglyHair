@@ -8,6 +8,7 @@ data class AppointmentDetailState(
     val content: AppointmentDetailContentState = AppointmentDetailContentState.Loading,
     val cancellationState: CancellationState = CancellationState.Idle,
     val showCancellationDialog: Boolean = false,
+    val cancellationReason: String = "",
 )
 
 sealed class AppointmentDetailContentState {
@@ -30,7 +31,11 @@ sealed interface AppointmentDetailAction {
     data object Retry : AppointmentDetailAction
     data object BackClicked : AppointmentDetailAction
     data object CancelClicked : AppointmentDetailAction           // opens confirm dialog
-    data object ConfirmCancellation : AppointmentDetailAction     // user confirms in dialog
+    data class CancellationReasonChanged(val reason: String) : AppointmentDetailAction
+    data class ConfirmCancellation(
+        val appointmentId: String,
+        val reason: String?,
+    ) : AppointmentDetailAction                                   // user confirms in dialog
     data object DismissCancellationDialog : AppointmentDetailAction
     data object DismissCancellationResult : AppointmentDetailAction
 }

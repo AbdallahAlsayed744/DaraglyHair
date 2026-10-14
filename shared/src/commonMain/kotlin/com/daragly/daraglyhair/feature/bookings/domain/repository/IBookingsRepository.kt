@@ -3,6 +3,7 @@ package com.daragly.daraglyhair.feature.bookings.domain.repository
 import com.daragly.daraglyhair.common.domain.Resource
 import com.daragly.daraglyhair.feature.bookings.domain.model.BookingAppointment
 import com.daragly.daraglyhair.feature.bookings.domain.model.BookingTabFilter
+import com.daragly.daraglyhair.feature.bookings.domain.model.CancellationRequest
 
 interface IBookingsRepository {
 
@@ -23,8 +24,8 @@ interface IBookingsRepository {
     suspend fun getAppointmentById(id: String): Resource<BookingAppointment>
 
     /**
-     * Requests cancellation of appointment [id].
+     * Requests cancellation of an appointment (optionally with a customer-supplied reason).
      * Returns success/failure — does not guarantee refund.
      */
-    suspend fun cancelAppointment(id: String): Resource<Unit>
+    suspend fun cancelAppointment(request: CancellationRequest): Resource<Unit>
 }

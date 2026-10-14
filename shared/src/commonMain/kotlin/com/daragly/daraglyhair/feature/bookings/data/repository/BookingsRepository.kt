@@ -2,10 +2,12 @@ package com.daragly.daraglyhair.feature.bookings.data.repository
 
 import com.daragly.daraglyhair.common.data.DaraglyHairException
 import com.daragly.daraglyhair.common.domain.Resource
+import com.daragly.daraglyhair.feature.bookings.data.dto.CancelAppointmentRequest
 import com.daragly.daraglyhair.feature.bookings.data.mapper.toBookingDomain
 import com.daragly.daraglyhair.feature.bookings.data.remote.BookingsRemoteDataSource
 import com.daragly.daraglyhair.feature.bookings.domain.model.BookingAppointment
 import com.daragly.daraglyhair.feature.bookings.domain.model.BookingTabFilter
+import com.daragly.daraglyhair.feature.bookings.domain.model.CancellationRequest
 import com.daragly.daraglyhair.feature.bookings.domain.repository.IBookingsRepository
 import com.daragly.daraglyhair.feature.home.data.request.AppointmentSearchRequest
 import kotlinx.datetime.Clock
@@ -80,8 +82,13 @@ class BookingsRepository(
         Resource.Failure(e)
     }
 
-    override suspend fun cancelAppointment(id: String): Resource<Unit> = try {
-        remoteDataSource.cancelAppointment(id) // return value ignored — success = no exception
+    override suspend fun cancelAppointment(request: CancellationRequest): Resource<Unit> = try {
+        remoteDataSource.cancelAppointment(
+            CancelAppointmentRequest(
+                id = request.appointmentId,
+                reason = request.reason?.takeIf { it.isNotBlank() },
+            ),
+        ) // returned appointment id is not needed — success = no exception
         Resource.Success(Unit)
     } catch (e: DaraglyHairException) {
         Resource.Failure(e)

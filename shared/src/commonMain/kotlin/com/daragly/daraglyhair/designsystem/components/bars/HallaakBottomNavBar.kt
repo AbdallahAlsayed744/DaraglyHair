@@ -149,15 +149,22 @@ fun HallaakBottomNavBar(
         currentDestination = currentDestination,
         destinations = destinations,
         onClick = { destination ->
-            navController.navigate(destination.route) {
-                // Pop up to start destination to avoid stack buildup
-                navController.graph.startDestinationRoute?.let {
-                    popUpTo(it) {
-                        saveState = true
+            // Tapping the already-selected tab does nothing — no pop, no re-creation
+            val isSelected = currentDestination?.hierarchy?.any {
+                it.hasRoute(destination.route::class)
+            } == true
+
+            if (!isSelected) {
+                navController.navigate(destination.route) {
+                    // Pop up to start destination to avoid stack buildup
+                    navController.graph.startDestinationRoute?.let {
+                        popUpTo(it) {
+                            saveState = true
+                        }
                     }
+                    launchSingleTop = true
+                    restoreState = true
                 }
-                launchSingleTop = true
-                restoreState = true
             }
         },
         modifier = modifier,

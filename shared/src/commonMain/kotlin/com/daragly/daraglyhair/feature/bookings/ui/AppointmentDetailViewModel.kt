@@ -5,6 +5,7 @@ import com.daragly.daraglyhair.common.domain.Resource
 import com.daragly.daraglyhair.common.ui.viewmodel.BaseViewModel
 import com.daragly.daraglyhair.feature.bookings.domain.interactors.CancelAppointmentUseCase
 import com.daragly.daraglyhair.feature.bookings.domain.interactors.GetAppointmentDetailUseCase
+import com.daragly.daraglyhair.feature.bookings.domain.model.CancellationRequest
 import kotlinx.coroutines.launch
 
 class AppointmentDetailViewModel(
@@ -24,8 +25,16 @@ class AppointmentDetailViewModel(
             is AppointmentDetailAction.Load                    -> loadAppointment()
             is AppointmentDetailAction.Retry                   -> loadAppointment()
             is AppointmentDetailAction.BackClicked             -> emitEvent(AppointmentDetailEvent.NavigateBack)
-            is AppointmentDetailAction.CancelClicked           -> updateState { copy(showCancellationDialog = true) }
-            is AppointmentDetailAction.ConfirmCancellation     -> confirmCancellation()
+            is AppointmentDetailAction.CancelClicked           -> updateState {
+                copy(showCancellationDialog = true, cancellationReason = "")
+            }
+            is AppointmentDetailAction.CancellationReasonChanged -> updateState {
+                copy(cancellationReason = action.reason)
+            }
+            is AppointmentDetailAction.ConfirmCancellation -> confirmCancellation(
+                appointmentId = action.appointmentId,
+                reason = action.reason,
+            )
             is AppointmentDetailAction.DismissCancellationDialog -> updateState { copy(showCancellationDialog = false) }
             is AppointmentDetailAction.DismissCancellationResult -> updateState { copy(cancellationState = CancellationState.Idle) }
         }
@@ -51,11 +60,11 @@ class AppointmentDetailViewModel(
         }
     }
 
-    private fun confirmCancellation() {
+    private fun confirmCancellation(appointmentId: String, reason: String?) {
         updateState { copy(showCancellationDialog = false, cancellationState = CancellationState.InProgress) }
 
         viewModelScope.launch {
-            when (val result = cancelAppointmentUseCase(appointmentId)) {
+            when (val result = cancelAppointmentUseCase(CancellationRequest(appointmentId, reason))) {
                 is Resource.Success -> {
                     // Reload appointment to reflect the updated status
                     loadAppointment()

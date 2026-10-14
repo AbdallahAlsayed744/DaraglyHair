@@ -27,6 +27,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.LocalPadding
+import com.daragly.daraglyhair.common.ui.navigation.IMainGraph
 import com.daragly.daraglyhair.common.ui.navigation.INavigator
 import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonPrimary
 import com.daragly.daraglyhair.designsystem.components.textfield.HallaakSearchField
@@ -72,7 +73,7 @@ fun ExploreScreen(
         viewModel.event.collect { event ->
             when (event) {
                 is ExploreEvent.NavigateToShopDetails -> {
-                    // TODO: navigate to shop details screen once it exists
+                    navigator.navigate(IMainGraph.ShopDetails(event.shopId))
                 }
             }
         }

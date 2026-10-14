@@ -99,10 +99,15 @@ fun HomeScreen(
                     navigator.navigate(IMainGraph.Explore(query = event.query))
                 }
                 is HomeEvent.NavigateToShopDetails -> {
-                    // TODO: Navigate to shop details
+                    navigator.navigate(IMainGraph.ShopDetails(event.shopId))
                 }
                 is HomeEvent.NavigateToAppointmentDetails -> {
-                    // TODO: Navigate to appointment details
+                    val appointmentId =
+                        (viewModel.state.value.upcomingAppointment as? UpcomingAppointmentState.Success)
+                            ?.appointment?.id
+                    if (appointmentId != null) {
+                        navigator.navigate(IMainGraph.AppointmentDetail(appointmentId))
+                    }
                 }
             }
         }

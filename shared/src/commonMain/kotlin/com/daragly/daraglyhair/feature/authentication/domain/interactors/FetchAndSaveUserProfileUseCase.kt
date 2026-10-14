@@ -22,12 +22,16 @@ class FetchAndSaveUserProfileUseCase(
     override suspend fun invoke(body: Unit): Resource<Unit> = nonFlowExecute {
         val dto = homeRemoteDataSource.getUserProfile()
 
+        val firstName = dto.firstName.orEmpty().trim()
+        val lastName = dto.lastName.orEmpty().trim()
+
         val user = User(
             id    = dto.id,
-            name  = listOfNotNull(dto.firstName, dto.lastName)
+            name  = listOf(firstName, lastName)
                         .filter { it.isNotBlank() }
-                        .joinToString(" ")
-                        .trim(),
+                        .joinToString(" "),
+            firstName = firstName,
+            lastName = lastName,
             email = dto.email.orEmpty(),
             phone = dto.phoneNumber.orEmpty(),
             image = dto.imageUrl,   // persist the profile image URL from the API

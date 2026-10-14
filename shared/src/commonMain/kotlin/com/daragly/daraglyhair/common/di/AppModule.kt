@@ -26,6 +26,7 @@ import com.daragly.daraglyhair.feature.explore.di.exploreModule
 import com.daragly.daraglyhair.feature.favorites.di.favoritesModule
 import com.daragly.daraglyhair.feature.home.di.homeModule
 import com.daragly.daraglyhair.feature.settings.di.settingsModule
+import com.daragly.daraglyhair.feature.shopbooking.di.shopBookingModule
 import com.daragly.daraglyhair.feature.user.di.userModule
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.singleOf
@@ -117,6 +118,6 @@ val appModule = module {
     single<IEventController<ISessionEvent>>(qualifier = named("SessionEvent")) { EventController() }
 
     // Feature modules
-    includes(authModule, homeModule, exploreModule, userModule, favoritesModule, settingsModule, bookingsModule)
+    includes(authModule, homeModule, exploreModule, userModule, favoritesModule, settingsModule, bookingsModule, shopBookingModule)
 }
 

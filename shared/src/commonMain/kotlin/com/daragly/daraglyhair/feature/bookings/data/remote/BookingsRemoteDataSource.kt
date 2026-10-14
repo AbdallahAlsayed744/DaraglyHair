@@ -2,6 +2,7 @@ package com.daragly.daraglyhair.feature.bookings.data.remote
 
 import com.daragly.daraglyhair.common.domain.remote.IRemoteDataSourceProvider
 import com.daragly.daraglyhair.feature.bookings.data.dto.AppointmentDetailDto
+import com.daragly.daraglyhair.feature.bookings.data.dto.CancelAppointmentRequest
 import com.daragly.daraglyhair.feature.home.data.dto.AppointmentDto
 import com.daragly.daraglyhair.feature.home.data.dto.BarbershopDto
 import com.daragly.daraglyhair.feature.home.data.dto.PaginatedResponse
@@ -27,12 +28,12 @@ class BookingsRemoteDataSource(private val remote: IRemoteDataSourceProvider) {
 
     /**
      * POST /api/v1/appointments/{id}/cancel
-     * Returns Boolean — success is indicated by no exception being thrown.
+     * Requires a JSON body ({ id, reason }); returns the cancelled appointment id as a raw uuid string.
      */
-    suspend fun cancelAppointment(id: String): Boolean = remote.post(
-        endpoint = "$APPOINTMENTS_ENDPOINT/$id/cancel",
-        requestBody = null,
-        serializer = Boolean.serializer(),
+    suspend fun cancelAppointment(request: CancelAppointmentRequest): String = remote.post(
+        endpoint = "${APPOINTMENTS_ENDPOINT}/${request.id}/cancel",
+        requestBody = request,
+        serializer = String.serializer(),
     )
 
     /** GET /api/v1/barbershops/{id} — used for name enrichment */

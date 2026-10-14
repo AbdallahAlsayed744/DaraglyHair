@@ -1,5 +1,6 @@
 package com.daragly.daraglyhair.feature.user.di
 
+import com.daragly.daraglyhair.feature.user.data.remote.UserRemoteDataSource
 import com.daragly.daraglyhair.feature.user.data.repository.UserRepository
 import com.daragly.daraglyhair.feature.user.data.repository.local.UserLocalDataSource
 import com.daragly.daraglyhair.feature.user.domain.repository.IUserRepository
@@ -8,6 +9,7 @@ import com.daragly.daraglyhair.feature.user.domain.usecase.GetTokenUseCase
 import com.daragly.daraglyhair.feature.user.domain.usecase.GetUserUseCase
 import com.daragly.daraglyhair.feature.user.domain.usecase.LogoutUseCase
 import com.daragly.daraglyhair.feature.user.domain.usecase.SaveUserUseCase
+import com.daragly.daraglyhair.feature.user.domain.usecase.UpdateUserProfileUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -17,6 +19,9 @@ val userModule = module {
     // Local data source
     singleOf(::UserLocalDataSource) bind IUserLocalDataSource::class
 
+    // Remote data source
+    singleOf(::UserRemoteDataSource)
+
     // Repository
     singleOf(::UserRepository) bind IUserRepository::class
 
@@ -25,4 +30,5 @@ val userModule = module {
     factoryOf(::SaveUserUseCase)
     factoryOf(::GetTokenUseCase)
     factoryOf(::LogoutUseCase)
+    factoryOf(::UpdateUserProfileUseCase)
 }

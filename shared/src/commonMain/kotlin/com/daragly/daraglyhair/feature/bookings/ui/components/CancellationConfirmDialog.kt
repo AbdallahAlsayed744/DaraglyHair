@@ -22,21 +22,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonPrimary
+import com.daragly.daraglyhair.designsystem.components.textfield.HallaakTextField
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import daraglyhair.shared.generated.resources.Res
 import daraglyhair.shared.generated.resources.cancel_booking
 import daraglyhair.shared.generated.resources.cancel_booking_body
 import daraglyhair.shared.generated.resources.cancel_booking_confirm
 import daraglyhair.shared.generated.resources.cancel_booking_dismiss
+import daraglyhair.shared.generated.resources.cancel_reason_hint
+import daraglyhair.shared.generated.resources.cancel_reason_label
 import org.jetbrains.compose.resources.stringResource
 
 /**
  * Screen E — Cancellation confirmation dialog.
  *
- * Does NOT promise a refund. Describes the action clearly.
+ * Does NOT promise a refund. Lets the customer attach an optional reason,
+ * which the cancel endpoint records alongside the cancellation.
  */
 @Composable
 fun CancellationConfirmDialog(
+    reason: String,
+    onReasonChange: (String) -> Unit,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {
@@ -79,6 +85,28 @@ fun CancellationConfirmDialog(
                     color = HallaakTheme.colors.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                 )
+
+                Spacer(Modifier.height(HallaakTheme.dimensions.space24))
+
+                // Optional reason — sent to the API as request.reason
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.cancel_reason_label),
+                        style = HallaakTheme.typography.label.large,
+                        color = HallaakTheme.colors.onSurfaceVariant,
+                    )
+                    HallaakTextField(
+                        value = reason,
+                        onValueChange = onReasonChange,
+                        placeholder = stringResource(Res.string.cancel_reason_hint),
+                        singleLine = false,
+                        minLines = 2,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
 
                 Spacer(Modifier.height(HallaakTheme.dimensions.space24))
 

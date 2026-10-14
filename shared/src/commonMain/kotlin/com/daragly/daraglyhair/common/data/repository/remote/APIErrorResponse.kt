@@ -9,4 +9,6 @@ data class APIErrorResponse(
     val message: String,
     @SerialName("errors")
     val errors: Map<ErrorKeyEnum, List<String>>?,
+    @SerialName("statusCode")
+    val status: Int,
 )

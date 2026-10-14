@@ -106,8 +106,17 @@ fun AppointmentDetailScreen(
     // Cancellation confirm dialog
     if (state.showCancellationDialog) {
         CancellationConfirmDialog(
+            reason = state.cancellationReason,
+            onReasonChange = { viewModel.onAction(AppointmentDetailAction.CancellationReasonChanged(it)) },
             onDismiss = { viewModel.onAction(AppointmentDetailAction.DismissCancellationDialog) },
-            onConfirm = { viewModel.onAction(AppointmentDetailAction.ConfirmCancellation) },
+            onConfirm = {
+                viewModel.onAction(
+                    AppointmentDetailAction.ConfirmCancellation(
+                        appointmentId = appointmentId,
+                        reason = state.cancellationReason.trim().takeIf { it.isNotEmpty() },
+                    ),
+                )
+            },
         )
     }
 

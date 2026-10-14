@@ -12,6 +12,12 @@ import com.daragly.daraglyhair.feature.favorites.ui.FavoritesScreen
 import com.daragly.daraglyhair.feature.home.ui.HomeScreen
 import com.daragly.daraglyhair.feature.profile.ui.EditProfileScreen
 import com.daragly.daraglyhair.feature.settings.ui.SettingsScreen
+import com.daragly.daraglyhair.feature.shopbooking.ui.BarberDetailsScreen
+import com.daragly.daraglyhair.feature.shopbooking.ui.BookingDateTimeScreen
+import com.daragly.daraglyhair.feature.shopbooking.ui.BookingReviewScreen
+import com.daragly.daraglyhair.feature.shopbooking.ui.BookingServicesScreen
+import com.daragly.daraglyhair.feature.shopbooking.ui.BookingSuccessScreen
+import com.daragly.daraglyhair.feature.shopbooking.ui.ShopDetailsScreen
 import kotlinx.serialization.Serializable
 
 // ── Main Graph Destinations ───────────────────────────────────────────────────
@@ -33,6 +39,14 @@ sealed interface IMainGraph : IDestination {
     @Serializable data object Profile     : IMainGraph   // tab — renders SettingsScreen
     @Serializable data object Settings    : IMainGraph   // alias kept for back-compat
     @Serializable data object EditProfile : IMainGraph   // nested — Edit Profile form
+
+    // ── Shop details & booking flow (nested, hide the bottom bar) ───────────
+    @Serializable data class  ShopDetails(val shopId: String) : IMainGraph
+    @Serializable data class  BarberDetails(val shopId: String, val barberId: String) : IMainGraph
+    @Serializable data class  BookingServices(val shopId: String) : IMainGraph
+    @Serializable data class  BookingDateTime(val shopId: String) : IMainGraph
+    @Serializable data class  BookingReview(val shopId: String) : IMainGraph
+    @Serializable data class  BookingSuccess(val shopId: String, val appointmentId: String) : IMainGraph
 }
 
 // ── Nav graph builder ─────────────────────────────────────────────────────────
@@ -54,6 +68,32 @@ fun NavGraphBuilder.buildMainNavGraph() {
         composable<IMainGraph.Profile>     { SettingsScreen() }
         composable<IMainGraph.Settings>    { SettingsScreen() }
         composable<IMainGraph.EditProfile> { EditProfileScreen() }
+
+        // ── Shop details & booking flow ──────────────────────────────────────
+        composable<IMainGraph.ShopDetails> { backStackEntry ->
+            val route = backStackEntry.toRoute<IMainGraph.ShopDetails>()
+            ShopDetailsScreen(shopId = route.shopId)
+        }
+        composable<IMainGraph.BarberDetails> { backStackEntry ->
+            val route = backStackEntry.toRoute<IMainGraph.BarberDetails>()
+            BarberDetailsScreen(shopId = route.shopId, barberId = route.barberId)
+        }
+        composable<IMainGraph.BookingServices> { backStackEntry ->
+            val route = backStackEntry.toRoute<IMainGraph.BookingServices>()
+            BookingServicesScreen(shopId = route.shopId)
+        }
+        composable<IMainGraph.BookingDateTime> { backStackEntry ->
+            val route = backStackEntry.toRoute<IMainGraph.BookingDateTime>()
+            BookingDateTimeScreen(shopId = route.shopId)
+        }
+        composable<IMainGraph.BookingReview> { backStackEntry ->
+            val route = backStackEntry.toRoute<IMainGraph.BookingReview>()
+            BookingReviewScreen(shopId = route.shopId)
+        }
+        composable<IMainGraph.BookingSuccess> { backStackEntry ->
+            val route = backStackEntry.toRoute<IMainGraph.BookingSuccess>()
+            BookingSuccessScreen(shopId = route.shopId, appointmentId = route.appointmentId)
+        }
     }
 }
 

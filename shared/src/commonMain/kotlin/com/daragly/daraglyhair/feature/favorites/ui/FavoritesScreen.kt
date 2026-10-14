@@ -65,8 +65,7 @@ fun FavoritesScreen(
         viewModel.event.collect { event ->
             when (event) {
                 is FavoritesEvent.NavigateToShopDetails -> {
-                    // TODO: Navigate to shop details once that route exists
-                    // navigator.navigate(IMainGraph.ShopDetails(event.shopId))
+                    navigator.navigate(IMainGraph.ShopDetails(event.shopId))
                 }
                 is FavoritesEvent.NavigateToExplore -> {
                     navigator.navigate(IMainGraph.Explore())
