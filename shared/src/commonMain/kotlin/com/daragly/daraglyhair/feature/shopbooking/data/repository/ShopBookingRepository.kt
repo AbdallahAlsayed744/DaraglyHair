@@ -47,6 +47,9 @@ class ShopBookingRepository(
                 shopBarberId = query.shopBarberId,
                 date = query.date.toString(),
                 durationMinutes = query.durationMinutes,
+                userLatitude = query.userLatitude,
+                userLongitude = query.userLongitude,
+                transportationMode = query.transportationMode.apiValue,
             ),
         )
         Resource.Success(response.toDomain())

@@ -5,6 +5,7 @@ import com.daragly.daraglyhair.feature.home.domain.model.Barbershop
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.BarberProfile
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.ShopBarber
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.ShopService
+import com.daragly.daraglyhair.feature.shopbooking.domain.model.TransportationMode
 
 // ── Shop Details ───────────────────────────────────────────────────────────────
 
@@ -102,12 +103,15 @@ sealed interface BookingServicesEvent {
 data class BookingDateTimeState(
     val dates: List<kotlinx.datetime.LocalDate> = emptyList(),
     val selectedDate: kotlinx.datetime.LocalDate? = null,
+    /** Slots are only requested after the user picks how they will travel. */
+    val transportationMode: TransportationMode? = null,
     val slots: SectionState<com.daragly.daraglyhair.feature.shopbooking.domain.model.SlotOffer> = SectionState.Loading,
     val selectedSlotStart: kotlinx.datetime.Instant? = null,
 )
 
 sealed interface BookingDateTimeAction {
     data class DateSelected(val date: kotlinx.datetime.LocalDate) : BookingDateTimeAction
+    data class TransportationModeSelected(val mode: TransportationMode) : BookingDateTimeAction
     data class SlotSelected(val slotStart: kotlinx.datetime.Instant) : BookingDateTimeAction
     data object RetrySlots : BookingDateTimeAction
     data object ContinueClicked : BookingDateTimeAction

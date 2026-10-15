@@ -6,6 +6,7 @@ import com.daragly.daraglyhair.common.ui.viewmodel.BaseViewModel
 import com.daragly.daraglyhair.feature.shopbooking.domain.interactors.GetAvailableSlotsUseCase
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.BookingDraftStateHolder
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.SlotQuery
+import com.daragly.daraglyhair.feature.shopbooking.domain.model.TransportationMode
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -14,6 +15,10 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 private const val DATE_STRIP_DAYS = 14
+
+// TODO(test): stand-in for the real user location until a location source exists.
+private const val TEST_USER_LATITUDE = 30.0152
+private const val TEST_USER_LONGITUDE = 31.4789
 
 private fun today(): LocalDate =
     Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -37,16 +42,24 @@ class BookingDateTimeViewModel(
             ?: today()
         draftHolder.selectDate(initialDate)
         updateState { copy(selectedDate = initialDate) }
-        loadSlots()
     }
 
     override fun onAction(action: BookingDateTimeAction) {
         when (action) {
             is BookingDateTimeAction.DateSelected -> onDateSelected(action.date)
+            is BookingDateTimeAction.TransportationModeSelected -> onTransportationModeSelected(action.mode)
             is BookingDateTimeAction.SlotSelected -> onSlotSelected(action.slotStart)
             is BookingDateTimeAction.RetrySlots -> loadSlots()
             is BookingDateTimeAction.ContinueClicked -> onContinueClicked()
         }
+    }
+
+    // ── Transportation mode ───────────────────────────────────────────────────
+
+    private fun onTransportationModeSelected(mode: TransportationMode) {
+        if (state.value.transportationMode == mode) return
+        updateState { copy(transportationMode = mode, slots = SectionState.Loading) }
+        loadSlots()
     }
 
     // ── Date handling ─────────────────────────────────────────────────────────
@@ -63,8 +76,9 @@ class BookingDateTimeViewModel(
     private fun loadSlots() {
         val draft = draftHolder.current
         val duration = draft.estimatedDurationMinutes
-        if (draft.shopId != shopId || duration <= 0 || draft.selectedServices.isEmpty()) {
-            // Flow entered without services — nothing to ask the API for.
+        val mode = state.value.transportationMode
+        if (draft.shopId != shopId || duration <= 0 || draft.selectedServices.isEmpty() || mode == null) {
+            // Flow entered without services, or no travel mode chosen yet — nothing to ask the API for.
             updateState { copy(slots = SectionState.Error("")) }
             return
         }
@@ -75,6 +89,9 @@ class BookingDateTimeViewModel(
                 shopBarberId = draft.shopBarberId,
                 date = state.value.selectedDate ?: today(),
                 durationMinutes = duration,
+                userLatitude = TEST_USER_LATITUDE,
+                userLongitude = TEST_USER_LONGITUDE,
+                transportationMode = mode,
             )
             when (val result = getAvailableSlotsUseCase(query)) {
                 is Resource.Success -> {

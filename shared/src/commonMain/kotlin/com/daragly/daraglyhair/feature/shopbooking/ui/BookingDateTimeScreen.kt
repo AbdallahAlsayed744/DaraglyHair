@@ -21,6 +21,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DirectionsBus
+import androidx.compose.material.icons.outlined.DirectionsCar
+import androidx.compose.material.icons.outlined.DirectionsWalk
 import androidx.compose.material.icons.outlined.EventBusy
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -42,6 +46,7 @@ import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonGold
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.feature.bookings.ui.toBookingTimeString
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.BookingSlot
+import com.daragly.daraglyhair.feature.shopbooking.domain.model.TransportationMode
 import com.daragly.daraglyhair.feature.shopbooking.ui.components.BookingNoticeBanner
 import com.daragly.daraglyhair.feature.shopbooking.ui.components.BookingSectionCard
 import com.daragly.daraglyhair.feature.shopbooking.ui.components.BookingSectionError
@@ -64,6 +69,11 @@ import daraglyhair.shared.generated.resources.month_9
 import daraglyhair.shared.generated.resources.no_slots_subtitle
 import daraglyhair.shared.generated.resources.no_slots_title
 import daraglyhair.shared.generated.resources.select_date_time_title
+import daraglyhair.shared.generated.resources.transport_mode_car
+import daraglyhair.shared.generated.resources.transport_mode_hint
+import daraglyhair.shared.generated.resources.transport_mode_public_transit
+import daraglyhair.shared.generated.resources.transport_mode_title
+import daraglyhair.shared.generated.resources.transport_mode_walking
 import daraglyhair.shared.generated.resources.travel_time_format
 import daraglyhair.shared.generated.resources.weekday_fri
 import daraglyhair.shared.generated.resources.weekday_mon
@@ -157,56 +167,81 @@ fun BookingDateTimeScreen(
                     .padding(horizontal = HallaakTheme.dimensions.space16),
                 verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space16),
             ) {
-                // ── Slots ────────────────────────────────────────────────────
-                when (val slots = state.slots) {
-                    is SectionState.Loading -> BookingSectionCard(title = stringResource(Res.string.select_date_time_title)) {
-                        FlowRow(
-                            horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
-                            verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
-                        ) {
-                            repeat(6) {
-                                HallaakShimmerBox(
-                                    modifier = Modifier
-                                        .width(88.dp)
-                                        .height(36.dp),
-                                )
-                            }
+                // ── Transportation mode (required before slots load) ────────
+                BookingSectionCard(title = stringResource(Res.string.transport_mode_title)) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
+                        verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
+                    ) {
+                        TransportationMode.entries.forEach { mode ->
+                            TransportModeChip(
+                                label = stringResource(mode.labelRes()),
+                                icon = mode.icon,
+                                selected = state.transportationMode == mode,
+                                onClick = {
+                                    viewModel.onAction(BookingDateTimeAction.TransportationModeSelected(mode))
+                                },
+                            )
                         }
                     }
+                }
 
-                    is SectionState.Error -> BookingSectionCard(title = stringResource(Res.string.select_date_time_title)) {
-                        BookingSectionError(
-                            message = slots.message,
-                            onRetry = { viewModel.onAction(BookingDateTimeAction.RetrySlots) },
-                        )
-                    }
+                when (state.transportationMode) {
+                    null -> BookingNoticeBanner(
+                        message = stringResource(Res.string.transport_mode_hint),
+                        isError = false,
+                    )
 
-                    is SectionState.Data -> {
-                        val offer = slots.model
-                        BookingSectionCard(title = stringResource(Res.string.select_date_time_title)) {
-                            offer.estimatedTravelMinutes?.takeIf { it > 0 }?.let { minutes ->
-                                BookingNoticeBanner(
-                                    message = stringResource(Res.string.travel_time_format, minutes.toString()),
-                                    isError = false,
-                                )
-                                Spacer(Modifier.height(HallaakTheme.dimensions.space12))
+                    else -> when (val slots = state.slots) {
+                        is SectionState.Loading -> BookingSectionCard(title = stringResource(Res.string.select_date_time_title)) {
+                            FlowRow(
+                                horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
+                                verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
+                            ) {
+                                repeat(6) {
+                                    HallaakShimmerBox(
+                                        modifier = Modifier
+                                            .width(88.dp)
+                                            .height(36.dp),
+                                    )
+                                }
                             }
+                        }
 
-                            if (offer.slots.isEmpty()) {
-                                SlotsEmptyState()
-                            } else {
-                                FlowRow(
-                                    horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
-                                    verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
-                                ) {
-                                    offer.slots.forEach { slot ->
-                                        SlotChip(
-                                            slot = slot,
-                                            selected = state.selectedSlotStart == slot.startAt,
-                                            onClick = {
-                                                viewModel.onAction(BookingDateTimeAction.SlotSelected(slot.startAt))
-                                            },
-                                        )
+                        is SectionState.Error -> BookingSectionCard(title = stringResource(Res.string.select_date_time_title)) {
+                            BookingSectionError(
+                                message = slots.message,
+                                onRetry = { viewModel.onAction(BookingDateTimeAction.RetrySlots) },
+                            )
+                        }
+
+                        is SectionState.Data -> {
+                            val offer = slots.model
+                            BookingSectionCard(title = stringResource(Res.string.select_date_time_title)) {
+                                offer.estimatedTravelMinutes?.takeIf { it > 0 }?.let { minutes ->
+                                    BookingNoticeBanner(
+                                        message = stringResource(Res.string.travel_time_format, minutes.toString()),
+                                        isError = false,
+                                    )
+                                    Spacer(Modifier.height(HallaakTheme.dimensions.space12))
+                                }
+
+                                if (offer.slots.isEmpty()) {
+                                    SlotsEmptyState()
+                                } else {
+                                    FlowRow(
+                                        horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
+                                        verticalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
+                                    ) {
+                                        offer.slots.forEach { slot ->
+                                            SlotChip(
+                                                slot = slot,
+                                                selected = state.selectedSlotStart == slot.startAt,
+                                                onClick = {
+                                                    viewModel.onAction(BookingDateTimeAction.SlotSelected(slot.startAt))
+                                                },
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -318,6 +353,66 @@ private fun SlotChip(
             color = contentColor,
             textAlign = TextAlign.Center,
         )
+    }
+}
+
+// ── Transportation mode ───────────────────────────────────────────────────────
+
+private fun TransportationMode.labelRes(): StringResource = when (this) {
+    TransportationMode.WALKING -> Res.string.transport_mode_walking
+    TransportationMode.CAR -> Res.string.transport_mode_car
+    TransportationMode.PUBLIC_TRANSIT -> Res.string.transport_mode_public_transit
+}
+
+private val TransportationMode.icon: ImageVector
+    get() = when (this) {
+        TransportationMode.WALKING -> Icons.Outlined.DirectionsWalk
+        TransportationMode.CAR -> Icons.Outlined.DirectionsCar
+        TransportationMode.PUBLIC_TRANSIT -> Icons.Outlined.DirectionsBus
+    }
+
+@Composable
+private fun TransportModeChip(
+    label: String,
+    icon: ImageVector,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    val containerColor = if (selected) {
+        HallaakTheme.colors.primary
+    } else {
+        HallaakTheme.colors.background.surfaceHigh
+    }
+    val contentColor = if (selected) {
+        HallaakTheme.colors.background.canvas
+    } else {
+        HallaakTheme.colors.onSurface
+    }
+
+    Box(
+        modifier = Modifier
+            .height(36.dp)
+            .background(color = containerColor, shape = HallaakTheme.shapes.pill)
+            .clickable(onClick = onClick)
+            .padding(horizontal = HallaakTheme.dimensions.space16),
+        contentAlignment = Alignment.Center,
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = contentColor,
+                modifier = Modifier.size(18.dp),
+            )
+            Text(
+                text = label,
+                style = HallaakTheme.typography.label.large,
+                color = contentColor,
+            )
+        }
     }
 }
 

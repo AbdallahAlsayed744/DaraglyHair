@@ -264,6 +264,11 @@
     <string name="travel_time_format">زمن الوصول المتوقع: ~%1$s دقيقة</string>
     <string name="no_slots_title">لا توجد مواعيد متاحة</string>
     <string name="no_slots_subtitle">لم تُرجع أي مواعيد لهذا التاريخ. جرّب تاريخًا آخر أو حلاقًا آخر.</string>
+    <string name="transport_mode_title">كيف ستصل إلى المحل؟</string>
+    <string name="transport_mode_hint">اختر طريقة وصولك لعرض المواعيد التي تستطيع الوصول إليها.</string>
+    <string name="transport_mode_walking">سيرًا</string>
+    <string name="transport_mode_car">بالسيارة</string>
+    <string name="transport_mode_public_transit">بالمواصلات</string>
     <string name="weekday_mon">اثنين</string>
     <string name="weekday_tue">ثلاثاء</string>
     <string name="weekday_wed">أربعاء</string>

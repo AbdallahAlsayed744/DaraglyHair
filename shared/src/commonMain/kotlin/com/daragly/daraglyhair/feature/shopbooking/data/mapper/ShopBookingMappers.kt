@@ -12,6 +12,9 @@ import com.daragly.daraglyhair.feature.shopbooking.domain.model.ShopBarber
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.ShopService
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.SlotOffer
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 
 fun ShopBarberDto.toDomain(): ShopBarber = ShopBarber(
     shopBarberId = id,
@@ -41,9 +44,18 @@ fun ShopServiceDto.toDomain(catalogNames: Map<String, ServiceCatalogDto>): ShopS
     isActive = isActive,
 )
 
+/**
+ * Slot boundaries arrive as naive date-times (no offset) — they are shop-local wall-clock
+ * times, so they are anchored to the device zone to keep the displayed time intact.
+ * Strings that do carry an offset are parsed as-is.
+ */
+private fun String.toSlotInstant(): Instant =
+    runCatching { Instant.parse(this) }
+        .getOrElse { LocalDateTime.parse(this).toInstant(TimeZone.currentSystemDefault()) }
+
 private fun AvailableSlotDto.toDomain(): BookingSlot? {
-    val start = Instant.parse(startAtUtc)
-    val end = runCatching { Instant.parse(endAtUtc) }.getOrDefault(start)
+    val start = startAtUtc.toSlotInstant()
+    val end = runCatching { endAtUtc.toSlotInstant() }.getOrDefault(start)
     return BookingSlot(
         startAt = start,
         endAt = end,

@@ -50,12 +50,22 @@ data class SlotOffer(
     val slots: List<BookingSlot>,
 )
 
+/** How the user travels to the shop. [apiValue] matches the backend enum (1 walking, 2 car, 3 public transit). */
+enum class TransportationMode(val apiValue: Int) {
+    WALKING(1),
+    CAR(2),
+    PUBLIC_TRANSIT(3),
+}
+
 /** Parameters for fetching available slots. */
 data class SlotQuery(
     val shopId: String,
     val shopBarberId: String?,
     val date: LocalDate,
     val durationMinutes: Int,
+    val userLatitude: Double,
+    val userLongitude: Double,
+    val transportationMode: TransportationMode,
 )
 
 /** Parameters for creating an appointment. */

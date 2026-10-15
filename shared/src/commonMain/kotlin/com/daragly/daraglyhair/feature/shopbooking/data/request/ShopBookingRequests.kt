@@ -3,13 +3,16 @@ package com.daragly.daraglyhair.feature.shopbooking.data.request
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/** POST /api/v1/appointments/available-slots body. Location/transport fields are omitted — the app has no user-location source. */
+/** POST /api/v1/appointments/available-slots body. */
 @Serializable
 data class AvailableSlotsApiRequest(
     @SerialName("shopId")           val shopId: String,
     @SerialName("shopBarberId")     val shopBarberId: String? = null,
     @SerialName("date")             val date: String,
     @SerialName("durationMinutes")  val durationMinutes: Int,
+    @SerialName("userLatitude")     val userLatitude: Double,
+    @SerialName("userLongitude")    val userLongitude: Double,
+    @SerialName("transportationMode") val transportationMode: Int,
 )
 
 /** POST /api/v1/appointments body — only shopId + shopServiceIds are required by the backend. */
