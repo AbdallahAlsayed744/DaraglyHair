@@ -2,6 +2,7 @@ package com.daragly.daraglyhair.feature.shopbooking.ui
 
 import com.daragly.daraglyhair.feature.bookings.domain.model.BookingAppointment
 import com.daragly.daraglyhair.feature.home.domain.model.Barbershop
+import com.daragly.daraglyhair.feature.reviews.domain.model.Review
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.BarberProfile
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.ShopBarber
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.ShopService
@@ -13,6 +14,7 @@ data class ShopDetailsState(
     val shop: SectionState<Barbershop> = SectionState.Loading,
     val services: SectionState<List<ShopService>> = SectionState.Loading,
     val barbers: SectionState<List<ShopBarber>> = SectionState.Loading,
+    val reviews: SectionState<List<Review>> = SectionState.Loading,
     /** Best-effort profile map: barberId → profile (null values mean "unknown"). */
     val barberProfiles: Map<String, BarberProfile> = emptyMap(),
 ) {
@@ -24,13 +26,16 @@ sealed interface ShopDetailsAction {
     data object RetryShop : ShopDetailsAction
     data object RetryServices : ShopDetailsAction
     data object RetryBarbers : ShopDetailsAction
+    data object RetryReviews : ShopDetailsAction
     data class BarberClicked(val shopBarber: ShopBarber) : ShopDetailsAction
     data object BookClicked : ShopDetailsAction
+    data object SeeAllReviewsClicked : ShopDetailsAction
 }
 
 sealed interface ShopDetailsEvent {
     data class NavigateToBarber(val shopId: String, val barberId: String) : ShopDetailsEvent
     data class NavigateToBookingServices(val shopId: String) : ShopDetailsEvent
+    data class NavigateToShopReviews(val shopId: String) : ShopDetailsEvent
 }
 
 // ── Barber Details ─────────────────────────────────────────────────────────────

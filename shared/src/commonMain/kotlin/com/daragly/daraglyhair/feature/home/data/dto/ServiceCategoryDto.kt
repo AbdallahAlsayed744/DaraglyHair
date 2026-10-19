@@ -9,6 +9,8 @@ data class ServiceCategoryDto(
     val id: String,
     @SerialName("name")
     val name: String,
+    @SerialName("nameAr")
+    val nameAr: String? = null,
     @SerialName("description")
     val description: String? = null,
     @SerialName("sortOrder")

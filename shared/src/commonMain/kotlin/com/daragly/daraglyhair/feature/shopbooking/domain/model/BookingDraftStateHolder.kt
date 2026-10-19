@@ -1,5 +1,6 @@
 package com.daragly.daraglyhair.feature.shopbooking.domain.model
 
+import com.daragly.daraglyhair.common.domain.location.LocationCoordinates
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -53,6 +54,14 @@ class BookingDraftStateHolder {
 
     fun selectSlot(slot: BookingSlot?) {
         _draft.update { it.copy(slot = slot) }
+    }
+
+    fun saveUserLocation(location: LocationCoordinates?) {
+        _draft.update { it.copy(userLocation = location) }
+    }
+
+    fun selectTransportationMode(mode: TransportationMode) {
+        _draft.update { it.copy(transportationMode = mode) }
     }
 
     fun setNotes(notes: String) {

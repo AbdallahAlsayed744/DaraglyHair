@@ -47,6 +47,7 @@ val shopBookingModule = module {
             getShopBarbersUseCase = get(),
             getShopServicesUseCase = get(),
             getBarberProfileUseCase = get(),
+            getShopReviewsUseCase = get(),
             draftHolder = get(),
         )
     }
@@ -75,6 +76,7 @@ val shopBookingModule = module {
             shopId = shopId,
             getAvailableSlotsUseCase = get(),
             draftHolder = get(),
+            userLocationHolder = get(),
         )
     }
 

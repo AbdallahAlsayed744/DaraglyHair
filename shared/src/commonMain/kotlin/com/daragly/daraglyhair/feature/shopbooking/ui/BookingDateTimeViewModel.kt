@@ -2,6 +2,7 @@ package com.daragly.daraglyhair.feature.shopbooking.ui
 
 import androidx.lifecycle.viewModelScope
 import com.daragly.daraglyhair.common.domain.Resource
+import com.daragly.daraglyhair.common.domain.location.UserLocationHolder
 import com.daragly.daraglyhair.common.ui.viewmodel.BaseViewModel
 import com.daragly.daraglyhair.feature.shopbooking.domain.interactors.GetAvailableSlotsUseCase
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.BookingDraftStateHolder
@@ -16,9 +17,8 @@ import kotlinx.datetime.toLocalDateTime
 
 private const val DATE_STRIP_DAYS = 14
 
-// TODO(test): stand-in for the real user location until a location source exists.
-private const val TEST_USER_LATITUDE = 30.0152
-private const val TEST_USER_LONGITUDE = 31.4789
+/** Shown when no device fix is available (e.g. location permission not granted yet). */
+internal const val LOCATION_REQUIRED_MESSAGE = "location_required"
 
 private fun today(): LocalDate =
     Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -32,6 +32,7 @@ class BookingDateTimeViewModel(
     private val shopId: String,
     private val getAvailableSlotsUseCase: GetAvailableSlotsUseCase,
     private val draftHolder: BookingDraftStateHolder,
+    private val userLocationHolder: UserLocationHolder,
 ) : BaseViewModel<BookingDateTimeState, BookingDateTimeAction, BookingDateTimeEvent>(
     BookingDateTimeState(dates = buildDateStrip()),
 ) {
@@ -58,6 +59,7 @@ class BookingDateTimeViewModel(
 
     private fun onTransportationModeSelected(mode: TransportationMode) {
         if (state.value.transportationMode == mode) return
+        draftHolder.selectTransportationMode(mode)
         updateState { copy(transportationMode = mode, slots = SectionState.Loading) }
         loadSlots()
     }
@@ -84,14 +86,22 @@ class BookingDateTimeViewModel(
         }
         updateState { copy(slots = SectionState.Loading) }
         viewModelScope.launch {
+            val location = draft.userLocation
+                ?: userLocationHolder.currentLocation()?.also { draftHolder.saveUserLocation(it) }
+            if (location == null) {
+                // No real fix yet (permission denied or no signal) — don't send stand-in coordinates.
+                updateState { copy(slots = SectionState.Error(LOCATION_REQUIRED_MESSAGE)) }
+                return@launch
+            }
             val query = SlotQuery(
                 shopId = shopId,
                 shopBarberId = draft.shopBarberId,
                 date = state.value.selectedDate ?: today(),
                 durationMinutes = duration,
-                userLatitude = TEST_USER_LATITUDE,
-                userLongitude = TEST_USER_LONGITUDE,
+                userLatitude = location.latitude,
+                userLongitude = location.longitude,
                 transportationMode = mode,
+                shopServiceIds = draft.selectedServices.map { it.shopServiceId },
             )
             when (val result = getAvailableSlotsUseCase(query)) {
                 is Resource.Success -> {

@@ -22,6 +22,7 @@ import com.daragly.daraglyhair.common.ui.navigation.IMainGraph
 import com.daragly.daraglyhair.common.ui.navigation.INavigator
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.feature.bookings.domain.model.isCancellable
+import com.daragly.daraglyhair.feature.bookings.domain.model.isCompleted
 import com.daragly.daraglyhair.feature.bookings.ui.components.BookingCard
 import com.daragly.daraglyhair.feature.bookings.ui.components.BookingEmptyState
 import com.daragly.daraglyhair.feature.bookings.ui.components.BookingErrorState
@@ -49,6 +50,8 @@ fun BookingsScreen(
             when (event) {
                 is BookingsEvent.NavigateToDetail ->
                     navigator.navigate(IMainGraph.AppointmentDetail(event.appointmentId))
+                is BookingsEvent.NavigateToWriteReview ->
+                    navigator.navigate(IMainGraph.WriteReview(event.appointmentId, event.shopName))
                 is BookingsEvent.NavigateToExplore ->
                     navigator.navigate(IMainGraph.Explore())
             }
@@ -97,6 +100,9 @@ fun BookingsScreen(
                             // Cancel action navigates to detail where the full cancel flow lives
                             onCancelClick = if (appointment.status.isCancellable()) {
                                 { viewModel.onAction(BookingsAction.AppointmentClicked(appointment.id)) }
+                            } else null,
+                            onWriteReviewClick = if (appointment.status.isCompleted()) {
+                                { viewModel.onAction(BookingsAction.WriteReviewClicked(appointment.id, appointment.shopName ?: "")) }
                             } else null,
                             modifier = Modifier.padding(
                                 horizontal = HallaakTheme.dimensions.space16,

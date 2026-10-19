@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,6 +30,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.LocalPadding
+import com.daragly.daraglyhair.common.ui.location.EnsureLocationPermission
 import com.daragly.daraglyhair.common.ui.navigation.IMainGraph
 import com.daragly.daraglyhair.common.ui.navigation.INavigator
 import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonPrimary
@@ -39,6 +43,8 @@ import daraglyhair.shared.generated.resources.cd_retry
 import daraglyhair.shared.generated.resources.cd_search_barbershops
 import daraglyhair.shared.generated.resources.error_generic_title
 import daraglyhair.shared.generated.resources.explore_clear_search
+import daraglyhair.shared.generated.resources.explore_distance_label
+import daraglyhair.shared.generated.resources.explore_distance_value
 import daraglyhair.shared.generated.resources.explore_empty_no_query
 import daraglyhair.shared.generated.resources.explore_empty_subtitle
 import daraglyhair.shared.generated.resources.explore_empty_with_query
@@ -62,6 +68,11 @@ fun ExploreScreen(
     navigator: INavigator = koinInject(),
 ) {
     val state by viewModel.state.collectAsState()
+
+    // Ask for location once per entry, then re-run the search with the user's real coordinates.
+    EnsureLocationPermission { granted ->
+        if (granted) viewModel.onAction(ExploreAction.Retry)
+    }
 
     // Boot the screen — pre-fill keyword if coming from Home search bar tap
     LaunchedEffect(Unit) {
@@ -96,6 +107,8 @@ fun ExploreScreen(
                     keyword = state.searchKeyword,
                     onKeywordChanged = { viewModel.onAction(ExploreAction.SearchKeywordChanged(it)) },
                     onClearClick = { viewModel.onAction(ExploreAction.ClearSearch) },
+                    maxDistanceKm = state.maxDistanceKm,
+                    onDistanceChanged = { viewModel.onAction(ExploreAction.DistanceChanged(it)) },
                 )
             }
 
@@ -164,6 +177,8 @@ private fun ExploreHeader(
     keyword: String,
     onKeywordChanged: (String) -> Unit,
     onClearClick: () -> Unit,
+    maxDistanceKm: Int,
+    onDistanceChanged: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -210,6 +225,41 @@ private fun ExploreHeader(
                 )
                 .semantics { contentDescription = searchFieldDescription },
         )
+
+        // Distance filter slider
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = HallaakTheme.dimensions.space16)
+                .padding(bottom = HallaakTheme.dimensions.space12),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(Res.string.explore_distance_label),
+                    style = HallaakTheme.typography.label.large,
+                    color = HallaakTheme.colors.onSurfaceVariant,
+                )
+                Text(
+                    text = stringResource(Res.string.explore_distance_value, maxDistanceKm),
+                    style = HallaakTheme.typography.label.large,
+                    color = HallaakTheme.colors.primary,
+                )
+            }
+            Slider(
+                value = maxDistanceKm.toFloat(),
+                onValueChange = { onDistanceChanged(it.toInt()) },
+                valueRange = MIN_DISTANCE_KM.toFloat()..MAX_DISTANCE_KM.toFloat(),
+                steps = MAX_DISTANCE_KM - MIN_DISTANCE_KM - 1,
+                colors = SliderDefaults.colors(
+                    thumbColor = HallaakTheme.colors.primary,
+                    activeTrackColor = HallaakTheme.colors.primary,
+                ),
+            )
+        }
     }
 }
 

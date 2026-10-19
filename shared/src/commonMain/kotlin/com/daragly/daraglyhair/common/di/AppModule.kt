@@ -7,6 +7,7 @@ import com.daragly.daraglyhair.common.data.repository.remote.SessionManager
 import com.daragly.daraglyhair.common.data.repository.remote.httpClientEngineFactory
 import com.daragly.daraglyhair.common.data.repository.remote.provideHttpClient
 import com.daragly.daraglyhair.common.domain.local.ILocalDataSourceProvider
+import com.daragly.daraglyhair.common.domain.location.UserLocationHolder
 import com.daragly.daraglyhair.common.domain.remote.IRemoteDataSourceProvider
 import com.daragly.daraglyhair.common.ui.eventcontroller.EventController
 import com.daragly.daraglyhair.common.ui.eventcontroller.IEventController
@@ -25,6 +26,7 @@ import com.daragly.daraglyhair.feature.bookings.di.bookingsModule
 import com.daragly.daraglyhair.feature.explore.di.exploreModule
 import com.daragly.daraglyhair.feature.favorites.di.favoritesModule
 import com.daragly.daraglyhair.feature.home.di.homeModule
+import com.daragly.daraglyhair.feature.reviews.di.reviewsModule
 import com.daragly.daraglyhair.feature.settings.di.settingsModule
 import com.daragly.daraglyhair.feature.shopbooking.di.shopBookingModule
 import com.daragly.daraglyhair.feature.user.di.userModule
@@ -47,6 +49,9 @@ val appModule = module {
 
     // DataStore (platform-specific factory)
     single { createDataStore() }
+
+    // User location (platform-specific source, cached after the first successful fix)
+    single { UserLocationHolder(createLocationProvider()) }
 
     // Local storage
     singleOf(::LocalDataSourceProvider) bind ILocalDataSourceProvider::class
@@ -118,6 +123,6 @@ val appModule = module {
     single<IEventController<ISessionEvent>>(qualifier = named("SessionEvent")) { EventController() }
 
     // Feature modules
-    includes(authModule, homeModule, exploreModule, userModule, favoritesModule, settingsModule, bookingsModule, shopBookingModule)
+    includes(authModule, homeModule, exploreModule, userModule, favoritesModule, settingsModule, bookingsModule, shopBookingModule, reviewsModule)
 }
 

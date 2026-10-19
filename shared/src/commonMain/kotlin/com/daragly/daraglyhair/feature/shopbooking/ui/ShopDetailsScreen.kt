@@ -33,8 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.common.ui.navigation.IMainGraph
 import com.daragly.daraglyhair.common.ui.navigation.INavigator
+import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonGhost
 import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonGold
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
+import com.daragly.daraglyhair.feature.reviews.ui.components.ReviewItem
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.BarberProfile
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.ShopBarber
 import com.daragly.daraglyhair.feature.shopbooking.domain.model.ShopService
@@ -54,6 +56,8 @@ import daraglyhair.shared.generated.resources.label_address
 import daraglyhair.shared.generated.resources.label_phone
 import daraglyhair.shared.generated.resources.price_egp_short
 import daraglyhair.shared.generated.resources.section_about
+import daraglyhair.shared.generated.resources.section_reviews
+import daraglyhair.shared.generated.resources.see_all_reviews
 import daraglyhair.shared.generated.resources.section_barbers
 import daraglyhair.shared.generated.resources.section_services
 import daraglyhair.shared.generated.resources.service_unnamed
@@ -86,6 +90,9 @@ fun ShopDetailsScreen(
 
                 is ShopDetailsEvent.NavigateToBookingServices ->
                     navigator.navigate(IMainGraph.BookingServices(event.shopId))
+
+                is ShopDetailsEvent.NavigateToShopReviews ->
+                    navigator.navigate(IMainGraph.ShopReviews(event.shopId))
             }
         }
     }
@@ -177,7 +184,6 @@ fun ShopDetailsScreen(
                                 listOf(
                                 barbershop.district,
                                 barbershop.city,
-                                barbershop.governorate,
                                 barbershop.streetAddress,
                             ).filterNotNull().filter { it.isNotBlank() }.joinToString("، ")
                             )
@@ -260,6 +266,36 @@ fun ShopDetailsScreen(
                                 )
                             }
                         }
+                    }
+                }
+            }
+
+            // ── Reviews preview ──────────────────────────────────────────────
+            when (val reviews = state.reviews) {
+                is SectionState.Loading -> BookingSectionCard(title = stringResource(Res.string.section_reviews)) {
+                    BookingShimmerLines(lines = 2, lineHeight = 64.dp)
+                }
+
+                is SectionState.Error -> BookingSectionCard(title = stringResource(Res.string.section_reviews)) {
+                    BookingSectionError(
+                        message = reviews.message,
+                        onRetry = { viewModel.onAction(ShopDetailsAction.RetryReviews) })
+                }
+
+                is SectionState.Data -> if (reviews.model.isNotEmpty()) {
+                    BookingSectionCard(title = stringResource(Res.string.section_reviews)) {
+                        reviews.model.forEachIndexed { index, review ->
+                            ReviewItem(review = review)
+                            if (index != reviews.model.lastIndex) {
+                                Spacer(Modifier.height(HallaakTheme.dimensions.space12))
+                            }
+                        }
+                        Spacer(Modifier.height(HallaakTheme.dimensions.space12))
+                        HallaakButtonGhost(
+                            label = stringResource(Res.string.see_all_reviews),
+                            onClick = { viewModel.onAction(ShopDetailsAction.SeeAllReviewsClicked) },
+                            modifier = Modifier.align(Alignment.Start),
+                        )
                     }
                 }
             }

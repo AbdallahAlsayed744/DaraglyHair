@@ -8,5 +8,8 @@ object AuthMapper {
         token                 = dto.token.orEmpty(),
         refreshToken          = dto.refreshToken.orEmpty(),
         refreshTokenExpiryTime = dto.refreshTokenExpiryTime.orEmpty(),
+        userId                = dto.userId,
+        roles                 = dto.roles,
+        permissions           = dto.permissions,
     )
 }

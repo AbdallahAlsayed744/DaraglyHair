@@ -47,6 +47,8 @@ class BookingReviewViewModel(
         val draft = draftHolder.current
         if (draft.shopId != shopId || !draft.isValidForSubmission) return
         val slot = draft.slot ?: return
+        val mode = draft.transportationMode ?: return
+        val location = draft.userLocation ?: return
 
         submitting = true
         updateState { copy(isSubmitting = true, hasConflict = false, errorMessage = null) }
@@ -58,6 +60,9 @@ class BookingReviewViewModel(
                 startAtUtc = slot.startAt,
                 shopServiceIds = draft.selectedServices.map { it.shopServiceId },
                 notes = draft.notes,
+                userLatitude = location.latitude,
+                userLongitude = location.longitude,
+                transportationMode = mode,
             )
             when (val result = createAppointmentUseCase(submission)) {
                 is Resource.Success -> {

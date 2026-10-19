@@ -45,6 +45,7 @@ import daraglyhair.shared.generated.resources.deposit_paid
 import daraglyhair.shared.generated.resources.deposit_pending
 import daraglyhair.shared.generated.resources.deposit_refunded
 import daraglyhair.shared.generated.resources.view_details
+import daraglyhair.shared.generated.resources.write_review
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -65,6 +66,7 @@ fun BookingCard(
     onViewDetailsClick: () -> Unit,
     onCancelClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    onWriteReviewClick: (() -> Unit)? = null,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -215,6 +217,14 @@ fun BookingCard(
                             text = stringResource(Res.string.cancel_booking),
                             style = HallaakTheme.typography.label.large,
                             color = HallaakTheme.colors.status.error,
+                        )
+                    }
+                } else if (onWriteReviewClick != null) {
+                    TextButton(onClick = onWriteReviewClick) {
+                        Text(
+                            text = stringResource(Res.string.write_review),
+                            style = HallaakTheme.typography.label.large,
+                            color = HallaakTheme.colors.primary,
                         )
                     }
                 }

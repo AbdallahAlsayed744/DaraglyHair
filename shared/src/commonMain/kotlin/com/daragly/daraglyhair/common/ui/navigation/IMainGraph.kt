@@ -11,6 +11,8 @@ import com.daragly.daraglyhair.feature.explore.ui.ExploreScreen
 import com.daragly.daraglyhair.feature.favorites.ui.FavoritesScreen
 import com.daragly.daraglyhair.feature.home.ui.HomeScreen
 import com.daragly.daraglyhair.feature.profile.ui.EditProfileScreen
+import com.daragly.daraglyhair.feature.reviews.ui.ShopReviewsScreen
+import com.daragly.daraglyhair.feature.reviews.ui.WriteReviewScreen
 import com.daragly.daraglyhair.feature.settings.ui.SettingsScreen
 import com.daragly.daraglyhair.feature.shopbooking.ui.BarberDetailsScreen
 import com.daragly.daraglyhair.feature.shopbooking.ui.BookingDateTimeScreen
@@ -47,6 +49,10 @@ sealed interface IMainGraph : IDestination {
     @Serializable data class  BookingDateTime(val shopId: String) : IMainGraph
     @Serializable data class  BookingReview(val shopId: String) : IMainGraph
     @Serializable data class  BookingSuccess(val shopId: String, val appointmentId: String) : IMainGraph
+
+    // ── Reviews (nested) ─────────────────────────────────────────────────────
+    @Serializable data class  ShopReviews(val shopId: String) : IMainGraph
+    @Serializable data class  WriteReview(val appointmentId: String, val shopName: String = "") : IMainGraph
 }
 
 // ── Nav graph builder ─────────────────────────────────────────────────────────
@@ -93,6 +99,16 @@ fun NavGraphBuilder.buildMainNavGraph() {
         composable<IMainGraph.BookingSuccess> { backStackEntry ->
             val route = backStackEntry.toRoute<IMainGraph.BookingSuccess>()
             BookingSuccessScreen(shopId = route.shopId, appointmentId = route.appointmentId)
+        }
+
+        // ── Reviews ──────────────────────────────────────────────────────────
+        composable<IMainGraph.ShopReviews> { backStackEntry ->
+            val route = backStackEntry.toRoute<IMainGraph.ShopReviews>()
+            ShopReviewsScreen(shopId = route.shopId)
+        }
+        composable<IMainGraph.WriteReview> { backStackEntry ->
+            val route = backStackEntry.toRoute<IMainGraph.WriteReview>()
+            WriteReviewScreen(appointmentId = route.appointmentId, shopName = route.shopName)
         }
     }
 }

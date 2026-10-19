@@ -263,6 +263,7 @@
     <string name="travel_time_format">Estimated travel time: ~%1$s min</string>
     <string name="no_slots_title">No available slots</string>
     <string name="no_slots_subtitle">No times were returned for this date. Try another date or another barber.</string>
+    <string name="location_required">Enable location access to see the times you can reach.</string>
     <string name="transport_mode_title">How will you get there?</string>
     <string name="transport_mode_hint">Choose how you\'ll travel to see the times you can reach.</string>
     <string name="transport_mode_walking">Walking</string>
@@ -298,4 +299,24 @@
     <string name="error_email_required">Email is required</string>
     <string name="error_email_invalid">Enter a valid email address</string>
     <string name="error_save_failed">Could not save your changes. Please try again.</string>
+
+    <!-- Reviews -->
+    <string name="section_reviews">Reviews</string>
+    <string name="see_all_reviews">See all reviews</string>
+    <string name="no_reviews_yet">No reviews yet</string>
+    <string name="review_no_comment">No comment provided</string>
+    <string name="review_photo_count">%1$d photos</string>
+    <string name="write_review">Write review</string>
+    <string name="write_review_title">Write a review</string>
+    <string name="rating_overall">Overall</string>
+    <string name="rating_quality">Quality</string>
+    <string name="rating_cleanliness">Cleanliness</string>
+    <string name="rating_value">Value for money</string>
+    <string name="review_comment_placeholder">Tell others about your experience…</string>
+    <string name="add_photo">Add photo</string>
+    <string name="submit_review">Submit review</string>
+
+    <!-- Explore distance filter -->
+    <string name="explore_distance_label">Within</string>
+    <string name="explore_distance_value">%1$d km</string>
 </resources>

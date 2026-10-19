@@ -25,6 +25,7 @@ sealed interface BookingsAction {
     data object Retry : BookingsAction
     data class TabSelected(val tab: BookingTabFilter) : BookingsAction
     data class AppointmentClicked(val appointmentId: String) : BookingsAction
+    data class WriteReviewClicked(val appointmentId: String, val shopName: String) : BookingsAction
     data object ExploreClicked : BookingsAction
 }
 
@@ -32,5 +33,6 @@ sealed interface BookingsAction {
 
 sealed interface BookingsEvent {
     data class NavigateToDetail(val appointmentId: String) : BookingsEvent
+    data class NavigateToWriteReview(val appointmentId: String, val shopName: String) : BookingsEvent
     data object NavigateToExplore : BookingsEvent
 }

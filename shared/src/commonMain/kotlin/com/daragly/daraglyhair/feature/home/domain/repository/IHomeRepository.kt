@@ -16,12 +16,17 @@ interface IHomeRepository {
     
     /**
      * Search for barbershops with optional filters.
+     * Passing [latitude]/[longitude] enables server-side geo search (default 25 km
+     * radius) with distance-sorted results and `distanceKm` on each shop.
      */
     suspend fun searchBarbershops(
         pageNumber: Int = 1,
         pageSize: Int = 10,
         keyword: String? = null,
-        governorate: String? = null,
+        latitude: Double? = null,
+        longitude: Double? = null,
+        maxDistanceKm: Double? = null,
+        governorate: Int? = null,
         city: String? = null,
         district: String? = null,
         isVerified: Boolean? = null,

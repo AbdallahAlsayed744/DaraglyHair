@@ -1,5 +1,6 @@
 package com.daragly.daraglyhair.feature.shopbooking.domain.model
 
+import com.daragly.daraglyhair.common.domain.location.LocationCoordinates
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 
@@ -18,6 +19,9 @@ data class BookingDraft(
     val date: LocalDate? = null,
     val slot: BookingSlot? = null,
     val notes: String = "",
+    /** Device position used for travel-time slots and the final booking request. */
+    val userLocation: LocationCoordinates? = null,
+    val transportationMode: TransportationMode? = null,
 ) {
     val estimatedTotalEgp: Double get() = selectedServices.sumOf { it.priceEgp }
     val estimatedDurationMinutes: Int get() = selectedServices.sumOf { it.durationMinutes }

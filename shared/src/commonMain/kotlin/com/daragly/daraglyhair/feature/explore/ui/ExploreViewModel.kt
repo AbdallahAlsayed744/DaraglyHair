@@ -2,6 +2,7 @@ package com.daragly.daraglyhair.feature.explore.ui
 
 import androidx.lifecycle.viewModelScope
 import com.daragly.daraglyhair.common.domain.Resource
+import com.daragly.daraglyhair.common.domain.location.UserLocationHolder
 import com.daragly.daraglyhair.common.ui.viewmodel.BaseViewModel
 import com.daragly.daraglyhair.feature.home.domain.repository.IHomeRepository
 import kotlinx.coroutines.Job
@@ -13,6 +14,7 @@ private const val PAGE_SIZE = 20
 
 class ExploreViewModel(
     private val repository: IHomeRepository,
+    private val userLocationHolder: UserLocationHolder,
 ) : BaseViewModel<ExploreState, ExploreAction, ExploreEvent>(ExploreState()) {
 
     private var searchJob: Job? = null
@@ -21,6 +23,7 @@ class ExploreViewModel(
         when (action) {
             is ExploreAction.Init                  -> init(action.initialQuery)
             is ExploreAction.SearchKeywordChanged  -> onKeywordChanged(action.keyword)
+            is ExploreAction.DistanceChanged       -> onDistanceChanged(action.maxDistanceKm)
             is ExploreAction.ClearSearch           -> clearSearch()
             is ExploreAction.Retry                 -> retry()
             is ExploreAction.ToggleFavorite        -> toggleFavorite(action.shopId)
@@ -52,6 +55,18 @@ class ExploreViewModel(
         }
     }
 
+    private fun onDistanceChanged(maxDistanceKm: Int) {
+        val clamped = maxDistanceKm.coerceIn(MIN_DISTANCE_KM, MAX_DISTANCE_KM)
+        if (clamped == state.value.maxDistanceKm) return
+        updateState { copy(maxDistanceKm = clamped) }
+
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(DEBOUNCE_DELAY_MS)
+            searchShops(state.value.searchKeyword)
+        }
+    }
+
     private fun clearSearch() {
         searchJob?.cancel()
         updateState { copy(searchKeyword = "") }
@@ -68,10 +83,14 @@ class ExploreViewModel(
         updateState { copy(shopsState = ExploreShopsState.Loading) }
 
         viewModelScope.launch {
+            val location = userLocationHolder.currentLocation()
             val result = repository.searchBarbershops(
                 pageNumber = 1,
                 pageSize = PAGE_SIZE,
                 keyword = keyword.takeIf { it.isNotBlank() },
+                latitude = location?.latitude,
+                longitude = location?.longitude,
+                maxDistanceKm = state.value.maxDistanceKm.toDouble(),
             )
             when (result) {
                 is Resource.Success -> {

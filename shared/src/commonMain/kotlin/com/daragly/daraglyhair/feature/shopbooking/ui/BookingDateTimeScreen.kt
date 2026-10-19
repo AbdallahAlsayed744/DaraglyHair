@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import com.daragly.daraglyhair.common.ui.location.EnsureLocationPermission
 import com.daragly.daraglyhair.common.ui.navigation.IMainGraph
 import com.daragly.daraglyhair.common.ui.navigation.INavigator
 import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonGold
@@ -54,6 +55,7 @@ import com.daragly.daraglyhair.feature.shopbooking.ui.components.BookingTopBar
 import com.daragly.daraglyhair.designsystem.util.HallaakShimmerBox
 import daraglyhair.shared.generated.resources.Res
 import daraglyhair.shared.generated.resources.continue_button
+import daraglyhair.shared.generated.resources.location_required
 import daraglyhair.shared.generated.resources.month_1
 import daraglyhair.shared.generated.resources.month_10
 import daraglyhair.shared.generated.resources.month_11
@@ -115,6 +117,11 @@ fun BookingDateTimeScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
+
+    // Ask for location once per entry, then refetch slots using the user's real coordinates.
+    EnsureLocationPermission { granted ->
+        if (granted) viewModel.onAction(BookingDateTimeAction.RetrySlots)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.event.collect { event ->
@@ -210,7 +217,11 @@ fun BookingDateTimeScreen(
 
                         is SectionState.Error -> BookingSectionCard(title = stringResource(Res.string.select_date_time_title)) {
                             BookingSectionError(
-                                message = slots.message,
+                                message = if (slots.message == LOCATION_REQUIRED_MESSAGE) {
+                                    stringResource(Res.string.location_required)
+                                } else {
+                                    slots.message
+                                },
                                 onRetry = { viewModel.onAction(BookingDateTimeAction.RetrySlots) },
                             )
                         }

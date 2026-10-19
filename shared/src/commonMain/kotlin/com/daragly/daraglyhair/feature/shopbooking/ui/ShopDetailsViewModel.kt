@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.daragly.daraglyhair.common.domain.Resource
 import com.daragly.daraglyhair.common.ui.viewmodel.BaseViewModel
 import com.daragly.daraglyhair.feature.home.domain.repository.IHomeRepository
+import com.daragly.daraglyhair.feature.reviews.domain.interactors.GetShopReviewsUseCase
+import com.daragly.daraglyhair.feature.reviews.domain.model.ShopReviewsQuery
 import com.daragly.daraglyhair.feature.shopbooking.domain.interactors.GetBarberProfileUseCase
 import com.daragly.daraglyhair.feature.shopbooking.domain.interactors.GetShopBarbersUseCase
 import com.daragly.daraglyhair.feature.shopbooking.domain.interactors.GetShopServicesUseCase
@@ -18,6 +20,7 @@ class ShopDetailsViewModel(
     private val getShopBarbersUseCase: GetShopBarbersUseCase,
     private val getShopServicesUseCase: GetShopServicesUseCase,
     private val getBarberProfileUseCase: GetBarberProfileUseCase,
+    private val getShopReviewsUseCase: GetShopReviewsUseCase,
     private val draftHolder: BookingDraftStateHolder,
 ) : BaseViewModel<ShopDetailsState, ShopDetailsAction, ShopDetailsEvent>(ShopDetailsState()) {
 
@@ -25,6 +28,7 @@ class ShopDetailsViewModel(
         loadShop()
         loadServices()
         loadBarbers()
+        loadReviews()
     }
 
     override fun onAction(action: ShopDetailsAction) {
@@ -32,9 +36,12 @@ class ShopDetailsViewModel(
             is ShopDetailsAction.RetryShop -> loadShop()
             is ShopDetailsAction.RetryServices -> loadServices()
             is ShopDetailsAction.RetryBarbers -> loadBarbers()
+            is ShopDetailsAction.RetryReviews -> loadReviews()
             is ShopDetailsAction.BarberClicked ->
                 emitEvent(ShopDetailsEvent.NavigateToBarber(shopId, action.shopBarber.barberId))
             is ShopDetailsAction.BookClicked -> onBookClicked()
+            is ShopDetailsAction.SeeAllReviewsClicked ->
+                emitEvent(ShopDetailsEvent.NavigateToShopReviews(shopId))
         }
     }
 
@@ -82,6 +89,19 @@ class ShopDetailsViewModel(
                 }
                 is Resource.Failure -> updateState {
                     copy(barbers = SectionState.Error(result.exception.message.orEmpty()))
+                }
+                is Resource.Loading -> Unit
+            }
+        }
+    }
+
+    private fun loadReviews() {
+        updateState { copy(reviews = SectionState.Loading) }
+        viewModelScope.launch {
+            when (val result = getShopReviewsUseCase(ShopReviewsQuery(shopId, pageNumber = 1, pageSize = 3))) {
+                is Resource.Success -> updateState { copy(reviews = SectionState.Data(result.model)) }
+                is Resource.Failure -> updateState {
+                    copy(reviews = SectionState.Error(result.exception.message.orEmpty()))
                 }
                 is Resource.Loading -> Unit
             }

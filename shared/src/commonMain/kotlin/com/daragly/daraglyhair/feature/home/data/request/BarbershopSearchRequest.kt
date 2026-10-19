@@ -11,8 +11,16 @@ data class BarbershopSearchRequest(
     val pageSize: Int = 10,
     @SerialName("keyword")
     val keyword: String? = null,
+    /** User coordinates — geo search + distance calculation. Backend defaults to a 25 km radius when set. */
+    @SerialName("latitude")
+    val latitude: Double? = null,
+    @SerialName("longitude")
+    val longitude: Double? = null,
+    @SerialName("maxDistanceKm")
+    val maxDistanceKm: Double? = null,
+    /** Governorate enum — int value (1..27, Egypt governorates). */
     @SerialName("governorate")
-    val governorate: String? = null,
+    val governorate: Int? = null,
     @SerialName("city")
     val city: String? = null,
     @SerialName("district")

@@ -7,8 +7,10 @@ import kotlinx.serialization.Serializable
 data class FavoriteDto(
     @SerialName("id")
     val id: String,
+    @SerialName("userId")
+    val userId: String? = null,
     @SerialName("shopId")
     val shopId: String,
-    @SerialName("createdAt")
-    val createdAt: String? = null,
+    @SerialName("createdOn")
+    val createdOn: String? = null,
 )

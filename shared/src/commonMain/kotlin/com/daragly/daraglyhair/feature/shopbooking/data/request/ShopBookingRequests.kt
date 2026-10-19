@@ -13,6 +13,7 @@ data class AvailableSlotsApiRequest(
     @SerialName("userLatitude")     val userLatitude: Double,
     @SerialName("userLongitude")    val userLongitude: Double,
     @SerialName("transportationMode") val transportationMode: Int,
+    @SerialName("shopServiceIds")   val shopServiceIds: List<String>? = null,
 )
 
 /** POST /api/v1/appointments body — only shopId + shopServiceIds are required by the backend. */
@@ -23,6 +24,9 @@ data class CreateAppointmentApiRequest(
     @SerialName("startAtUtc")     val startAtUtc: String,
     @SerialName("shopServiceIds") val shopServiceIds: List<String>,
     @SerialName("notes")          val notes: String? = null,
+    @SerialName("userLatitude")   val userLatitude: Double,
+    @SerialName("userLongitude")  val userLongitude: Double,
+    @SerialName("transportationMode") val transportationMode: Int,
 )
 
 /** POST /api/v1/services/search body — used to resolve catalog names for shop services. */

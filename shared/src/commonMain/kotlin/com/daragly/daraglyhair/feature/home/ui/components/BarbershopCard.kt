@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.feature.home.domain.model.Barbershop
+import com.daragly.daraglyhair.feature.reviews.ui.components.StarRatingDisplay
 import daraglyhair.shared.generated.resources.Res
 import daraglyhair.shared.generated.resources.booking_available
 import daraglyhair.shared.generated.resources.cd_add_favorite
@@ -118,6 +119,29 @@ fun BarbershopCard(
 
             Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space8))
 
+            // Rating summary (stars + review count) when available
+            barbershop.averageRating?.let { rating ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space4),
+                ) {
+                    StarRatingDisplay(rating = rating, starSize = 14.dp)
+                    Text(
+                        text = formatRating(rating),
+                        style = HallaakTheme.typography.label.large,
+                        color = HallaakTheme.colors.onSurface,
+                    )
+                    barbershop.reviewCount?.let { count ->
+                        Text(
+                            text = "(${count})",
+                            style = HallaakTheme.typography.label.large,
+                            color = HallaakTheme.colors.onSurfaceVariant,
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(HallaakTheme.dimensions.space12))
+            }
+
             // Location
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -196,14 +220,19 @@ private fun StatusChip(
 
 private fun buildLocationString(barbershop: Barbershop): String {
     val parts = mutableListOf<String>()
-    
+
     if (!barbershop.district.isNullOrBlank()) {
         parts.add(barbershop.district)
     }
-    
+
     parts.add(barbershop.city)
-    
+
     return parts.joinToString(", ")
+}
+
+private fun formatRating(rating: Double): String {
+    val rounded = ((rating * 10).toInt()) / 10.0
+    return if (rounded % 1.0 == 0.0) rounded.toInt().toString() else rounded.toString()
 }
 
 @Composable

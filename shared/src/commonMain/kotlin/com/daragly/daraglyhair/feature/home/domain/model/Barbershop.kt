@@ -5,7 +5,6 @@ data class Barbershop(
     val name: String,
     val description: String?,
     val phoneNumber: String,
-    val governorate: String,
     val city: String,
     val district: String?,
     val streetAddress: String?,
@@ -14,6 +13,9 @@ data class Barbershop(
     val isVerified: Boolean,
     val isBookingEnabled: Boolean,
     val isActive: Boolean,
+    val averageRating: Double? = null,
+    val reviewCount: Int? = null,
     val isFavorite: Boolean = false,
-    val distanceKm: Double? = null, // Client-side calculated distance
+    /** Server-provided when the search includes user coordinates; otherwise a client-side estimate. */
+    val distanceKm: Double? = null,
 )

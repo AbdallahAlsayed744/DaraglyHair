@@ -23,20 +23,22 @@ fun UserProfileDto.toDomain(): UserProfile = UserProfile(
 fun BarbershopDto.toDomain(isFavorite: Boolean = false, distanceKm: Double? = null): Barbershop =
     Barbershop(
         id = id,
-        name = name,
+        // localized* already reflect the Accept-Language request header
+        name = localizedName?.takeIf { it.isNotBlank() } ?: name,
         description = description,
         phoneNumber = phoneNumber,
-        governorate = governorate,
-        city = city,
+        city = localizedCity?.takeIf { it.isNotBlank() } ?: city,
         district = district,
-        streetAddress = streetAddress,
+        streetAddress = localizedStreetAddress?.takeIf { it.isNotBlank() } ?: streetAddress,
         latitude = latitude,
         longitude = longitude,
         isVerified = isVerified,
         isBookingEnabled = isBookingEnabled,
         isActive = isActive,
+        averageRating = averageRating,
+        reviewCount = reviewCount,
         isFavorite = isFavorite,
-        distanceKm = distanceKm,
+        distanceKm = this.distanceKm ?: distanceKm,
     )
 
 fun ServiceCategoryDto.toDomain(): ServiceCategory = ServiceCategory(

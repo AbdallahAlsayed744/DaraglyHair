@@ -66,6 +66,8 @@ data class SlotQuery(
     val userLatitude: Double,
     val userLongitude: Double,
     val transportationMode: TransportationMode,
+    /** Filters barbers to those offering these services; null considers every active barber. */
+    val shopServiceIds: List<String>? = null,
 )
 
 /** Parameters for creating an appointment. */
@@ -75,4 +77,7 @@ data class BookingSubmission(
     val startAtUtc: Instant,
     val shopServiceIds: List<String>,
     val notes: String?,
+    val userLatitude: Double,
+    val userLongitude: Double,
+    val transportationMode: TransportationMode,
 )

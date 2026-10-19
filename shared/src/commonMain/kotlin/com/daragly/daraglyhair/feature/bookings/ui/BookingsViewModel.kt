@@ -22,6 +22,7 @@ class BookingsViewModel(
             is BookingsAction.Retry               -> loadAppointments()
             is BookingsAction.TabSelected         -> onTabSelected(action.tab)
             is BookingsAction.AppointmentClicked  -> emitEvent(BookingsEvent.NavigateToDetail(action.appointmentId))
+            is BookingsAction.WriteReviewClicked  -> emitEvent(BookingsEvent.NavigateToWriteReview(action.appointmentId, action.shopName))
             is BookingsAction.ExploreClicked      -> emitEvent(BookingsEvent.NavigateToExplore)
         }
     }

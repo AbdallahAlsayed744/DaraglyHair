@@ -6,6 +6,8 @@ import com.daragly.daraglyhair.feature.home.domain.model.Barbershop
 
 data class ExploreState(
     val searchKeyword: String = "",
+    /** Maximum distance filter in kilometres (1..20). Default 5 km. */
+    val maxDistanceKm: Int = DEFAULT_MAX_DISTANCE_KM,
     val shopsState: ExploreShopsState = ExploreShopsState.Idle,
     val favoriteToggleInProgress: Set<String> = emptySet(),
 )
@@ -25,6 +27,7 @@ sealed interface ExploreAction {
     /** Called on first composition (optionally with a pre-filled query from Home) */
     data class Init(val initialQuery: String = "") : ExploreAction
     data class SearchKeywordChanged(val keyword: String) : ExploreAction
+    data class DistanceChanged(val maxDistanceKm: Int) : ExploreAction
     data object ClearSearch : ExploreAction
     data object Retry : ExploreAction
     data class ToggleFavorite(val shopId: String) : ExploreAction
@@ -36,3 +39,7 @@ sealed interface ExploreAction {
 sealed interface ExploreEvent {
     data class NavigateToShopDetails(val shopId: String) : ExploreEvent
 }
+
+const val MIN_DISTANCE_KM = 1
+const val MAX_DISTANCE_KM = 20
+const val DEFAULT_MAX_DISTANCE_KM = 5

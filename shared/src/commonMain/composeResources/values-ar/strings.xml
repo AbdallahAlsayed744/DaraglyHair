@@ -264,6 +264,7 @@
     <string name="travel_time_format">زمن الوصول المتوقع: ~%1$s دقيقة</string>
     <string name="no_slots_title">لا توجد مواعيد متاحة</string>
     <string name="no_slots_subtitle">لم تُرجع أي مواعيد لهذا التاريخ. جرّب تاريخًا آخر أو حلاقًا آخر.</string>
+    <string name="location_required">فعّل إذن الوصول إلى الموقع لعرض المواعيد التي تستطيع الوصول إليها.</string>
     <string name="transport_mode_title">كيف ستصل إلى المحل؟</string>
     <string name="transport_mode_hint">اختر طريقة وصولك لعرض المواعيد التي تستطيع الوصول إليها.</string>
     <string name="transport_mode_walking">سيرًا</string>
@@ -298,4 +299,24 @@
     <string name="error_email_required">البريد الإلكتروني مطلوب</string>
     <string name="error_email_invalid">أدخل بريدًا إلكترونيًا صحيحًا</string>
     <string name="error_save_failed">تعذّر حفظ التعديلات. حاول مرة أخرى.</string>
+
+    <!-- Reviews -->
+    <string name="section_reviews">التقييمات</string>
+    <string name="see_all_reviews">عرض كل التقييمات</string>
+    <string name="no_reviews_yet">لا توجد تقييمات بعد</string>
+    <string name="review_no_comment">لم تتم إضافة تعليق</string>
+    <string name="review_photo_count">%1$d صور</string>
+    <string name="write_review">اكتب تقييمًا</string>
+    <string name="write_review_title">اكتب تقييمًا</string>
+    <string name="rating_overall">التقييم العام</string>
+    <string name="rating_quality">الجودة</string>
+    <string name="rating_cleanliness">النظافة</string>
+    <string name="rating_value">القيمة مقابل السعر</string>
+    <string name="review_comment_placeholder">أخبر الآخرين عن تجربتك…</string>
+    <string name="add_photo">إضافة صورة</string>
+    <string name="submit_review">إرسال التقييم</string>
+
+    <!-- Explore distance filter -->
+    <string name="explore_distance_label">ضمن</string>
+    <string name="explore_distance_value">%1$d كم</string>
 </resources>

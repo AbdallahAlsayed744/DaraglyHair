@@ -50,6 +50,7 @@ class ShopBookingRepository(
                 userLatitude = query.userLatitude,
                 userLongitude = query.userLongitude,
                 transportationMode = query.transportationMode.apiValue,
+                shopServiceIds = query.shopServiceIds,
             ),
         )
         Resource.Success(response.toDomain())
@@ -70,6 +71,9 @@ class ShopBookingRepository(
                 startAtUtc = submission.startAtUtc.toString(),
                 shopServiceIds = submission.shopServiceIds,
                 notes = submission.notes?.takeIf { it.isNotBlank() },
+                userLatitude = submission.userLatitude,
+                userLongitude = submission.userLongitude,
+                transportationMode = submission.transportationMode.apiValue,
             ),
         )
         if (appointmentId.isBlank()) {

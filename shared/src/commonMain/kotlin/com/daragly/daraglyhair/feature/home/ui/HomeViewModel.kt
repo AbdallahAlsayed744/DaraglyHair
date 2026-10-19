@@ -2,6 +2,7 @@ package com.daragly.daraglyhair.feature.home.ui
 
 import androidx.lifecycle.viewModelScope
 import com.daragly.daraglyhair.common.domain.Resource
+import com.daragly.daraglyhair.common.domain.location.UserLocationHolder
 import com.daragly.daraglyhair.common.ui.viewmodel.BaseViewModel
 import com.daragly.daraglyhair.feature.home.domain.model.isUpcoming
 import com.daragly.daraglyhair.feature.home.domain.repository.IHomeRepository
@@ -10,6 +11,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val repository: IHomeRepository,
+    private val userLocationHolder: UserLocationHolder,
 ) : BaseViewModel<HomeState, HomeAction, HomeEvent>(HomeState()) {
 
     init {
@@ -139,9 +141,16 @@ class HomeViewModel(
 
     private fun loadNearbyShops() {
         updateState { copy(nearbyShops = NearbyShopsState.Loading) }
-        
+
         viewModelScope.launch {
-            when (val result = repository.searchBarbershops(pageNumber = 1, pageSize = 10)) {
+            // First screen to open pays for the device fix; later screens reuse the cache.
+            val location = userLocationHolder.currentLocation()
+            when (val result = repository.searchBarbershops(
+                pageNumber = 1,
+                pageSize = 10,
+                latitude = location?.latitude,
+                longitude = location?.longitude,
+            )) {
                 is Resource.Success -> {
                     if (result.model.isEmpty()) {
                         updateState {

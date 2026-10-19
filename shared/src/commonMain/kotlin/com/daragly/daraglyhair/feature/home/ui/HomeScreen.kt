@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.daragly.daraglyhair.LocalPadding
+import com.daragly.daraglyhair.common.ui.location.EnsureLocationPermission
 import com.daragly.daraglyhair.common.ui.navigation.IMainGraph
 import com.daragly.daraglyhair.common.ui.navigation.INavigator
 import com.daragly.daraglyhair.designsystem.components.buttons.HallaakButtonPrimary
@@ -87,6 +88,11 @@ fun HomeScreen(
     navigator: INavigator = koinInject(),
 ) {
     val state by viewModel.state.collectAsState()
+
+    // Ask for location once per entry, then reload nearby shops with the user's real coordinates.
+    EnsureLocationPermission { granted ->
+        if (granted) viewModel.onAction(HomeAction.RetryNearbyShops)
+    }
 
     // Collect events
     LaunchedEffect(Unit) {
