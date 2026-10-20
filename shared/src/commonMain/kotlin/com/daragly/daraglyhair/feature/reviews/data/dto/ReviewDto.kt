@@ -28,9 +28,26 @@ data class ReviewDto(
     val valueRating: Int? = null,
     @SerialName("comment")
     val comment: String? = null,
-    /** Public CDN URLs of attached photos (max 5). */
+    /** Attached photo objects (max 5). */
     @SerialName("images")
-    val images: List<String>? = null,
+    val images: List<ReviewImageDto>? = null,
     @SerialName("createdOn")
     val createdOn: String? = null,
 )
+
+@Serializable
+data class ReviewImageDto(
+    @SerialName("id")
+    val id: String? = null,
+    @SerialName("url")
+    val url: String? = null,
+    @SerialName("imageUrl")
+    val imageUrl: String? = null,
+    @SerialName("path")
+    val path: String? = null,
+) {
+    /** First non-blank URL across the candidate field names the backend may use. */
+    fun resolvedUrl(): String? =
+        listOf(url, imageUrl, path)
+            .firstOrNull { !it.isNullOrBlank() }
+}

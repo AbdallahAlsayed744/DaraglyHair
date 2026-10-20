@@ -1,6 +1,6 @@
 package com.daragly.daraglyhair.feature.reviews.domain.model
 
-/** A published shop review. [photoCount] is shown as an indicator (remote photos aren't rendered yet). */
+/** A published shop review. [photoUrls] holds the attached remote photos (may be empty). */
 data class Review(
     val id: String,
     val shopId: String?,
@@ -10,7 +10,7 @@ data class Review(
     val cleanlinessRating: Int?,
     val valueRating: Int?,
     val comment: String?,
-    val photoCount: Int,
+    val photoUrls: List<String> = emptyList(),
     val createdOn: String?,
 )
 

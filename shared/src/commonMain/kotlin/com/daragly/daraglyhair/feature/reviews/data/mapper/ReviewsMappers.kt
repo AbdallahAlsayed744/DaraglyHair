@@ -12,6 +12,6 @@ fun ReviewDto.toDomain(): Review = Review(
     cleanlinessRating = cleanlinessRating,
     valueRating = valueRating,
     comment = comment?.takeIf { it.isNotBlank() },
-    photoCount = images?.size ?: 0,
+    photoUrls = images?.mapNotNull { it.resolvedUrl() } ?: emptyList(),
     createdOn = createdOn,
 )

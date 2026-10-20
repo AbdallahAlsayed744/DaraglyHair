@@ -28,6 +28,9 @@ koinBom = "4.1.0"
 # Navigation
 navigationCompose = "2.8.0-alpha10"
 
+# Coil
+coil = "3.5.0"
+
 # DataStore
 datastorePreferences = "1.1.7"
 
@@ -74,6 +77,10 @@ koin-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref
 
 # Navigation (Compose Multiplatform)
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+
+# Coil (image loading)
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
 # DataStore
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }

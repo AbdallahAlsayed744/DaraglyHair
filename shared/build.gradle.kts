@@ -91,6 +91,10 @@ kotlin {
             // Navigation
             implementation(libs.navigation.compose)
 
+            // Coil (image loading, Ktor-backed network on all platforms)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor3)
+
             // DataStore multiplatform core
             implementation(libs.androidx.datastore.preferences.core)
         }

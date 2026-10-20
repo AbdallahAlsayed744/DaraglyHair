@@ -2,6 +2,8 @@ package com.daragly.daraglyhair.feature.reviews.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,14 +27,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.daragly.daraglyhair.designsystem.theme.HallaakTheme
 import com.daragly.daraglyhair.feature.reviews.domain.model.Review
 import kotlin.math.floor
 import daraglyhair.shared.generated.resources.Res
 import daraglyhair.shared.generated.resources.review_no_comment
-import daraglyhair.shared.generated.resources.review_photo_count
 import org.jetbrains.compose.resources.stringResource
 
 // ── Read-only star row (supports fractional average) ──────────────────────────
@@ -164,23 +167,23 @@ fun ReviewItem(
                 )
             }
 
-            if (review.photoCount > 0) {
+            if (review.photoUrls.isNotEmpty()) {
                 Spacer(Modifier.height(HallaakTheme.dimensions.space8))
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space4),
+                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(HallaakTheme.dimensions.space8),
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.AddAPhoto,
-                        contentDescription = null,
-                        tint = HallaakTheme.colors.onSurfaceVariant,
-                        modifier = Modifier.size(14.dp),
-                    )
-                    Text(
-                        text = stringResource(Res.string.review_photo_count, review.photoCount),
-                        style = HallaakTheme.typography.label.medium,
-                        color = HallaakTheme.colors.onSurfaceVariant,
-                    )
+                    review.photoUrls.take(5).forEach { url ->
+                        AsyncImage(
+                            model = url,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            clipToBounds = true,
+                            modifier = Modifier
+                                .size(72.dp)
+                                .clip(HallaakTheme.shapes.card),
+                        )
+                    }
                 }
             }
         }
