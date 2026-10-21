@@ -47,7 +47,7 @@ import daraglyhair.shared.generated.resources.booking_unavailable_notice
 import daraglyhair.shared.generated.resources.experience_years_format
 import daraglyhair.shared.generated.resources.label_experience
 import daraglyhair.shared.generated.resources.label_specialization
-import daraglyhair.shared.generated.resources.section_about
+import daraglyhair.shared.generated.resources.section_description
 import daraglyhair.shared.generated.resources.section_shop
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
@@ -192,7 +192,7 @@ fun BarberDetailsScreen(
                         profile.bio?.takeIf { it.isNotBlank() }?.let { bio ->
                             Spacer(Modifier.height(HallaakTheme.dimensions.space12))
                             Text(
-                                text = stringResource(Res.string.section_about),
+                                text = stringResource(Res.string.section_description),
                                 style = HallaakTheme.typography.label.large,
                                 color = HallaakTheme.colors.onSurfaceVariant,
                             )

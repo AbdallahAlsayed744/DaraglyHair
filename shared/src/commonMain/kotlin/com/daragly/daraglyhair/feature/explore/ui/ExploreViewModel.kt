@@ -19,9 +19,16 @@ class ExploreViewModel(
 
     private var searchJob: Job? = null
 
+    // Bumped on every search; only the newest generation may write state, so a slow
+    // earlier response can never overwrite a newer one.
+    private var searchGeneration = 0
+    private var lastSearchAttempted = false
+    private var lastSearchHadLocation = true
+
     override fun onAction(action: ExploreAction) {
         when (action) {
             is ExploreAction.Init                  -> init(action.initialQuery)
+            is ExploreAction.LocationReady         -> onLocationReady()
             is ExploreAction.SearchKeywordChanged  -> onKeywordChanged(action.keyword)
             is ExploreAction.DistanceChanged       -> onDistanceChanged(action.maxDistanceKm)
             is ExploreAction.ClearSearch           -> clearSearch()
@@ -34,6 +41,17 @@ class ExploreViewModel(
     // ─────────────────────────────────────────────────────────────────────────
 
     private fun init(initialQuery: String) {
+        val current = state.value
+        // A search for this keyword is already running or already shown (screen re-entry) — don't re-fire.
+        val sameQuery = initialQuery == current.searchKeyword
+        val alreadyCovered = current.shopsState is ExploreShopsState.Loading ||
+            current.shopsState is ExploreShopsState.Success
+        if (sameQuery && alreadyCovered) return
+
+        // Cancel any pending debounced search so it can't overwrite the entry query.
+        searchJob?.cancel()
+        searchJob = null
+
         if (initialQuery.isNotBlank()) {
             updateState { copy(searchKeyword = initialQuery) }
             searchShops(initialQuery)
@@ -41,6 +59,14 @@ class ExploreViewModel(
             // Load all shops on open with no query
             searchShops("")
         }
+    }
+
+    private fun onLocationReady() {
+        // The permission callback also fires on plain entry; only re-run when the
+        // previous attempt actually went out without coordinates.
+        if (!lastSearchAttempted) return
+        if (lastSearchHadLocation) return
+        searchShops(state.value.searchKeyword)
     }
 
     private fun onKeywordChanged(keyword: String) {
@@ -80,10 +106,13 @@ class ExploreViewModel(
     // ── Core search ───────────────────────────────────────────────────────────
 
     private fun searchShops(keyword: String) {
+        val generation = ++searchGeneration
+        lastSearchAttempted = true
         updateState { copy(shopsState = ExploreShopsState.Loading) }
 
         viewModelScope.launch {
             val location = userLocationHolder.currentLocation()
+            lastSearchHadLocation = location != null
             val result = repository.searchBarbershops(
                 pageNumber = 1,
                 pageSize = PAGE_SIZE,
@@ -92,6 +121,8 @@ class ExploreViewModel(
                 longitude = location?.longitude,
                 maxDistanceKm = state.value.maxDistanceKm.toDouble(),
             )
+            // A newer search superseded this one — drop the stale response.
+            if (generation != searchGeneration) return@launch
             when (result) {
                 is Resource.Success -> {
                     updateState {

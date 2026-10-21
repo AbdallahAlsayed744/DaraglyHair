@@ -26,6 +26,10 @@ sealed class ExploreShopsState {
 sealed interface ExploreAction {
     /** Called on first composition (optionally with a pre-filled query from Home) */
     data class Init(val initialQuery: String = "") : ExploreAction
+
+    /** Called when the location permission is granted; re-searches only if the last attempt had no fix. */
+    data object LocationReady : ExploreAction
+
     data class SearchKeywordChanged(val keyword: String) : ExploreAction
     data class DistanceChanged(val maxDistanceKm: Int) : ExploreAction
     data object ClearSearch : ExploreAction

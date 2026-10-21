@@ -117,7 +117,7 @@ class HomeRepository(
         val appointmentWithShopName = nextAppointment?.let { appointment ->
             try {
                 val shop = remoteDataSource.getBarbershopById(appointment.shopId)
-                appointment.copy(shopName = shop.name)
+                appointment.copy(shopName = shop.displayName)
             } catch (e: Exception) {
                 // If shop fetch fails, return appointment without shop name
                 appointment

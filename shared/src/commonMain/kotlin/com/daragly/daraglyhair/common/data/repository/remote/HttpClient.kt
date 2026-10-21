@@ -33,7 +33,7 @@ import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-const val BASE_URL = "https://barberhub-api.runasp.net/"
+const val BASE_URL = "https://barber-hub-api.runasp.net/"
 
 /**
  * Builds the shared Ktor [HttpClient] using a platform-provided [engine].

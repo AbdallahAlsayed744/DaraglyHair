@@ -25,10 +25,10 @@ fun BarbershopDto.toDomain(isFavorite: Boolean = false, distanceKm: Double? = nu
         id = id,
         // localized* already reflect the Accept-Language request header
         name = localizedName?.takeIf { it.isNotBlank() } ?: name,
-        description = description,
+        description = displayDescription,
         phoneNumber = phoneNumber,
         city = localizedCity?.takeIf { it.isNotBlank() } ?: city,
-        district = district,
+        district = localizedDistrict?.takeIf { it.isNotBlank() } ?: district,
         streetAddress = localizedStreetAddress?.takeIf { it.isNotBlank() } ?: streetAddress,
         latitude = latitude,
         longitude = longitude,

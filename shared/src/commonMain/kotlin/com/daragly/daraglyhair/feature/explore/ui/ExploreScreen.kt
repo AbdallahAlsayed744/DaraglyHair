@@ -69,14 +69,16 @@ fun ExploreScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-    // Ask for location once per entry, then re-run the search with the user's real coordinates.
-    EnsureLocationPermission { granted ->
-        if (granted) viewModel.onAction(ExploreAction.Retry)
-    }
-
-    // Boot the screen — pre-fill keyword if coming from Home search bar tap
+    // Boot the screen — pre-fill keyword if coming from Home search bar tap.
+    // This is the single entry search; the permission callback below only re-runs it
+    // when the first attempt had no coordinates, so barbershops/search fires once on entry.
     LaunchedEffect(Unit) {
         viewModel.onAction(ExploreAction.Init(initialQuery))
+    }
+
+    // Ask for location once per entry; re-run the search only if it changed the outcome.
+    EnsureLocationPermission { granted ->
+        if (granted) viewModel.onAction(ExploreAction.LocationReady)
     }
 
     // Collect one-shot navigation events

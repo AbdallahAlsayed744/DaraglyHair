@@ -193,6 +193,7 @@
     <string name="section_privacy_security">الخصوصية والأمان</string>
     <string name="section_help_support">المساعدة والدعم</string>
     <string name="section_about">حول التطبيق</string>
+    <string name="section_description">الوصف</string>
     <string name="change_password">تغيير كلمة المرور</string>
     <string name="send_reset_link">إرسال رابط إعادة التعيين</string>
     <string name="send_reset_link_email">إرسال رابط إعادة التعيين بالبريد</string>

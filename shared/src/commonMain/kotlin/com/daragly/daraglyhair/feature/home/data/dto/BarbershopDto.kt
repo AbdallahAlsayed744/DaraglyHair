@@ -59,8 +59,19 @@ data class BarbershopDto(
     val reviewCount: Int? = null,
     @SerialName("localizedName")
     val localizedName: String? = null,
+    @SerialName("localizedDescription")
+    val localizedDescription: String? = null,
     @SerialName("localizedCity")
     val localizedCity: String? = null,
+    @SerialName("localizedDistrict")
+    val localizedDistrict: String? = null,
     @SerialName("localizedStreetAddress")
     val localizedStreetAddress: String? = null,
-)
+) {
+    /** Name/description selected by the server's Accept-Language localization, falling back to English. */
+    val displayName: String
+        get() = localizedName?.takeIf { it.isNotBlank() } ?: name
+
+    val displayDescription: String?
+        get() = localizedDescription?.takeIf { it.isNotBlank() } ?: description
+}

@@ -74,7 +74,7 @@ class BookingsRepository(
 
         // Enrich with shop name
         val shopName = try {
-            remoteDataSource.getBarbershopById(dto.shopId).name
+            remoteDataSource.getBarbershopById(dto.shopId).displayName
         } catch (_: Exception) { null }
 
         Resource.Success(dto.toBookingDomain(shopName = shopName))
@@ -105,7 +105,7 @@ class BookingsRepository(
         for (shopId in shopIds) {
             try {
                 val shop = remoteDataSource.getBarbershopById(shopId)
-                map[shopId] = shop.name
+                map[shopId] = shop.displayName
             } catch (_: Exception) {
                 // Non-fatal: shop name is optional
             }

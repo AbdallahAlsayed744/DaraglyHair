@@ -55,7 +55,7 @@ import daraglyhair.shared.generated.resources.duration_minutes
 import daraglyhair.shared.generated.resources.label_address
 import daraglyhair.shared.generated.resources.label_phone
 import daraglyhair.shared.generated.resources.price_egp_short
-import daraglyhair.shared.generated.resources.section_about
+import daraglyhair.shared.generated.resources.section_description
 import daraglyhair.shared.generated.resources.section_reviews
 import daraglyhair.shared.generated.resources.see_all_reviews
 import daraglyhair.shared.generated.resources.section_barbers
@@ -167,7 +167,7 @@ fun ShopDetailsScreen(
 
                         barbershop.description?.takeIf { it.isNotBlank() }?.let { description ->
                             Text(
-                                text = stringResource(Res.string.section_about),
+                                text = stringResource(Res.string.section_description),
                                 style = HallaakTheme.typography.label.large,
                                 color = HallaakTheme.colors.onSurfaceVariant,
                             )
